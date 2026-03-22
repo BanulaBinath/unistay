@@ -1,0 +1,173 @@
+.register-selection-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-selection-content {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.register-selection-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1e3a8a;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.register-selection-subtitle {
+  font-size: 18px;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.registration-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.registration-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.registration-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-badge {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: #1e3a8a;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.registration-card h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 20px 0 15px 0;
+}
+
+.card-description {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  min-height: 75px;
+}
+
+.card-features {
+  margin-bottom: 25px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  background: #dbeafe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: 600;
+  color: #1e3a8a;
+  font-size: 12px;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.sliit-btn {
+  background: #1e3a8a;
+}
+
+.sliit-btn:hover {
+  background: #1e40af;
+  transform: scale(1.02);
+}
+
+.external-btn {
+  background: #0891b2;
+}
+
+.external-btn:hover {
+  background: #0e7490;
+  transform: scale(1.02);
+}
+
+.vendor-btn {
+  background: #1e3a8a;
+}
+
+.vendor-btn:hover {
+  background: #1e40af;
+  transform: scale(1.02);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.login-link p {
+  font-size: 15px;
+  color: #64748b;
+}
+
+.login-link span {
+  color: #1e3a8a;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login-link span:hover {
+  color: #1e40af;
+}
+
+@media (max-width: 768px) {
+  .register-selection-title {
+    font-size: 36px;
+  }
+
+  .registration-cards {
+    grid-template-columns: 1fr;
+  }
+}

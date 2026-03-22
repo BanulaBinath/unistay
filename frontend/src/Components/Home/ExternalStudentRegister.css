@@ -1,0 +1,281 @@
+.external-register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.external-register-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.external-register-left {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+  color: white;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.external-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  width: fit-content;
+  margin-bottom: 30px;
+}
+
+.external-title {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.external-description {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.feature-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 30px;
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.feature-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.feature-box p {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.security-icon {
+  font-size: 18px;
+}
+
+.external-register-right {
+  padding: 50px 40px;
+  background: white;
+}
+
+.external-register-form {
+  max-width: 550px;
+}
+
+.form-header {
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0891b2;
+  background: white;
+}
+
+.form-group input.error {
+  border-color: #ef4444;
+}
+
+.role-display {
+  padding: 14px 16px;
+  background: #dbeafe;
+  border-radius: 8px;
+  color: #0891b2;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.form-group-inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.error-text {
+  display: block;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.api-error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  border-left: 4px solid #dc2626;
+}
+
+.subscription-info {
+  background: #dbeafe;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.subscription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #0891b2;
+}
+
+.subscription-price {
+  font-size: 24px;
+  color: #1e3a8a;
+}
+
+.price-period {
+  font-size: 14px;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+.subscription-description {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #1e40af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.payment-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.payment-badge {
+  font-size: 24px;
+}
+
+.pci-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.terms-text {
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.terms-text a {
+  color: #0891b2;
+  text-decoration: underline;
+}
+
+.terms-text a:hover {
+  color: #0e7490;
+}
+
+@media (max-width: 968px) {
+  .external-register-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .external-register-left {
+    padding: 40px 30px;
+  }
+
+  .form-group-inline {
+    grid-template-columns: 1fr;
+  }
+}
