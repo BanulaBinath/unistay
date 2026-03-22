@@ -407,11 +407,150 @@ const processPaymentSuccess = async (req, res) => {
   }
 };
 
+// User Login
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: 'Account is not active. Please complete registration or payment.'
+      });
+    }
+
+    // Check if user is verified (for SLIIT students)
+    if (user.role === 'student_sliit' && !user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: 'Account is not verified. Please verify your email with OTP.'
+      });
+    }
+
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Generate JWT token
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+        vendorType: user.vendorType
+      },
+      process.env.JWT_SECRET || 'unistay_secret_key_2024',
+      { expiresIn: '7d' }
+    );
+
+    // Return user data and token
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        token,
+        user: {
+          id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+          vendorType: user.vendorType,
+          isActive: user.isActive
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Login Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Login failed. Please try again.',
+      error: error.message
+    });
+  }
+};
+
+// Get Current User Profile
+const getCurrentUser = async (req, res) => {
+  try {
+    // User is already attached to req by auth middleware
+    const user = await User.findById(req.user.userId).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        id: user._id,
+        fullName: user.fullName,
+        businessName: user.businessName,
+        email: user.email,
+        role: user.role,
+        vendorType: user.vendorType,
+        isActive: user.isActive,
+        isVerified: user.isVerified,
+        subscriptionStatus: user.subscriptionStatus
+      }
+    });
+
+  } catch (error) {
+    console.error('Get Current User Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch user profile',
+      error: error.message
+    });
+  }
+};
+
+// Logout (client-side token removal, optional backend tracking)
+const logout = async (req, res) => {
+  try {
+    // In a simple JWT implementation, logout is handled client-side
+    // This endpoint can be used for logging or token blacklisting if needed
+    res.status(200).json({
+      success: true,
+      message: 'Logout successful'
+    });
+  } catch (error) {
+    console.error('Logout Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Logout failed',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   registerSLIITStudent,
   verifyOTP,
   resendOTP,
   registerExternalStudent,
   registerVendor,
-  processPaymentSuccess
+  processPaymentSuccess,
+  login,
+  getCurrentUser,
+  logout
 };

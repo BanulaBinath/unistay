@@ -5,8 +5,10 @@ const {
   validateSLIITRegistration,
   validateExternalRegistration,
   validateVendorRegistration,
-  validateOTPVerification
+  validateOTPVerification,
+  validateLogin
 } = require('../middleware/validation');
+const { verifyToken, isStudent, isVendor } = require('../middleware/authMiddleware');
 
 // SLIIT Student Registration
 router.post(
@@ -41,5 +43,14 @@ router.post(
 
 // Payment Success Callback
 router.post('/payment/success', authController.processPaymentSuccess);
+
+// Login
+router.post('/login', validateLogin, authController.login);
+
+// Get Current User (Protected)
+router.get('/me', verifyToken, authController.getCurrentUser);
+
+// Logout
+router.post('/logout', verifyToken, authController.logout);
 
 module.exports = router;

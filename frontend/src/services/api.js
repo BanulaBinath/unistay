@@ -9,8 +9,54 @@ const api = axios.create({
   }
 });
 
+// Add token to requests if available
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle token expiration
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth API calls
 export const authAPI = {
+  // Login
+  login: async (data) => {
+    const response = await api.post('/auth/login', data);
+    return response.data;
+  },
+
+  // Get current user
+  getCurrentUser: async () => {
+    const response = await api.get('/auth/me');
+    return response.data;
+  },
+
+  // Logout
+  logout: async () => {
+    const response = await api.post('/auth/logout');
+    return response.data;
+  },
+
   // Register SLIIT Student
   registerSLIITStudent: async (data) => {
     const response = await api.post('/auth/register/sliit-student', data);
