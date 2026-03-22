@@ -78,9 +78,22 @@ const isVendorType = (vendorType) => {
   };
 };
 
+// Check if user is an admin
+const isAdmin = (req, res, next) => {
+  if (req.user.role === 'admin') {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: 'Access denied. Admins only.'
+    });
+  }
+};
+
 module.exports = {
   verifyToken,
   isStudent,
   isVendor,
-  isVendorType
+  isVendorType,
+  isAdmin
 };
