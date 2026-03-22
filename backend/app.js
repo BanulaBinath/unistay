@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const authRoutes = require('./Route/authRoutes');
 const userRoutes = require('./Route/userRoutes');
+const adminRoutes = require('./Route/adminRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

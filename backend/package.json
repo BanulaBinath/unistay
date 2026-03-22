@@ -4,7 +4,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "create-admin": "node scripts/createAdmin.js",
+    "add-admin": "node scripts/addAdmin.js",
+    "delete-admin": "node scripts/deleteAdmin.js"
   },
   "author": "",
   "license": "ISC",
