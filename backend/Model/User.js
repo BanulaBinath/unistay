@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: [true, 'Role is required'],
-    enum: ['student_sliit', 'student_external', 'vendor'],
+    enum: ['student_sliit', 'student_external', 'vendor', 'admin'],
     default: 'student_external'
   },
   vendorType: {
@@ -59,8 +59,8 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for faster queries
-userSchema.index({ email: 1 });
+// Remove duplicate index definition - unique: true in schema is enough
+// userSchema.index({ email: 1 }); // REMOVED - causing duplicate warning
 userSchema.index({ role: 1 });
 
 module.exports = mongoose.model('User', userSchema);
