@@ -4,7 +4,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "create-admin": "node scripts/createAdmin.js",
+    "add-admin": "node scripts/addAdmin.js",
+    "delete-admin": "node scripts/deleteAdmin.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +15,12 @@
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.1.5",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "express-validator": "^7.0.1"
   }
 }
