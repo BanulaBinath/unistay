@@ -1,6 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken, isStudent, isVendor, isVendorType } = require('../middleware/authMiddleware');
+const User = require('../Model/User');
+
+// Get vendors by type (for complaint form)
+router.get('/vendors', verifyToken, async (req, res) => {
+  try {
+    const { vendorType } = req.query;
+    
+    const filter = { role: 'vendor', isActive: true };
+    if (vendorType) {
+      filter.vendorType = vendorType;
+    }
+
+    const vendors = await User.find(filter)
+      .select('fullName businessName email vendorType')
+      .sort({ businessName: 1, fullName: 1 });
+
+    res.status(200).json({
+      success: true,
+      count: vendors.length,
+      data: vendors
+    });
+  } catch (error) {
+    console.error('Get vendors error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch vendors',
+      error: error.message
+    });
+  }
+});
 
 // Protected Student Routes
 router.get('/student/dashboard', verifyToken, isStudent, (req, res) => {

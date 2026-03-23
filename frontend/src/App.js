@@ -19,6 +19,18 @@ import BoardingVendorDashboard from './Components/dashboards/BoardingVendorDashb
 import LaundryVendorDashboard from './Components/dashboards/LaundryVendorDashboard';
 import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashboard';
 
+import AdminDashboard from './Components/admin/AdminDashboard';
+import UsersManagement from './Components/admin/UsersManagement';
+import PaymentsManagement from './Components/admin/PaymentsManagement';
+import SubscriptionsManagement from './Components/admin/SubscriptionsManagement';
+
+import CreateComplaintPage from './pages/student/CreateComplaintPage';
+import MyTicketsPage from './pages/student/MyTicketsPage';
+import TicketDetailsPage from './pages/student/TicketDetailsPage';
+
+import AdminTicketsPage from './pages/admin/AdminTicketsPage';
+import AdminTicketDetailsPage from './pages/admin/AdminTicketDetailsPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -40,6 +52,33 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
                 <StudentDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/complaints/new" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <CreateComplaintPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/complaints" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <MyTicketsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/complaints/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <TicketDetailsPage />
               </ProtectedRoute>
             } 
           />
@@ -77,6 +116,61 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
                 <CleaningVendorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Protected Admin Routes */}
+          <Route 
+            path="/admin/dashboard" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/users" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <UsersManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/payments" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <PaymentsManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/subscriptions" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <SubscriptionsManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminTicketsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminTicketDetailsPage />
               </ProtectedRoute>
             } 
           />

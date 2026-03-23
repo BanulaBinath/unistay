@@ -38,7 +38,9 @@ function Login() {
         // Redirect based on role
         const { role, vendorType } = response.data.user;
 
-        if (role === 'student_sliit' || role === 'student_external') {
+        if (role === 'admin') {
+          navigate('/admin/dashboard');
+        } else if (role === 'student_sliit' || role === 'student_external') {
           navigate('/student/dashboard');
         } else if (role === 'vendor') {
           navigate(`/vendor/${vendorType}/dashboard`);
