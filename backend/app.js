@@ -6,6 +6,9 @@ const cors = require('cors');
 const authRoutes = require('./Route/authRoutes');
 const userRoutes = require('./Route/userRoutes');
 const adminRoutes = require('./Route/adminRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
+const adminTicketRoutes = require('./routes/adminTicketRoutes');
+const vendorTicketRoutes = require('./routes/vendorTicketRoutes');
 
 const app = express();
 
@@ -21,6 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/tickets', ticketRoutes);
+app.use('/api/admin/tickets', adminTicketRoutes);
+app.use('/api/vendor/tickets', vendorTicketRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
