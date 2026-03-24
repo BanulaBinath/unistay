@@ -12,6 +12,9 @@ import OTPVerification from './Components/Home/OTPVerification';
 import ExternalStudentRegister from './Components/Home/ExternalStudentRegister';
 import VendorRegister from './Components/Home/VendorRegister';
 import PaymentProcess from './Components/Home/PaymentProcess';
+import Services from './Components/pages/Services';
+import About from './Components/pages/About';
+import Contact from './Components/pages/Contact';
 
 import StudentDashboard from './Components/dashboards/StudentDashboard';
 import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
@@ -38,6 +41,9 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<NomalHome />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterSelection />} />
           <Route path="/register/sliit-student" element={<SLIITStudentRegister />} />
