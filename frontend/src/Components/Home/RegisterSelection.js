@@ -1,13 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
 import './RegisterSelection.css';
 
 function RegisterSelection() {
   const navigate = useNavigate();
 
   return (
-    <div className="register-selection-container">
-      <div className="register-selection-content">
+    <div className="register-selection-page">
+      <Navbar />
+      <div className="register-selection-container">
+        <div className="register-selection-content">
         <h1 className="register-selection-title">Join Unistay</h1>
         <p className="register-selection-subtitle">Choose your account type to get started</p>
         
@@ -103,7 +107,9 @@ function RegisterSelection() {
         <div className="login-link">
           <p>Already have an account? <span onClick={() => navigate('/login')}>Sign In</span></p>
         </div>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }
