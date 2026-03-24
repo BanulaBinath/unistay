@@ -32,6 +32,9 @@ function nomalhome() {
               </Link>
             </div>
           </div>
+          <div className="hero-image">
+            <img src="/hero-students5.png" alt="Happy students" className="hero-img" />
+          </div>
         </div>
       </section>
 
