@@ -39,6 +39,7 @@ import AddItem from './Components/foodvendor/addItem';
 import UpdateItem from './Components/foodvendor/updateitem';
 import AcceptItem from './Components/foodvendor/AcceptItem';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
+import BuyOrderPage from './Components/studenthome/foodorder';
 
 function App() {
   return (
@@ -58,6 +59,8 @@ function App() {
           <Route path="/register/external-student" element={<ExternalStudentRegister />} />
           <Route path="/register/vendor" element={<VendorRegister />} />
           <Route path="/payment/process" element={<PaymentProcess />} />
+          <Route path="/buyorder" element={<BuyOrderPage />} />
+
 
           {/* Student */}
           <Route 
@@ -167,19 +170,17 @@ function App() {
               <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
                 <AcceptItem />
               </ProtectedRoute>
-  } 
-/>
-
-            <Route 
-              path="/complaint" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <Complaint />
-              </ProtectedRoute>
-            } 
+              } 
           />
 
-            
+              <Route 
+                path="/complaint" 
+              element={
+                <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                  <Complaint />
+                </ProtectedRoute>
+              } 
+            />
 
           {/* Admin */}
           <Route 

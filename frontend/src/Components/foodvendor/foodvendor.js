@@ -3,9 +3,11 @@ import './foodvendor.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ItemSidebar from '../foodvendor/itemsidebar';
 import { deleteItem as deleteItemApi, getItems } from '../../services/itemApi';
+import { useAuth } from '../../context/AuthContext';
 
 function FoodVendor() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
@@ -13,7 +15,6 @@ function FoodVendor() {
 
   const imageBaseUrl = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -22,12 +23,14 @@ function FoodVendor() {
     try {
       setIsLoading(true);
       setFetchError('');
-      const response = await getItems();
+      const response = await getItems({ vendorId: user?.id });
       setItems(response?.data || []);
     } catch (error) {
       setFetchError(
-        error?.response?.data?.message
-        || (error?.code === 'ERR_NETWORK' ? 'Cannot connect to backend. Please start the server on port 5000.' : 'Failed to load items')
+        error?.response?.data?.message ||
+          (error?.code === 'ERR_NETWORK'
+            ? 'Cannot connect to backend. Please start the server on port 5000.'
+            : 'Failed to load items')
       );
     } finally {
       setIsLoading(false);
@@ -35,8 +38,10 @@ function FoodVendor() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    if (user?.id) {
+      fetchItems();
+    }
+  }, [user?.id]);
 
   const handleUpdate = (itemId) => {
     navigate(`/updateItem/${itemId}`);
@@ -51,7 +56,7 @@ function FoodVendor() {
 
     try {
       await deleteItemApi(itemId);
-      setItems((previousItems) => previousItems.filter((item) => item._id !== itemId));
+      setItems((previous) => previous.filter((item) => item._id !== itemId));
     } catch (error) {
       setFetchError(error?.response?.data?.message || 'Failed to delete item');
     } finally {
@@ -60,24 +65,23 @@ function FoodVendor() {
   };
 
   return (
-    <div>
+    <div className="vendor-wrapper">
       <ItemSidebar />
 
-      {/* Main content */}
-      <div className="main-content">
-        <div className="header">
+      <div className="vendor-main">
+        <div className="vendor-header">
           <h2>Unistay</h2>
           <h3>Food Item Management System</h3>
         </div>
 
-        <ul className="top-buttons">
+        <ul className="vendor-buttons">
           <li><Link to="/addItem"><button>Add Item</button></Link></li>
           <li><Link to="/ItemManagement"><button>Manage Item</button></Link></li>
         </ul>
 
-        {fetchError && <p className="error-message">{fetchError}</p>}
+        {fetchError && <p className="vendor-error">{fetchError}</p>}
 
-        <table>
+        <table className="vendor-table">
           <thead>
             <tr>
               <th>Item Name</th>
@@ -92,13 +96,13 @@ function FoodVendor() {
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan="6">Loading items...</td>
+                <td colSpan="6" className="vendor-loading">Loading items...</td>
               </tr>
             )}
 
             {!isLoading && items.length === 0 && (
               <tr>
-                <td colSpan="6">No items available</td>
+                <td colSpan="6" className="vendor-no-items">No items available</td>
               </tr>
             )}
 
@@ -108,26 +112,26 @@ function FoodVendor() {
                   <td>{item.itemName}</td>
                   <td>{item.description}</td>
                   <td>{Number(item.price).toFixed(2)}</td>
-                  <td className={item.category === 'active' ? 'status-active' : 'status-inactive'}>
+                  <td className={item.category === 'active' ? 'vendor-status-active' : 'vendor-status-inactive'}>
                     {item.category}
                   </td>
                   <td>
                     <img
                       src={`${imageBaseUrl}${item.itemImage}`}
                       alt={item.itemName}
-                      width="60"
+                      className="vendor-item-img"
                     />
                   </td>
                   <td>
                     <button
-                      className="btn btn-update"
+                      className="vendor-btn vendor-btn-update"
                       onClick={() => handleUpdate(item._id)}
                       disabled={actionItemId === item._id}
                     >
                       Update
                     </button>
                     <button
-                      className="btn btn-delete"
+                      className="vendor-btn vendor-btn-delete"
                       onClick={() => handleDelete(item._id)}
                       disabled={actionItemId === item._id}
                     >

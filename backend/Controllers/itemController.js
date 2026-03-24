@@ -16,6 +16,11 @@ const addItem = async (req, res) => {
     const { itemName, description, price, category } = req.body;
     const uploadedFile = req.file;
 
+    if (!req.user || !req.user.userId || req.user.role !== 'vendor') {
+      if (uploadedFile) removeUploadedFile(uploadedFile.path);
+      return res.status(403).json({ success: false, message: 'Only vendors can add items' });
+    }
+
     if (!itemName || !itemName.trim()) {
       return res.status(400).json({ success: false, message: 'Item Name is required' });
     }
@@ -51,6 +56,7 @@ const addItem = async (req, res) => {
     }
 
     const item = await Item.create({
+      vendorId: req.user.userId,
       itemName: itemName.trim(),
       itemImage: `/uploads/${uploadedFile.filename}`,
       description: description.trim(),
@@ -78,7 +84,17 @@ const addItem = async (req, res) => {
 
 const getItems = async (req, res) => {
   try {
-    const items = await Item.find().sort({ createdAt: -1 });
+    const filter = {};
+
+    if (req.query.category) {
+      filter.category = req.query.category;
+    }
+
+    if (req.query.vendorId) {
+      filter.vendorId = req.query.vendorId;
+    }
+
+    const items = await Item.find(filter).sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import './AddItem.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ItemSidebar from '../foodvendor/itemsidebar';
 import { addItem as addItemApi } from '../../services/itemApi';
 
 function AddItem() {
+  const navigate = useNavigate();
   const [itemName, setItemName] = useState('');
   const [itemImage, setItemImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // <-- for preview
+  const [imagePreview, setImagePreview] = useState(null);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
@@ -21,7 +22,7 @@ function AddItem() {
     setItemImage(file);
 
     if (file) {
-      setImagePreview(URL.createObjectURL(file)); // <-- generate preview
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setImagePreview(null);
     }
@@ -43,7 +44,7 @@ function AddItem() {
       setDescription(value);
       setErrors((prev) => ({ ...prev, description: '' }));
     } else {
-      setErrors((prev) => ({ ...prev, description: 'Description can only contain letters and basic punctuation' }));
+      setErrors((prev) => ({ ...prev, description: 'Description can only contain letters and punctuation' }));
     }
   };
 
@@ -53,7 +54,7 @@ function AddItem() {
       setPrice(value);
       setErrors((prev) => ({ ...prev, price: '' }));
     } else {
-      setErrors((prev) => ({ ...prev, price: 'Price must be a number and cannot contain letters or symbols' }));
+      setErrors((prev) => ({ ...prev, price: 'Price must be a number' }));
     }
   };
 
@@ -64,6 +65,7 @@ function AddItem() {
     if (!description.trim()) newErrors.description = 'Description is required';
     if (!price || isNaN(price) || Number(price) <= 0) newErrors.price = 'Enter a valid price';
     if (!category) newErrors.category = 'Select a category';
+
     setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
@@ -86,6 +88,7 @@ function AddItem() {
       addItemApi(formData)
         .then((response) => {
           setSubmitMessage(response?.message || 'Item added successfully');
+
           setItemName('');
           setItemImage(null);
           setImagePreview(null);
@@ -93,10 +96,18 @@ function AddItem() {
           setPrice('');
           setCategory('');
           setErrors({});
+
+          setTimeout(() => {
+            navigate('/ItemManagement');
+          }, 600);
         })
         .catch((error) => {
-          const message = error?.response?.data?.message
-            || (error?.code === 'ERR_NETWORK' ? 'Cannot connect to backend. Please start the server on port 5000.' : 'Failed to add item');
+          const message =
+            error?.response?.data?.message ||
+            (error?.code === 'ERR_NETWORK'
+              ? 'Cannot connect to backend. Start server on port 5000.'
+              : 'Failed to add item');
+
           setSubmitError(message);
         })
         .finally(() => {
@@ -106,82 +117,78 @@ function AddItem() {
   };
 
   return (
-    <div className="container">
+    <div className="additem-wrapper">
       <ItemSidebar />
-      <div className="main-content">
-        <div className="card">
-          <div className="management-header">
+
+      <div className="additem-content">
+        <div className="additem-card">
+
+          <div className="additem-header">
             <div>
               <h2>Unistay</h2>
               <h3>Food Item Management System</h3>
             </div>
-            <ul>
+
+            <ul className="additem-top-buttons">
               <li><Link to="/addItem"><button>Add Item</button></Link></li>
               <li><Link to="/ItemManagement"><button>Manage Item</button></Link></li>
             </ul>
           </div>
 
           <form onSubmit={handleSubmit}>
-            {submitMessage && <p className="success-message">{submitMessage}</p>}
-            {submitError && <p className="error-message">{submitError}</p>}
 
-            <div className="form-group">
+            {submitMessage && <p className="additem-success">{submitMessage}</p>}
+            {submitError && <p className="additem-error">{submitError}</p>}
+
+            <div className="additem-field">
               <label>Item Name</label>
               <input
                 type="text"
-                placeholder="e.g. Delicious Burger"
                 value={itemName}
                 onChange={handleItemNameChange}
                 disabled={isSubmitting}
               />
-              {errors.itemName && <span className="error">{errors.itemName}</span>}
+              {errors.itemName && <span className="additem-error-text">{errors.itemName}</span>}
             </div>
 
-            <div className="form-group">
+            <div className="additem-field">
               <label>Item Image</label>
               <input type="file" accept="image/*" onChange={handleImageChange} disabled={isSubmitting} />
-              {errors.itemImage && <span className="error">{errors.itemImage}</span>}
+              {errors.itemImage && <span className="additem-error-text">{errors.itemImage}</span>}
 
-              {/* Image preview */}
               {imagePreview && (
-                <div style={{ marginTop: '10px' }}>
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-                  />
+                <div className="additem-preview-box">
+                  <img src={imagePreview} alt="Preview" />
                 </div>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="additem-field">
               <label>Description</label>
               <textarea
                 rows="4"
-                placeholder="Tell us about the item..."
                 value={description}
                 onChange={handleDescriptionChange}
                 disabled={isSubmitting}
               ></textarea>
-              {errors.description && <span className="error">{errors.description}</span>}
+              {errors.description && <span className="additem-error-text">{errors.description}</span>}
             </div>
 
-            <div className="form-group">
+            <div className="additem-field">
               <label>Price (RS)</label>
               <input
                 type="text"
-                placeholder="0.00"
                 value={price}
                 onChange={handlePriceChange}
                 disabled={isSubmitting}
               />
-              {errors.price && <span className="error">{errors.price}</span>}
+              {errors.price && <span className="additem-error-text">{errors.price}</span>}
             </div>
 
-            <div className="form-group">
+            <div className="additem-field">
               <label>Category</label>
               <select
-                className="category-select"
+                className="additem-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 disabled={isSubmitting}
@@ -190,12 +197,13 @@ function AddItem() {
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
-              {errors.category && <span className="error">{errors.category}</span>}
+              {errors.category && <span className="additem-error-text">{errors.category}</span>}
             </div>
 
-            <button type="submit" className="btn-submit" disabled={isSubmitting}>
+            <button type="submit" className="additem-submit-btn" disabled={isSubmitting}>
               {isSubmitting ? 'Adding Item...' : 'Add Item to Menu'}
             </button>
+
           </form>
         </div>
       </div>

@@ -54,12 +54,15 @@ function nomalhome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
+              
+            <Link to="/services">
               <div className="service-content">
                 <h3 className="service-title">Food</h3>
                 <p className="service-description">
                   Delicious and nutritious meals delivered right to your doorstep. Choose from a variety of cuisines.
                 </p>
               </div>
+              </Link>
               <div className="service-card-pattern"></div>
             </div>
             <div className="service-card service-card-boarding">

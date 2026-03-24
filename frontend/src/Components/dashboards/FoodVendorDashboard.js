@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './FoodVendorDashboard.css';
 import ItemSidebar from '../foodvendor/itemsidebar'; 
@@ -8,24 +7,34 @@ function FoodVendorDashboard() {
   const { user } = useAuth();
 
   return (
-    <div className="dashboard-container">
-      
-       
-      
+    <div className="vendor-dashboard-wrapper">
 
-            <ItemSidebar />
+      <ItemSidebar />
 
+      <div className="vendor-dashboard-content">
 
-      <div className="dashboard-content">
-        <div className="welcome-card">
-          <h2>Welcome, {user?.fullName}!</h2>
-          <p>Business: {user?.businessName || 'N/A'}</p>
-          <p>Email: {user?.email}</p>
-          <p>Vendor Type: Food</p>
-          <p className="status-badge">Status: Active</p>
+        <div className="vendor-dashboard-card">
+          <h2 className="vendor-dashboard-title">
+            Welcome, {user?.fullName}!
+          </h2>
+
+          <p className="vendor-dashboard-info">
+            <strong>Business:</strong> {user?.businessName || 'N/A'}
+          </p>
+
+          <p className="vendor-dashboard-info">
+            <strong>Email:</strong> {user?.email}
+          </p>
+
+          <p className="vendor-dashboard-info">
+            <strong>Vendor Type:</strong> Food
+          </p>
+
+          <p className="vendor-dashboard-status">
+            Status: Active
+          </p>
         </div>
 
-      
       </div>
     </div>
   );

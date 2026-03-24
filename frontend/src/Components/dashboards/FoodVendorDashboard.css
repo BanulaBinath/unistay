@@ -1,96 +1,47 @@
-/* Background with gradient animation */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(-45deg, #1e3a8a, #2563eb, #0ea5e9, #1e40af);
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-}
-
-/* Background animation */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Layout */
-.dashboard-container {
+/* MAIN LAYOUT */
+.vendor-dashboard-wrapper {
   display: flex;
-}
-
-/* Content area */
-.dashboard-content {
-  margin-left: 260px;
-  padding: 50px;
-  width: 100%;
+  background: #f8f9ff;
   min-height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* Glass card (modern look) */
-.welcome-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-
-  border-radius: 20px;
+/* CONTENT AREA */
+.vendor-dashboard-content {
+  margin-left: 260px; /* keep space for sidebar */
   padding: 40px;
-  width: 400px;
-
-  color: #fff;
-
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  animation: fadeUp 0.8s ease;
-  transition: 0.3s;
+  width: 100%;
 }
 
-/* Hover effect */
-.welcome-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+/* WELCOME CARD */
+.vendor-dashboard-card {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  width: 420px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Animation */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Text */
-.welcome-card h2 {
+.vendor-dashboard-title {
   font-size: 26px;
-  margin-bottom: 20px;
+  color: #1e3a8a;
+  margin-bottom: 15px;
 }
 
-.welcome-card p {
-  margin: 10px 0;
-  font-size: 15px;
-  opacity: 0.9;
+/* INFO TEXT */
+.vendor-dashboard-info {
+  font-size: 16px;
+  color: #334155;
+  margin: 8px 0;
 }
 
-/* Status badge (neon style) */
-.status-badge {
-  margin-top: 20px;
+/* STATUS BADGE */
+.vendor-dashboard-status {
+  margin-top: 15px;
+  padding: 8px 14px;
   display: inline-block;
-  padding: 8px 16px;
-  border-radius: 30px;
-  background: rgba(16, 185, 129, 0.2);
-  border: 1px solid #10b981;
-
-  color: #10b981;
-  font-weight: bold;
-
-  box-shadow: 0 0 10px #10b981;
+  background: #0d9488;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const { verifyToken, isVendor } = require('../middleware/authMiddleware');
 const { addItem, getItems, getItemById, updateItem, deleteItem } = require('../controllers/itemController');
 
 const router = express.Router();
@@ -66,9 +67,9 @@ const handleUploadErrors = (req, res, next) => {
 
 router.get('/', getItems);
 router.get('/:id', getItemById);
-router.put('/:id', handleUploadErrors, updateItem);
-router.delete('/:id', deleteItem);
+router.put('/:id', verifyToken, isVendor, handleUploadErrors, updateItem);
+router.delete('/:id', verifyToken, isVendor, deleteItem);
 
-router.post('/add', handleUploadErrors, addItem);
+router.post('/add', verifyToken, isVendor, handleUploadErrors, addItem);
 
 module.exports = router;

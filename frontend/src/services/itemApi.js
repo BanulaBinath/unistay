@@ -16,8 +16,8 @@ export const addItem = async (formData) => {
   return response.data;
 };
 
-export const getItems = async () => {
-  const response = await api.get('/items');
+export const getItems = async (params = {}) => {
+  const response = await api.get('/items', { params });
   return response.data;
 };
 

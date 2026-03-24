@@ -1,0 +1,115 @@
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Page container */
+.accept-item-container {
+  display: flex;
+  min-height: 100vh;
+  background: #F5F5FF; /* light soft white-purple */
+}
+
+/* Main table area */
+.table-container {
+  flex-grow: 1;
+  padding: 30px;
+  margin-left: 260px; /* keeps table from touching sidebar */
+}
+
+.table-container h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Error Message */
+.error-message {
+  background: #ffdddd;
+  color: #d8000c;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-left: 5px solid #d8000c;
+  border-radius: 4px;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+}
+
+thead {
+  background: #4A4CE8; /* soft blue-violet */
+  color: #fff;
+}
+
+thead th {
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+}
+
+tbody td {
+  padding: 10px 12px;
+  color: #333;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Hover effect */
+tbody tr:hover {
+  background: #f7f7ff;
+}
+
+/* Buttons */
+.update-btn,
+.delete-btn {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+/* Update button */
+.update-btn {
+  background: #4A4CE8;
+  color: #fff;
+  margin-right: 8px;
+}
+
+.update-btn:hover {
+  background: #2c2ecc;
+}
+
+/* Delete button */
+.delete-btn {
+  background: #ff4e4e;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #d63c3c;
+}
+
+/* When button is disabled */
+.update-btn:disabled,
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

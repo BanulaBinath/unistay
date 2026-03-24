@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Dashboard.css';
 
+
+
 function StudentDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -35,7 +37,13 @@ function StudentDashboard() {
             <p>Book and manage your accommodation</p>
             <button className="card-button">Coming Soon</button>
           </div>
-
+        
+          <div className="dashboard-card">
+            <h3>Food Services</h3>
+            <p>Order meals from campus vendors</p>
+            <button className="card-button">Explore Services</button>
+          </div>
+        
           <div className="dashboard-card">
             <h3>Food Orders</h3>
             <p>Order meals from campus vendors</p>

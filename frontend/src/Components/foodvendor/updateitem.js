@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './updateitem.css';
+import  './updateitem.css';
 import ItemSidebar from '../foodvendor/itemsidebar';
 import { getItemById, updateItem as updateItemApi } from '../../services/itemApi';
 

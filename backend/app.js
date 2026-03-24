@@ -11,6 +11,7 @@ const ticketRoutes = require('./routes/ticketRoutes');
 const adminTicketRoutes = require('./routes/adminTicketRoutes');
 const vendorTicketRoutes = require('./routes/vendorTicketRoutes');
 const itemRoutes = require('./routes/itemRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/admin/tickets', adminTicketRoutes);
 app.use('/api/vendor/tickets', vendorTicketRoutes);
 app.use('/api/items', itemRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
