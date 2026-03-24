@@ -1,10 +1,16 @@
 import api from './api';
+import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+const getAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const addItem = async (formData) => {
-  const response = await api.post('/items/add', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+  const response = await axios.post(`${API_BASE_URL}/items/add`, formData, {
+    headers: getAuthHeader()
   });
 
   return response.data;
@@ -21,10 +27,8 @@ export const getItemById = async (itemId) => {
 };
 
 export const updateItem = async (itemId, payload) => {
-  const response = await api.put(`/items/${itemId}`, payload, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+  const response = await axios.put(`${API_BASE_URL}/items/${itemId}`, payload, {
+    headers: getAuthHeader()
   });
   return response.data;
 };

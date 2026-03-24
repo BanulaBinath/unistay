@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './updateitem.css';
 import ItemSidebar from '../foodvendor/itemsidebar';
 import { getItemById, updateItem as updateItemApi } from '../../services/itemApi';
@@ -43,7 +43,7 @@ function UpdateItem() {
     };
 
     fetchItem();
-  }, [id]);
+  }, [id, imageBaseUrl]);
 
   const handleItemNameChange = (e) => {
     const value = e.target.value;
@@ -93,6 +93,8 @@ function UpdateItem() {
 
     if (file) {
       setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview('');
     }
   };
 
