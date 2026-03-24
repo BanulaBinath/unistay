@@ -31,11 +31,18 @@ import TicketDetailsPage from './pages/student/TicketDetailsPage';
 import AdminTicketsPage from './pages/admin/AdminTicketsPage';
 import AdminTicketDetailsPage from './pages/admin/AdminTicketDetailsPage';
 
+import FoodVendor from './Components/foodvendor/foodvendor';
+import AddItem from './Components/foodvendor/addItem';
+import UpdateItem from './Components/foodvendor/updateitem';
+import AcceptItem from './Components/foodvendor/AcceptItem';
+import Complaint from './Components/foodvendor/foodVendorcomplaint';
+
 function App() {
   return (
     <AuthProvider>
       <div className="App">
         <Routes>
+
           {/* Public Routes */}
           <Route path="/" element={<NomalHome />} />
           <Route path="/login" element={<Login />} />
@@ -46,7 +53,7 @@ function App() {
           <Route path="/register/vendor" element={<VendorRegister />} />
           <Route path="/payment/process" element={<PaymentProcess />} />
 
-          {/* Protected Student Routes */}
+          {/* Student */}
           <Route 
             path="/student/dashboard" 
             element={
@@ -83,7 +90,7 @@ function App() {
             } 
           />
 
-          {/* Protected Vendor Routes */}
+          {/* Vendor Dashboards */}
           <Route 
             path="/vendor/food/dashboard" 
             element={
@@ -120,7 +127,55 @@ function App() {
             } 
           />
 
-          {/* Protected Admin Routes */}
+          {/* ✅ FIXED: Item Management Route */}
+          <Route 
+            path="/ItemManagement" 
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                <FoodVendor />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/addItem" 
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                <AddItem />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/updateItem/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                <UpdateItem />
+              </ProtectedRoute>
+            } 
+          />
+
+           <Route 
+            path="/accept-item" 
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                <AcceptItem />
+              </ProtectedRoute>
+  } 
+/>
+
+            <Route 
+              path="/complaint" 
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                <Complaint />
+              </ProtectedRoute>
+            } 
+          />
+
+            
+
+          {/* Admin */}
           <Route 
             path="/admin/dashboard" 
             element={
@@ -174,6 +229,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+
         </Routes>
       </div>
     </AuthProvider>

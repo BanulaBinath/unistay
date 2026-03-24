@@ -1,0 +1,96 @@
+/* Background with gradient animation */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(-45deg, #1e3a8a, #2563eb, #0ea5e9, #1e40af);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+}
+
+/* Background animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Layout */
+.dashboard-container {
+  display: flex;
+}
+
+/* Content area */
+.dashboard-content {
+  margin-left: 260px;
+  padding: 50px;
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Glass card (modern look) */
+.welcome-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  border-radius: 20px;
+  padding: 40px;
+  width: 400px;
+
+  color: #fff;
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  animation: fadeUp 0.8s ease;
+  transition: 0.3s;
+}
+
+/* Hover effect */
+.welcome-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Text */
+.welcome-card h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.welcome-card p {
+  margin: 10px 0;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Status badge (neon style) */
+.status-badge {
+  margin-top: 20px;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+
+  color: #10b981;
+  font-weight: bold;
+
+  box-shadow: 0 0 10px #10b981;
+}

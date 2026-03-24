@@ -1,0 +1,10 @@
+@import './AddItem.css';
+
+.error-message {
+	background: #fee2e2;
+	border: 1px solid #ef4444;
+	color: #991b1b;
+	padding: 10px 12px;
+	border-radius: 8px;
+	font-size: 0.9rem;
+}

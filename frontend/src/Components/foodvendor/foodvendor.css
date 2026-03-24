@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: #F5F5FF;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 260px; /* sidebar width */
+  width: calc(100% - 260px);
+  padding: 30px 40px;
+  min-height: 100vh;
+  background: #F5F5FF;
+  overflow-x: auto;
+}
+
+/* Header */
+.header h2 {
+  color: #624BFF;
+  margin-bottom: 5px;
+}
+.header h3 {
+  font-size: 14px;
+  color: #5555AA;
+  margin-bottom: 20px;
+}
+
+/* Top Buttons */
+.top-buttons {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin-bottom: 25px;
+}
+.top-buttons button {
+  background: #1976D2;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.top-buttons button:hover {
+  background: #624BFF;
+  transform: scale(1.05);
+}
+
+/* Table */
+table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+thead {
+  background: #624BFF;
+  color: #fff;
+}
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+}
+tbody tr:nth-child(even) {
+  background: #f0f0ff;
+}
+tbody tr:hover {
+  background: #e0e0ff;
+}
+img {
+  border-radius: 8px;
+}
+
+/* Status */
+.status-active {
+  color: green;
+  font-weight: 600;
+}
+.status-inactive {
+  color: red;
+  font-weight: 600;
+}
+
+/* Buttons in table */
+.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s ease;
+  margin-right: 5px;
+}
+.btn-update {
+  background: #1976D2;
+  color: #fff;
+}
+.btn-update:hover {
+  background: #624BFF;
+  transform: scale(1.05);
+}
+.btn-delete {
+  background: #EF4444;
+  color: #fff;
+}
+.btn-delete:hover {
+  background: #DC2626;
+  transform: scale(1.05);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+/* Responsive table */
+@media (max-width: 900px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead tr {
+    display: none;
+  }
+  tbody tr {
+    margin-bottom: 15px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    padding: 10px;
+    border-radius: 10px;
+  }
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  tbody td img {
+    max-width: 50px;
+    height: auto;
+  }
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: #555;
+  }
+  .top-buttons {
+    flex-direction: column;
+  }
+  .top-buttons button {
+    width: 100%;
+  }
+}
