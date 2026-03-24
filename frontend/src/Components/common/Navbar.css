@@ -33,6 +33,15 @@
   transition: color 0.3s ease;
   font-family: 'Poppins', sans-serif;
   margin-left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
 }
 
 .navbar-logo:hover {
