@@ -10,6 +10,7 @@ function foodVendorcomplaint() {
     <div>
         <h1>Complaint</h1>  
         <ItemSidebar />
+        
     </div>
   )
 }
