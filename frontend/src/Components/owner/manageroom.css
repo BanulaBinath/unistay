@@ -1,0 +1,67 @@
+.manage-container {
+  padding: 40px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.manage-container h1 {
+  margin-bottom: 25px;
+  color: #222;
+}
+
+.room-table {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+  padding: 16px 20px;
+  align-items: center;
+}
+
+.table-head {
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+}
+
+.table-row {
+  border-bottom: 1px solid #eee;
+}
+
+.table-row:hover {
+  background: #f9fbff;
+}
+
+.actions button {
+  margin-right: 10px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.edit {
+  background: #10b981;
+  color: white;
+}
+
+.delete {
+  background: #ef4444;
+  color: white;
+}
+
+.occ {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.vac {
+  color: #10b981;
+  font-weight: 600;
+}
