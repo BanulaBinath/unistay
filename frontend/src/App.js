@@ -16,11 +16,9 @@ import PaymentProcess from './Components/Home/PaymentProcess';
 import StudentDashboard from './Components/dashboards/StudentDashboard';
 import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
 import BoardingVendorDashboard from './Components/dashboards/BoardingVendorDashboard';
+
 import LaundryVendorDashboard from './Components/laundryvendor/laundryvendor';
 import CleaningVendorDashboard from './Components/cleaningvendor/cleaningvendor';
-
-
-// Siddarth - Maintenance Services
 import StudentLaundry from './Components/studenthome/studentlaundry';
 import StudentCleaning from './Components/studenthome/studentcleaning';
 
@@ -59,7 +57,6 @@ function App() {
             } 
           />
 
-          {/* Siddarth - Student Maintenance Routes */}
           <Route 
             path="/student/laundry" 
             element={
