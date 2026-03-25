@@ -1,13 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import './Home.css';
 
-function nomalhome() {
+function NomalHome() {
+  const location = useLocation();
+
   return (
     <div className="home-page">
       <Navbar />
+      {location.state?.orderSuccess && (
+        <div className="home-order-success">
+          {location.state.orderMessage || 'Order placed successfully.'}
+        </div>
+      )}
       
       {/* Hero Section */}
       <section className="hero-section">
@@ -333,4 +340,4 @@ function nomalhome() {
   );
 }
 
-export default nomalhome;
+export default NomalHome;

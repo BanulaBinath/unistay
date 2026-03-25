@@ -161,11 +161,18 @@ function FoodOrder() {
         notes: formData.notes
       });
 
-      alert('Order placed!');
-      navigate('/services');
+      navigate('/services', {
+        state: {
+          successMessage: 'Order placed successfully!'
+        }
+      });
 
     } catch (error) {
-      setSubmitError(error?.response?.data?.message || 'Failed to place order');
+      if (error?.response?.status === 401) {
+        setSubmitError('Please login as a student account to place an order.');
+      } else {
+        setSubmitError(error?.response?.data?.message || 'Failed to place order');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -277,10 +284,7 @@ function FoodOrder() {
               <input value={formData.liveLocation} readOnly />
             </div>
 
-            <div className="form-group">
-              <label>Notes</label>
-              <textarea name="notes" rows="3" value={formData.notes} onChange={handleChange}></textarea>
-            </div>
+           
 
             <div ref={mapContainerRef} className="map-box"></div>
 

@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import './Services.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getItems } from '../../services/itemApi';
 import './Services2.css';
 
 function Services() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [foodItems, setFoodItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const imageBaseUrl = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
@@ -31,6 +33,13 @@ function Services() {
     loadItems();
   }, []);
 
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setSuccessMessage(location.state.successMessage);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
+
   const handleOrderNow = (item) => {
     navigate('/buyorder', { state: { item } });
   };
@@ -41,6 +50,9 @@ function Services() {
 
       <div className="services-content">
         <h1>Our Services</h1>
+        {successMessage && (
+          <p className="order-success-message">{successMessage}</p>
+        )}
         <ul>
           <li><Link to="/services"><button>Food Services</button></Link></li>
           <li><Link to="/room-booking"><button>Room Booking</button></Link></li>
