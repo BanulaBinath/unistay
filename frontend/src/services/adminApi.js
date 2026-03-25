@@ -107,3 +107,65 @@ export const updateSubscriptionStatus = async (id, activationStatus) => {
   );
   return response.data;
 };
+
+// Ticket Management
+export const getAllTickets = async (filters = {}) => {
+  const params = new URLSearchParams(filters).toString();
+  const response = await axios.get(
+    `${API_URL}/admin/tickets?${params}`,
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const getTicketStats = async () => {
+  const response = await axios.get(
+    `${API_URL}/admin/tickets/stats`,
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const getTicketDetails = async (id) => {
+  const response = await axios.get(
+    `${API_URL}/admin/tickets/${id}`,
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const updateTicketStatus = async (id, status, notes = '') => {
+  const response = await axios.patch(
+    `${API_URL}/admin/tickets/${id}/status`,
+    { status, notes },
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const updateTicketPriority = async (id, priority, notes = '') => {
+  const response = await axios.patch(
+    `${API_URL}/admin/tickets/${id}/priority`,
+    { priority, notes },
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const resolveTicket = async (id, notes = '') => {
+  const response = await axios.patch(
+    `${API_URL}/admin/tickets/${id}/resolve`,
+    { notes },
+    createAuthRequest()
+  );
+  return response.data;
+};
+
+export const closeTicket = async (id, notes = '') => {
+  const response = await axios.patch(
+    `${API_URL}/admin/tickets/${id}/close`,
+    { notes },
+    createAuthRequest()
+  );
+  return response.data;
+};
