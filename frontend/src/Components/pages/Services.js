@@ -3,8 +3,8 @@ import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import './Services.css';
 import { Link, useNavigate } from 'react-router-dom';
-import './Services2.css';
 import { getItems } from '../../services/itemApi';
+import './Services2.css';
 
 function Services() {
   const navigate = useNavigate();
