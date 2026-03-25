@@ -1,13 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import './Home.css';
 
-function nomalhome() {
+function NomalHome() {
+  const location = useLocation();
+
   return (
     <div className="home-page">
       <Navbar />
+      {location.state?.orderSuccess && (
+        <div className="home-order-success">
+          {location.state.orderMessage || 'Order placed successfully.'}
+        </div>
+      )}
       
       {/* Hero Section */}
       <section className="hero-section">
@@ -57,12 +64,15 @@ function nomalhome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
+              
+            <Link to="/services">
               <div className="service-content">
                 <h3 className="service-title">Food</h3>
                 <p className="service-description">
                   Delicious and nutritious meals delivered right to your doorstep. Choose from a variety of cuisines.
                 </p>
               </div>
+              </Link>
               <div className="service-card-pattern"></div>
             </div>
             <div className="service-card service-card-boarding">
@@ -333,4 +343,4 @@ function nomalhome() {
   );
 }
 
-export default nomalhome;
+export default NomalHome;

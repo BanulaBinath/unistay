@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const authRoutes = require('./Route/authRoutes');
 const userRoutes = require('./Route/userRoutes');
@@ -9,6 +10,8 @@ const adminRoutes = require('./Route/adminRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const adminTicketRoutes = require('./routes/adminTicketRoutes');
 const vendorTicketRoutes = require('./routes/vendorTicketRoutes');
+const itemRoutes = require('./routes/itemRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 
@@ -19,6 +22,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -27,6 +31,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/admin/tickets', adminTicketRoutes);
 app.use('/api/vendor/tickets', vendorTicketRoutes);
+app.use('/api/items', itemRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

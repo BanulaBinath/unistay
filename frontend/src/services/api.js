@@ -12,6 +12,10 @@ const api = axios.create({
 // Add token to requests if available
 api.interceptors.request.use(
   (config) => {
+    if (config.skipAuth) {
+      return config;
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -27,7 +31,16 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const requestUrl = error.config?.url || '';
+    const requestMethod = (error.config?.method || '').toLowerCase();
+    const isCreateOrderRequest = requestMethod === 'post' && requestUrl.includes('/orders');
+
+    if (
+      error.response?.status === 401 &&
+      !error.config?.skipAuth &&
+      !error.config?.skipAuthRedirect &&
+      !isCreateOrderRequest
+    ) {
       // Token expired or invalid
       localStorage.removeItem('token');
       localStorage.removeItem('user');

@@ -1,0 +1,153 @@
+/* PAGE WRAPPER */
+.order-page {
+  padding: 20px;
+  background: #f7f8ff;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.order-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.order-header h2 {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 0;
+  padding: 8px 18px;
+  border: none;
+  background: #d6d6d6;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.back-btn:hover {
+  background: #bfbfbf;
+}
+
+/* TWO COLUMNS */
+.order-container {
+  display: flex;
+  gap: 30px;
+  padding: 15px;
+}
+
+.order-left,
+.order-right {
+  width: 50%;
+}
+
+/* LEFT CARD */
+.service-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.service-card h4 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* FIXED IMAGE WRAPPER */
+.image-box {
+  width: 100%;
+  height: 260px;      /* FIXED HEIGHT */
+  overflow: hidden;   /* PREVENT OVERFLOW */
+  border-radius: 12px;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* PERFECT CROPPING */
+}
+
+/* FORM SECTION */
+.order-right {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.camplain-btn {
+  padding: 10px 16px;
+  background: #ff5d5d;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.camplain-btn:hover {
+  background: #e04646;
+}
+
+.order-form {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0px 3px 12px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+}
+
+/* MAP */
+.map-box {
+  width: 100%;
+  height: 220px;
+  background: #eee;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* SUBMIT BUTTON */
+.btn-update {
+  width: 100%;
+  padding: 12px;
+  background: #4a6cf7;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 17px;
+}
+.btn-update:hover {
+  background: #364fc7;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .order-container {
+    flex-direction: column;
+  }
+  .order-left,
+  .order-right {
+    width: 100%;
+  }
+}
