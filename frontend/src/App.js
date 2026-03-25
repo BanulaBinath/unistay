@@ -16,8 +16,14 @@ import PaymentProcess from './Components/Home/PaymentProcess';
 import StudentDashboard from './Components/dashboards/StudentDashboard';
 import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
 import BoardingVendorDashboard from './Components/dashboards/BoardingVendorDashboard';
-import LaundryVendorDashboard from './Components/dashboards/LaundryVendorDashboard';
-import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashboard';
+import LaundryVendorDashboard from './Components/laundryvendor/laundryvendor';
+import CleaningVendorDashboard from './Components/cleaningvendor/cleaningvendor';
+
+
+// Siddarth - Maintenance Services
+import StudentLaundry from './Components/studenthome/studentlaundry';
+import StudentCleaning from './Components/studenthome/studentcleaning';
+
 
 function App() {
   return (
@@ -34,6 +40,15 @@ function App() {
           <Route path="/register/vendor" element={<VendorRegister />} />
           <Route path="/payment/process" element={<PaymentProcess />} />
 
+          {/* TEMP TEST - Siddarth (Remove before final submission) */}
+          <Route path="/test/laundry" element={<StudentLaundry />} />
+          <Route path="/test/cleaning" element={<StudentCleaning />} />
+          <Route path="/test/laundryvendor" element={<LaundryVendorDashboard />} />
+          <Route path="/test/cleaningvendor" element={<CleaningVendorDashboard />} />
+
+
+
+
           {/* Protected Student Routes */}
           <Route 
             path="/student/dashboard" 
@@ -43,6 +58,26 @@ function App() {
               </ProtectedRoute>
             } 
           />
+
+          {/* Siddarth - Student Maintenance Routes */}
+          <Route 
+            path="/student/laundry" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <StudentLaundry />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/cleaning" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <StudentCleaning />
+              </ProtectedRoute>
+            } 
+          />
+
 
           {/* Protected Vendor Routes */}
           <Route 
