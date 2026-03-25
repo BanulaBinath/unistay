@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
+import Navbar from '../common/Navbar';
 import './VendorRegister.css';
 
 function VendorRegister() {
@@ -18,7 +19,7 @@ function VendorRegister() {
   const [apiError, setApiError] = useState('');
 
   const vendorTypes = [
-    { value: '', label: 'Select category' },
+    { value: '', label: 'Select your business category' },
     { value: 'food', label: 'Food Services' },
     { value: 'boarding', label: 'Boarding/Accommodation' },
     { value: 'laundry', label: 'Laundry Services' },
@@ -124,179 +125,196 @@ function VendorRegister() {
   };
 
   return (
-    <div className="vendor-register-container">
-      <div className="vendor-register-wrapper">
-        {/* Left Side */}
-        <div className="vendor-register-left">
-          <div className="vendor-badge">🤝 STEP 1 OF 2 (VENDOR SETUP)</div>
-          <h1 className="vendor-title">Partner with Unistay</h1>
-          <p className="vendor-description">
-            Join an exclusive network of high-end academic service providers. Scale your business within the prestigious student housing ecosystem.
-          </p>
+    <>
+      <Navbar />
+      <div className="vendor-register-container">
+        <div className="vendor-register-wrapper">
+          {/* Left Side - Blue Section */}
+          <div className="vendor-register-left">
+            <div className="vendor-badge">VENDOR SETUP</div>
+            
+            <h1 className="vendor-title">Partner with Unistay</h1>
+            
+            <p className="vendor-description">
+              Join the premier network for academic search services and grow your business with our global student community. 
+            </p>
 
-          <div className="progress-section">
-            <div className="progress-header">
-              <span className="progress-label">REGISTRATION PROGRESS</span>
-              <span className="progress-step">50% Complete</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: '50%' }}></div>
+            <p className="vendor-description-secondary">
+              Access advanced analytics, automated booking systems, and dedicated support to scale your operations efficiently across multiple locations.
+            </p>
+
+            <div className="vendor-insights-card">
+              <div className="insights-header">
+                <div className="insights-title-section">
+                  <span className="insights-label">VENDOR INSIGHTS</span>
+                  <h3>Growth Metrics</h3>
+                </div>
+                <div className="insights-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="insights-chart">
+                <div className="chart-bar" style={{ height: '35%' }}></div>
+                <div className="chart-bar" style={{ height: '55%' }}></div>
+                <div className="chart-bar" style={{ height: '45%' }}></div>
+                <div className="chart-bar" style={{ height: '75%' }}></div>
+                <div className="chart-bar" style={{ height: '60%' }}></div>
+                <div className="chart-bar" style={{ height: '85%' }}></div>
+              </div>
+              
+              <p className="insights-footer">Average partner growth: +34% per quarter</p>
             </div>
           </div>
 
-          <div className="feature-list">
-            <div className="feature-item">
-              <div className="feature-icon">💳</div>
-              <div>
-                <h3>Seamless Activation</h3>
-                <p>Profile activates instantly upon payment success.</p>
-              </div>
+          {/* Right Side - Form Section */}
+          <div className="vendor-register-right">
+            <div className="form-header">
+              <h2>Create Vendor Account</h2>
+              <p>Complete the details below to begin your partnership</p>
             </div>
 
-            <div className="feature-item">
-              <div className="feature-icon">📊</div>
-              <div>
-                <h3>Vendor Insights</h3>
-                <p>Access detailed dashboard analytics for your academic market share.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+            <div className="form-card">
+              <form onSubmit={handleSubmit} className="vendor-register-form">
+              <div className="form-row-three">
+                <div className="form-group">
+                  <label htmlFor="fullName">FULL NAME</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="John Doe"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className={errors.fullName ? 'error' : ''}
+                  />
+                  {errors.fullName && <span className="error-text">{errors.fullName}</span>}
+                </div>
 
-        {/* Right Side */}
-        <div className="vendor-register-right">
-          <form onSubmit={handleSubmit} className="vendor-register-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="fullName">FULL NAME</label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  placeholder="Alexander Sterling"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  className={errors.fullName ? 'error' : ''}
-                />
-                {errors.fullName && <span className="error-text">{errors.fullName}</span>}
-              </div>
+                <div className="form-group">
+                  <label htmlFor="businessName">BUSINESS NAME</label>
+                  <input
+                    type="text"
+                    id="businessName"
+                    name="businessName"
+                    placeholder="Sanctuary Livings Ltd"
+                    value={formData.businessName}
+                    onChange={handleChange}
+                    className={errors.businessName ? 'error' : ''}
+                  />
+                  {errors.businessName && <span className="error-text">{errors.businessName}</span>}
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="businessName">BUSINESS NAME</label>
-                <input
-                  type="text"
-                  id="businessName"
-                  name="businessName"
-                  placeholder="Sterling Gourmet Services"
-                  value={formData.businessName}
-                  onChange={handleChange}
-                  className={errors.businessName ? 'error' : ''}
-                />
-                {errors.businessName && <span className="error-text">{errors.businessName}</span>}
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="email">BUSINESS EMAIL</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="alex@sterling.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={errors.email ? 'error' : ''}
-                />
-                {errors.email && <span className="error-text">{errors.email}</span>}
+                <div className="form-group">
+                  <label htmlFor="email">BUSINESS EMAIL</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="partners@yourcompany.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={errors.email ? 'error' : ''}
+                  />
+                  {errors.email && <span className="error-text">{errors.email}</span>}
+                </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="vendorType">VENDOR TYPE</label>
-                <select
-                  id="vendorType"
-                  name="vendorType"
-                  value={formData.vendorType}
-                  onChange={handleChange}
-                  className={errors.vendorType ? 'error' : ''}
+              <div className="form-row-three">
+                <div className="form-group">
+                  <label htmlFor="vendorType">VENDOR TYPE</label>
+                  <select
+                    id="vendorType"
+                    name="vendorType"
+                    value={formData.vendorType}
+                    onChange={handleChange}
+                    className={errors.vendorType ? 'error' : ''}
+                  >
+                    {vendorTypes.map(type => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.vendorType && <span className="error-text">{errors.vendorType}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">PASSWORD</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error' : ''}
+                  />
+                  {errors.password && <span className="error-text">{errors.password}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={errors.confirmPassword ? 'error' : ''}
+                  />
+                  {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+                </div>
+              </div>
+
+              {apiError && (
+                <div className="api-error-message">
+                  {apiError}
+                </div>
+              )}
+
+              <div className="subscription-info">
+                <div className="subscription-header">
+                  <span className="subscription-label">Annual Subscription</span>
+                  <span className="subscription-price">Rs.1000<span className="price-period">/YEAR</span></span>
+                </div>
+                <p className="subscription-description">
+                  Billed once a year. Full access to vendor dashboard and business analytics.
+                </p>
+              </div>
+
+              <div className="form-footer-new">
+                <div className="form-footer-left">
+                  <label className="checkbox-container">
+                    <input type="checkbox" required />
+                    <span className="checkmark"></span>
+                    <span className="checkbox-label">
+                      I agree to the <a href="/terms">Partner Terms</a> and <a href="/privacy">Privacy Policy</a>
+                    </span>
+                  </label>
+
+                  <div className="signin-link">
+                    Already a partner? <a href="/login">Sign In to Dashboard</a>
+                  </div>
+                </div>
+
+                <button 
+                  type="submit" 
+                  className="submit-btn"
+                  disabled={loading}
                 >
-                  {vendorTypes.map(type => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-                {errors.vendorType && <span className="error-text">{errors.vendorType}</span>}
+                  {loading ? 'Processing...' : 'Register & Pay Annual Subscription'}
+                </button>
               </div>
+              </form>
             </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="password">PASSWORD</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? 'error' : ''}
-                />
-                {errors.password && <span className="error-text">{errors.password}</span>}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? 'error' : ''}
-                />
-                {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>ASSIGNED ROLE</label>
-              <div className="role-display">
-                <span className="role-icon">🏢</span>
-                <span className="role-text">Vendor</span>
-              </div>
-            </div>
-
-            {apiError && (
-              <div className="api-error-message">
-                {apiError}
-              </div>
-            )}
-
-            <div className="subscription-info">
-              <div className="info-icon">ℹ️</div>
-              <div className="info-content">
-                <h4>Annual business subscription activation required.</h4>
-                <p>Registration provides access to the Unistay Vendor Slate interface and institutional market tools.</p>
-              </div>
-            </div>
-
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : 'Register & Pay for Activation →'}
-            </button>
-
-            <div className="terms-text">
-              By registering, you agree to our <a href="/guidelines">Institutional Guidelines</a> and <a href="/terms">Terms of Service</a>.
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
