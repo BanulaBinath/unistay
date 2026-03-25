@@ -14,7 +14,9 @@ import VendorRegister from './Components/Home/VendorRegister';
 import PaymentProcess from './Components/Home/PaymentProcess';
 import Services from './Components/pages/Services';
 import About from './Components/pages/About';
-import Contact from './Components/pages/Contact';
+import AboutUs from './Components/Home/AboutUs';
+import ContactPage from './Components/pages/Contact';
+import Contact from './Components/Home/Contact';
 
 import StudentDashboard from './Components/dashboards/StudentDashboard';
 import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
@@ -50,7 +52,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={<NomalHome />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterSelection />} />
