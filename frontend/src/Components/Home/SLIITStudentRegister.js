@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
 import './SLIITStudentRegister.css';
 
 function SLIITStudentRegister() {
@@ -102,141 +104,152 @@ function SLIITStudentRegister() {
   };
 
   return (
-    <div className="sliit-register-container">
-      <div className="sliit-register-wrapper">
-        {/* Left Side - Info */}
-        <div className="sliit-register-left">
-          <div className="sliit-badge">🎓 INSTITUTIONAL PARTNER: SLIIT</div>
-          <h1 className="sliit-title">Join Unistay as a SLIIT Student</h1>
-          <p className="sliit-description">
-            Access exclusive academic housing near Malabe campus. Verified listings curated for the SLIIT community.
-          </p>
+    <>
+      <Navbar />
+      <div className="sliit-register-container">
+        <div className="sliit-register-wrapper">
+          {/* Left Side - Emerald Section */}
+          <div className="sliit-register-left">
+            <div className="sliit-badge">SLIIT STUDENT</div>
+            
+            <h1 className="sliit-title">Join Unistay as a SLIIT Student</h1>
+            
+            <p className="sliit-description">
+              Access exclusive academic housing near Malabe campus. Verified listings curated specifically for the SLIIT community.
+            </p>
 
-          <div className="progress-section">
-            <div className="progress-header">
-              <span className="progress-label">PROGRESS</span>
-              <span className="progress-step">STEP 1 OF 2</span>
+            <p className="sliit-description-secondary">
+              Register with your institutional email for instant access to campus-adjacent hostels, private stays, and verified accommodation partners.
+            </p>
+
+            <div className="sliit-insights-card">
+              <div className="insights-header">
+                <div className="insights-title-section">
+                  <span className="insights-label">STUDENT BENEFITS</span>
+                  <h3>Campus Proximity</h3>
+                </div>
+                <div className="insights-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="insights-chart">
+                <div className="chart-bar" style={{ height: '45%' }}></div>
+                <div className="chart-bar" style={{ height: '65%' }}></div>
+                <div className="chart-bar" style={{ height: '55%' }}></div>
+                <div className="chart-bar" style={{ height: '80%' }}></div>
+                <div className="chart-bar" style={{ height: '70%' }}></div>
+                <div className="chart-bar" style={{ height: '90%' }}></div>
+              </div>
+              
+              <p className="insights-footer">95% of SLIIT students find housing within 2km of campus</p>
             </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: '50%' }}></div>
-            </div>
-            <p className="progress-text">Registration in progress</p>
           </div>
 
-          <div className="advantage-box">
-            <div className="advantage-icon">🛡️</div>
-            <h3>SLIIT Verified Advantage</h3>
-            <p>Registration with your institutional email unlocks immediate access to campus-adjacent hostels and private stays.</p>
+          {/* Right Side - Form Section */}
+          <div className="sliit-register-right">
+            <div className="form-header">
+              <h2>Create Student Account</h2>
+              <p>Complete the details below to access exclusive housing</p>
+            </div>
+
+            <div className="form-card">
+              <form onSubmit={handleSubmit} className="sliit-register-form">
+                <div className="form-row-two">
+                  <div className="form-group">
+                    <label htmlFor="fullName">FULL NAME</label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      placeholder="John Doe"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className={errors.fullName ? 'error' : ''}
+                    />
+                    {errors.fullName && <span className="error-text">{errors.fullName}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email">SLIIT STUDENT EMAIL</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="it21000000@my.sliit.lk"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={errors.email ? 'error' : ''}
+                    />
+                    {errors.email && <span className="error-text">{errors.email}</span>}
+                  </div>
+                </div>
+
+                <div className="form-row-two">
+                  <div className="form-group">
+                    <label htmlFor="password">PASSWORD</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={errors.password ? 'error' : ''}
+                    />
+                    {errors.password && <span className="error-text">{errors.password}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="••••••••"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className={errors.confirmPassword ? 'error' : ''}
+                    />
+                    {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+                  </div>
+                </div>
+
+                {apiError && (
+                  <div className="api-error-message">
+                    {apiError}
+                  </div>
+                )}
+
+                <div className="form-footer-new">
+                  <div className="form-footer-left">
+                    <div className="info-text">
+                      ℹ️ Use your SLIIT student email (@my.sliit.lk) to register for free access.
+                    </div>
+
+                    <div className="signin-link">
+                      Already have an account? <a href="/login">Sign In</a>
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="submit-btn"
+                    disabled={loading}
+                  >
+                    {loading ? 'Processing...' : 'Generate OTP & Register'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-
-        {/* Right Side - Form */}
-        <div className="sliit-register-right">
-          <form onSubmit={handleSubmit} className="sliit-register-form">
-            <div className="form-group">
-              <label>ACCOUNT ROLE</label>
-              <div className="role-display">
-                <span className="role-icon">🎓</span>
-                <span className="role-text">student_sliit</span>
-                <span className="role-badge">FIXED</span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="fullName">FULL NAME</label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                placeholder="John Doe"
-                value={formData.fullName}
-                onChange={handleChange}
-                className={errors.fullName ? 'error' : ''}
-              />
-              {errors.fullName && <span className="error-text">{errors.fullName}</span>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">SLIIT STUDENT EMAIL</label>
-              <div className="email-input-wrapper">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="it21000000@my.sliit.lk"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={errors.email ? 'error' : ''}
-                />
-                <span className="email-icon">@</span>
-              </div>
-              <p className="input-hint">ℹ️ Use your SLIIT student email to register for free.</p>
-              {errors.email && <span className="error-text">{errors.email}</span>}
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="password">PASSWORD</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? 'error' : ''}
-                />
-                {errors.password && <span className="error-text">{errors.password}</span>}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? 'error' : ''}
-                />
-                {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-              </div>
-            </div>
-
-            {apiError && (
-              <div className="api-error-message">
-                {apiError}
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : 'Generate OTP & Register →'}
-            </button>
-
-            <div className="form-footer">
-              <p className="already-account">ALREADY HAVE AN ACCOUNT?</p>
-              <button 
-                type="button" 
-                className="signin-btn"
-                onClick={() => navigate('/login')}
-              >
-                Sign In
-              </button>
-            </div>
-
-            <div className="help-section">
-              <span className="help-icon">❓</span>
-              <span className="help-text">Need help with registration?</span>
-            </div>
-          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
