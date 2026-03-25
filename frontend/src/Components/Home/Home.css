@@ -27,27 +27,35 @@
 
 /* Hero Section */
 .hero-section {
-  background: #f5f7fa;
-  padding: 80px 24px 100px;
-  min-height: 600px;
+  background: #ffffff;
+  padding: 120px 0px 40px 24px;
+  min-height: 539px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  overflow: visible;
 }
 
 .hero-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 0 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-between;
   width: 100%;
+  gap: 60px;
+  position: relative;
+  padding-right: 0;
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding-left: 40px;
-  max-width: 700px;
+  padding-left: 20px;
+  padding-top: 160px;
+  padding-bottom: 40px;
+  max-width: 550px;
+  flex: 0 0 50%;
 }
 
 .hero-title {
@@ -57,6 +65,7 @@
   line-height: 1.1;
   margin: 0;
   letter-spacing: -1px;
+  text-align: left;
 }
 
 .hero-highlight {
@@ -72,6 +81,7 @@
   margin: 0;
   font-weight: 400;
   max-width: 500px;
+  text-align: left;
 }
 
 .hero-buttons {
@@ -79,6 +89,7 @@
   gap: 16px;
   margin-top: 8px;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .btn-primary {
@@ -125,11 +136,35 @@
   height: 20px;
 }
 
+.hero-image {
+  flex: 0 0 50%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  min-height: 600px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-bottom: 0px;
+}
+
+.hero-img {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  min-height: 500px;
+  max-height: 550px;
+  position: relative;
+  z-index: 10;
+  margin-top: 0px;
+}
+
 /* Services Section */
 .services-section {
-  padding: 50px 24px 70px;
+  padding: 10px 24px 70px;
   background: #fafbfc;
   position: relative;
+  z-index: 1;
 }
 
 .section-container {
@@ -947,10 +982,22 @@
   .hero-container {
     grid-template-columns: 1fr;
     gap: 40px;
+    flex-direction: column;
   }
 
   .hero-content {
     padding-left: 0;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .hero-image {
+    max-width: 100%;
+    order: -1;
+  }
+
+  .hero-img {
+    max-height: 350px;
   }
 
   .hero-title {

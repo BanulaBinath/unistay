@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../services/api';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
+import { FaHome, FaLifeRing } from 'react-icons/fa';
 import './login.css';
 
 const HomeIcon = () => (
@@ -83,8 +84,8 @@ function Login() {
           
           <div className="feature-cards">
             <div className="feature-card">
-              <div className="feature-icon blue">
-                <HomeIcon />
+              <div className="feature-icon-wrapper blue">
+                <FaHome className="feature-icon" />
               </div>
               <div className="feature-content">
                 <h3>Verified Student Housing</h3>
@@ -93,8 +94,8 @@ function Login() {
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon purple">
-                <ChatIcon />
+              <div className="feature-icon-wrapper purple">
+                <FaLifeRing className="feature-icon" />
               </div>
               <div className="feature-content">
                 <h3>24/7 Support</h3>
