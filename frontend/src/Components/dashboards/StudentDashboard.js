@@ -57,7 +57,19 @@ function StudentDashboard() {
           <div className="dashboard-card">
             <h3>Complaints</h3>
             <p>Submit and track complaints</p>
-            <button className="card-button">Coming Soon</button>
+            <button
+              className="card-button"
+              onClick={() => navigate('/student/complaints')}
+            >
+              My Complaints
+            </button>
+            <button
+              className="card-button"
+              onClick={() => navigate('/student/complaints/new')}
+              style={{ marginTop: '8px' }}
+            >
+              Submit New Complaint
+            </button>
           </div>
 
           <div className="dashboard-card">

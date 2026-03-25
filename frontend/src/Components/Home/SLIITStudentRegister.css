@@ -1,248 +1,337 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .sliit-register-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-  padding: 20px;
+  background: #fafafa;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .sliit-register-wrapper {
-  max-width: 1200px;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  grid-template-columns: 28% 72%;
   background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 }
 
+/* Left Side - Purple Section */
 .sliit-register-left {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  background: #7c3aed;
   color: white;
-  padding: 50px 40px;
+  padding: 60px 32px 50px 32px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .sliit-badge {
   background: rgba(255, 255, 255, 0.2);
   padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
   width: fit-content;
-  margin-bottom: 30px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
 }
 
 .sliit-title {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  letter-spacing: -0.8px;
 }
 
 .sliit-description {
-  font-size: 16px;
+  font-size: 11px;
   line-height: 1.6;
-  opacity: 0.9;
-  margin-bottom: 40px;
+  opacity: 0.92;
+  margin-bottom: 20px;
+  font-weight: 400;
 }
 
-.progress-section {
-  margin-bottom: 40px;
+.sliit-description-secondary {
+  font-size: 11px;
+  line-height: 1.6;
+  opacity: 0.92;
+  margin-bottom: 20px;
+  font-weight: 400;
 }
 
-.progress-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.progress-bar {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: #0891b2;
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  font-size: 13px;
-  opacity: 0.8;
-}
-
-.advantage-box {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 12px;
+/* SLIIT Insights Card */
+.sliit-insights-card {
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.advantage-icon {
-  font-size: 32px;
-  margin-bottom: 15px;
+.insights-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
-.advantage-box h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
+.insights-title-section {
+  flex: 1;
 }
 
-.advantage-box p {
+.insights-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  opacity: 0.75;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.insights-title-section h3 {
   font-size: 14px;
-  line-height: 1.6;
-  opacity: 0.9;
+  font-weight: 600;
+  margin: 0;
 }
 
+.insights-icon {
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.insights-icon svg {
+  width: 14px;
+  height: 14px;
+  color: white;
+}
+
+.insights-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 60px;
+  margin-bottom: 12px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.insights-footer {
+  font-size: 10px;
+  opacity: 0.82;
+  margin: 0;
+}
+
+/* Right Side - Form Section */
 .sliit-register-right {
-  padding: 50px 40px;
+  padding: 40px 50px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-header {
+  margin-bottom: 18px;
+}
+
+.form-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.form-header p {
+  font-size: 12px;
+  color: #718096;
+  font-weight: 400;
+}
+
+/* Form Card Container */
+.form-card {
   background: white;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+  max-width: 920px;
 }
 
 .sliit-register-form {
-  max-width: 500px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.form-row-two {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 10px;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-  display: block;
-  font-size: 12px;
+  font-size: 11px !important;
   font-weight: 600;
-  color: #64748b;
-  margin-bottom: 8px;
+  color: #4a5568;
+  margin-bottom: 5px;
   letter-spacing: 0.5px;
-}
-
-.role-display {
-  display: flex;
-  align-items: center;
-  background: #dbeafe;
-  padding: 14px 16px;
-  border-radius: 8px;
-  gap: 10px;
-}
-
-.role-icon {
-  font-size: 20px;
-}
-
-.role-text {
-  flex: 1;
-  font-weight: 500;
-  color: #1e3a8a;
-}
-
-.role-badge {
-  background: #0891b2;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .form-group input {
   width: 100%;
-  padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  background: #f8fafc;
+  padding: 8px 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  background: #f7fafc;
+  color: #2d3748;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  height: 36px;
+}
+
+.form-group input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #1e3a8a;
+  border-color: #7c3aed;
   background: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
 }
 
 .form-group input.error {
   border-color: #ef4444;
-}
-
-.email-input-wrapper {
-  position: relative;
-}
-
-.email-icon {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #0891b2;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.input-hint {
-  font-size: 12px;
-  color: #0891b2;
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  background: #fef2f2;
 }
 
 .error-text {
-  display: block;
   color: #ef4444;
-  font-size: 12px;
-  margin-top: 6px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  font-size: 10px;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
 .api-error-message {
   background: #fee2e2;
   color: #dc2626;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-bottom: 20px;
-  border-left: 4px solid #dc2626;
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  margin-bottom: 14px;
+  border-left: 3px solid #dc2626;
+}
+
+.form-footer-new {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.form-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.info-text {
+  font-size: 11px;
+  color: #7c3aed;
+  line-height: 1.4;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signin-link {
+  text-align: left;
+  font-size: 12px;
+  color: #4a5568;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  font-weight: 400;
+}
+
+.signin-link a {
+  color: #7c3aed;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signin-link a:hover {
+  text-decoration: underline;
 }
 
 .submit-btn {
-  width: 100%;
-  padding: 16px;
-  background: #1e3a8a;
+  padding: 8px 24px !important;
+  background: #7c3aed;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 50px;
+  font-size: 11px !important;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 20px;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+  height: 38px !important;
+  flex-shrink: 0;
+  width: auto !important;
+  max-width: none !important;
+  min-width: auto !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #1e40af;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+  background: #6d28d9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45);
 }
 
 .submit-btn:disabled {
@@ -250,58 +339,112 @@
   cursor: not-allowed;
 }
 
-.form-footer {
-  text-align: center;
-  margin-bottom: 20px;
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .sliit-register-wrapper {
+    grid-template-columns: 32% 68%;
+  }
+
+  .sliit-register-right {
+    padding: 44px 50px;
+  }
+
+  .form-card {
+    padding: 30px 32px;
+  }
 }
 
-.already-account {
-  font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
-}
+@media (max-width: 1200px) {
+  .sliit-register-wrapper {
+    grid-template-columns: 38% 62%;
+  }
 
-.signin-btn {
-  width: 100%;
-  padding: 14px;
-  background: #dbeafe;
-  color: #1e3a8a;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  .sliit-register-right {
+    padding: 40px 45px;
+  }
 
-.signin-btn:hover {
-  background: #bfdbfe;
-}
+  .form-row-two {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 
-.help-section {
-  text-align: center;
-  padding: 16px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #64748b;
+  .form-footer-new {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .submit-btn {
+    width: 100% !important;
+  }
 }
 
 @media (max-width: 968px) {
+  .sliit-register-container {
+    padding-top: 0;
+  }
+
   .sliit-register-wrapper {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .sliit-register-left {
-    padding: 40px 30px;
+    padding: 36px 28px;
+    min-height: 380px;
   }
 
-  .form-row {
-    grid-template-columns: 1fr;
+  .sliit-register-right {
+    padding: 36px 28px;
+  }
+
+  .form-card {
+    padding: 26px 24px;
+  }
+
+  .sliit-title {
+    font-size: 28px;
+  }
+
+  .form-header h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sliit-register-container {
+    padding: 0;
+  }
+
+  .sliit-register-left {
+    padding: 28px 20px;
+  }
+
+  .sliit-register-right {
+    padding: 28px 20px;
+  }
+
+  .form-card {
+    padding: 22px 20px;
+  }
+
+  .sliit-title {
+    font-size: 26px;
+  }
+
+  .form-header h2 {
+    font-size: 22px;
+  }
+
+  .form-group input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .insights-chart {
+    height: 50px;
+  }
+
+  .sliit-insights-card {
+    padding: 14px;
   }
 }

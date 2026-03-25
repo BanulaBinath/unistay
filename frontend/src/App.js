@@ -12,6 +12,9 @@ import OTPVerification from './Components/Home/OTPVerification';
 import ExternalStudentRegister from './Components/Home/ExternalStudentRegister';
 import VendorRegister from './Components/Home/VendorRegister';
 import PaymentProcess from './Components/Home/PaymentProcess';
+import Services from './Components/pages/Services';
+import About from './Components/pages/About';
+import Contact from './Components/pages/Contact';
 
 import StudentDashboard from './Components/dashboards/StudentDashboard';
 import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
@@ -23,6 +26,18 @@ import StudentLaundry from './Components/studenthome/studentlaundry';
 import StudentCleaning from './Components/studenthome/studentcleaning';
 
 
+import AdminDashboard from './Components/admin/AdminDashboard';
+import UsersManagement from './Components/admin/UsersManagement';
+import PaymentsManagement from './Components/admin/PaymentsManagement';
+import SubscriptionsManagement from './Components/admin/SubscriptionsManagement';
+
+import CreateComplaintPage from './pages/student/CreateComplaintPage';
+import MyTicketsPage from './pages/student/MyTicketsPage';
+import TicketDetailsPage from './pages/student/TicketDetailsPage';
+
+import AdminTicketsPage from './pages/admin/AdminTicketsPage';
+import AdminTicketDetailsPage from './pages/admin/AdminTicketDetailsPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -30,6 +45,9 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<NomalHome />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterSelection />} />
           <Route path="/register/sliit-student" element={<SLIITStudentRegister />} />
@@ -63,6 +81,14 @@ function App() {
               <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
                 <StudentLaundry />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/complaints/new" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <CreateComplaintPage />
+              </ProtectedRoute>
             } 
           />
 
@@ -72,9 +98,25 @@ function App() {
               <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
                 <StudentCleaning />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/complaints" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <MyTicketsPage />
+              </ProtectedRoute>
             } 
           />
 
+          <Route 
+            path="/student/complaints/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <TicketDetailsPage />
+              </ProtectedRoute>
+            } 
+          />
 
           {/* Protected Vendor Routes */}
           <Route 
@@ -109,6 +151,61 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
                 <CleaningVendorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Protected Admin Routes */}
+          <Route 
+            path="/admin/dashboard" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/users" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <UsersManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/payments" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <PaymentsManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/subscriptions" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <SubscriptionsManagement />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminTicketsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminTicketDetailsPage />
               </ProtectedRoute>
             } 
           />
