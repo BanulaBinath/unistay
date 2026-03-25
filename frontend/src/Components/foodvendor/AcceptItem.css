@@ -1,7 +1,5 @@
-/* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* Global reset */
 * {
   margin: 0;
   padding: 0;
@@ -9,105 +7,96 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Page container */
+/* Page layout */
 .accept-item-container {
   display: flex;
   min-height: 100vh;
-  background: #F5F5FF; /* light soft white-purple */
+  background: #F5F5FF;
 }
 
-/* Main table area */
+/* MAIN CONTENT FIX */
 .table-container {
-  flex-grow: 1;
+  margin-left: 260px; /* matches sidebar width */
   padding: 30px;
-  margin-left: 260px; /* keeps table from touching sidebar */
+  width: calc(100% - 260px); /* prevents overlap */
+  overflow: hidden; /* prevent page scroll */
 }
 
+/* Title */
 .table-container h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  color: #333;
+  font-size: 26px;
+  margin-bottom: 20px;
 }
 
-/* Error Message */
+/* Error */
 .error-message {
   background: #ffdddd;
   color: #d8000c;
   padding: 10px;
-  margin-bottom: 10px;
-  border-left: 5px solid #d8000c;
-  border-radius: 4px;
+  margin-bottom: 15px;
+  border-left: 5px solid red;
 }
 
-/* Table Styling */
-table {
+/* TABLE SCROLL FIX */
+.table-container table {
+  display: block;
   width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+  overflow-x: auto; /* ONLY table scrolls */
+  white-space: nowrap;
 }
 
+/* Table base */
+table {
+  border-collapse: collapse;
+  min-width: 1200px; /* ensures full content visible */
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Header */
 thead {
-  background: #4A4CE8; /* soft blue-violet */
-  color: #fff;
+  background: #4A4CE8;
+  color: white;
 }
 
 thead th {
   padding: 12px;
-  font-size: 15px;
-  font-weight: 500;
   text-align: left;
 }
 
+/* Body */
 tbody td {
-  padding: 10px 12px;
-  color: #333;
-  font-size: 14px;
+  padding: 10px;
   border-bottom: 1px solid #eee;
 }
 
-/* Hover effect */
+/* Hover */
 tbody tr:hover {
-  background: #f7f7ff;
+  background: #f4f6ff;
 }
 
 /* Buttons */
-.update-btn,
-.delete-btn {
-  padding: 7px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: 0.3s ease;
-}
-
-/* Update button */
 .update-btn {
   background: #4A4CE8;
-  color: #fff;
-  margin-right: 8px;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
-.update-btn:hover {
-  background: #2c2ecc;
-}
-
-/* Delete button */
 .delete-btn {
   background: #ff4e4e;
-  color: #fff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.delete-btn:hover {
-  background: #d63c3c;
-}
-
-/* When button is disabled */
+/* Disabled */
 .update-btn:disabled,
 .delete-btn:disabled {
   opacity: 0.6;
