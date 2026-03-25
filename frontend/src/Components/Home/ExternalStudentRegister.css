@@ -73,8 +73,8 @@
 .external-insights-card {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
-  border-radius: 14px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 12px;
   margin-top: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
@@ -83,7 +83,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .insights-title-section {
@@ -91,48 +91,48 @@
 }
 
 .insights-label {
-  font-size: 9px;
+  font-size: 7px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   opacity: 0.75;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 
 .insights-title-section h3 {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   margin: 0;
 }
 
 .insights-icon {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   background: rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .insights-icon svg {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   color: white;
 }
 
 .insights-chart {
   display: flex;
   align-items: flex-end;
-  gap: 7px;
-  height: 80px;
-  margin-bottom: 14px;
+  gap: 5px;
+  height: 45px;
+  margin-bottom: 10px;
 }
 
 .chart-bar {
   flex: 1;
   background: rgba(255, 255, 255, 0.28);
-  border-radius: 4px 4px 0 0;
+  border-radius: 3px 3px 0 0;
   transition: all 0.3s ease;
 }
 
@@ -141,7 +141,7 @@
 }
 
 .insights-footer {
-  font-size: 11px;
+  font-size: 9px;
   opacity: 0.82;
   margin: 0;
 }
@@ -484,10 +484,10 @@
   }
 
   .insights-chart {
-    height: 70px;
+    height: 40px;
   }
 
   .external-insights-card {
-    padding: 18px;
+    padding: 12px;
   }
 }

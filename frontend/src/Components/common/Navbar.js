@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -12,6 +14,9 @@ function Navbar() {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  // Check if user is a student
+  const isStudent = user?.role === 'student_sliit' || user?.role === 'student_external';
 
   return (
     <nav className="navbar">
@@ -47,16 +52,28 @@ function Navbar() {
               Contact
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/login" className="nav-link" onClick={closeMenu}>
-              Sign in
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/register" className="nav-link-btn" onClick={closeMenu}>
-              Sign up
-            </Link>
-          </li>
+          
+          {/* Show Student Profile if logged in as student, otherwise show Sign In/Sign Up */}
+          {isAuthenticated() && isStudent ? (
+            <li className="nav-item">
+              <Link to="/student/dashboard" className="nav-link-btn" onClick={closeMenu}>
+                Student Profile
+              </Link>
+            </li>
+          ) : (
+            <>
+              <li className="nav-item">
+                <Link to="/login" className="nav-link" onClick={closeMenu}>
+                  Sign in
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/register" className="nav-link-btn" onClick={closeMenu}>
+                  Sign up
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

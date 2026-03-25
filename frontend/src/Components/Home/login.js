@@ -56,7 +56,8 @@ function Login() {
         if (role === 'admin') {
           navigate('/admin/dashboard');
         } else if (role === 'student_sliit' || role === 'student_external') {
-          navigate('/student/dashboard');
+          // Navigate to home page instead of dashboard for students
+          navigate('/');
         } else if (role === 'vendor') {
           navigate(`/vendor/${vendorType}/dashboard`);
         }
