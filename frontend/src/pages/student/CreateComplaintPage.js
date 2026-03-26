@@ -34,6 +34,13 @@ const CreateComplaintPage = () => {
     { value: 'other', label: 'Other' }
   ];
 
+  const categoryToComplaintTypes = {
+    food: ['service_not_delivered', 'poor_quality', 'late_delivery', 'wrong_item', 'bad_behavior', 'payment_issue', 'other'],
+    boarding: ['poor_quality', 'bad_behavior', 'payment_issue', 'fraud_or_fake_service', 'cleanliness_issue', 'other'],
+    laundry: ['service_not_delivered', 'poor_quality', 'late_delivery', 'wrong_item', 'bad_behavior', 'payment_issue', 'other'],
+    cleaning: ['service_not_delivered', 'poor_quality', 'late_delivery', 'bad_behavior', 'payment_issue', 'cleanliness_issue', 'other']
+  };
+
   const serviceCategories = [
     { value: 'food', label: 'Food' },
     { value: 'boarding', label: 'Boarding' },
@@ -73,7 +80,8 @@ const CreateComplaintPage = () => {
     if (name === 'serviceCategory') {
       setFormData(prev => ({
         ...prev,
-        vendorId: ''
+        vendorId: '',
+        complaintType: ''
       }));
     }
   };
@@ -200,9 +208,12 @@ const CreateComplaintPage = () => {
                     value={formData.complaintType}
                     onChange={handleChange}
                     required
+                    disabled={!formData.serviceCategory}
                   >
-                    <option value="">Select Type</option>
-                    {complaintTypes.map(type => (
+                    <option value="">{formData.serviceCategory ? "Select Type" : "Select Category First"}</option>
+                    {formData.serviceCategory && complaintTypes
+                      .filter(type => categoryToComplaintTypes[formData.serviceCategory]?.includes(type.value))
+                      .map(type => (
                       <option key={type.value} value={type.value}>{type.label}</option>
                     ))}
                   </select>

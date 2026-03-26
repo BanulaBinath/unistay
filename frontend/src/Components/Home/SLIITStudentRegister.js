@@ -38,6 +38,8 @@ function SLIITStudentRegister() {
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
+    } else if (/\d/.test(formData.fullName)) {
+      newErrors.fullName = 'Full name cannot contain numbers';
     }
 
     if (!formData.email.trim()) {

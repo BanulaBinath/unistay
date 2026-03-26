@@ -46,6 +46,8 @@ function VendorRegister() {
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
+    } else if (/\d/.test(formData.fullName)) {
+      newErrors.fullName = 'Full name cannot contain numbers';
     }
 
     if (!formData.businessName.trim()) {
@@ -54,6 +56,8 @@ function VendorRegister() {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+    } else if (!formData.email.includes('@')) {
+      newErrors.email = 'Business email must contain "@"';
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Please provide a valid email';
     }
