@@ -105,10 +105,10 @@ const updateVendorOrderStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!status || !['Pending', 'Accepted', 'Completed', 'Cancelled'].includes(status)) {
+    if (!status || !['Pending', 'Accepted', 'Completed', 'Cancelled', 'Rejected'].includes(status)) {
       return res.status(400).json({
         success: false,
-        message: 'Status must be one of Pending, Accepted, Completed, Cancelled'
+        message: 'Status must be one of Pending, Accepted, Completed, Cancelled, Rejected'
       });
     }
 
@@ -165,9 +165,60 @@ const deleteVendorOrder = async (req, res) => {
   }
 };
 
+// Get student orders
+const getStudentOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.user.userId })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: orders.length,
+      data: orders
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch student orders',
+      error: error.message
+    });
+  }
+};
+
+// Get single order by ID
+const getOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findOne({ 
+      _id: id, 
+      userId: req.user.userId 
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: order
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch order details',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   getVendorOrders,
   updateVendorOrderStatus,
-  deleteVendorOrder
+  deleteVendorOrder,
+  getStudentOrders,
+  getOrderById
 };

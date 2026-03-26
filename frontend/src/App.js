@@ -29,6 +29,9 @@ import AdminDashboard from './Components/admin/AdminDashboard';
 import CreateComplaintPage from './pages/student/CreateComplaintPage';
 import MyTicketsPage from './pages/student/MyTicketsPage';
 import TicketDetailsPage from './pages/student/TicketDetailsPage';
+import OrderHistoryPage from './pages/student/OrderHistoryPage';
+import OrderDetailsPage from './pages/student/OrderDetailsPage';
+import MyFoodOrders from './pages/student/MyFoodOrders';
 
 import FoodVendor from './Components/foodvendor/foodvendor';
 import AddItem from './Components/foodvendor/addItem';
@@ -91,6 +94,33 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
                 <TicketDetailsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/orders" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <MyFoodOrders />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/orders/history" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <OrderHistoryPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/student/orders/:orderId" 
+            element={
+              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+                <OrderDetailsPage />
               </ProtectedRoute>
             } 
           />

@@ -19,3 +19,14 @@ export const deleteVendorOrder = async (orderId) => {
   const response = await api.delete(`/orders/vendor/${orderId}`);
   return response.data;
 };
+
+// Student order functions
+export const getStudentOrders = async () => {
+  const response = await api.get('/orders/student');
+  return response.data;
+};
+
+export const getOrderById = async (orderId) => {
+  const response = await api.get(`/orders/${orderId}`);
+  return response.data;
+};

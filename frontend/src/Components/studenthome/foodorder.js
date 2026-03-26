@@ -161,18 +161,20 @@ function FoodOrder() {
         notes: formData.notes
       });
 
-      navigate('/services', {
-        state: {
-          successMessage: 'Order placed successfully!'
-        }
-      });
+      // Show success message
+      alert('Order placed successfully!');
+      
+      // Navigate to Services page after user clicks OK
+      navigate('/services');
 
     } catch (error) {
+      // Show error alert
       if (error?.response?.status === 401) {
-        setSubmitError('Please login as a student account to place an order.');
+        alert('Please login as a student account to place an order.');
       } else {
-        setSubmitError(error?.response?.data?.message || 'Failed to place order');
+        alert(error?.response?.data?.message || 'Failed to place order. Please try again.');
       }
+      setSubmitError(error?.response?.data?.message || 'Failed to place order');
     } finally {
       setIsSubmitting(false);
     }
