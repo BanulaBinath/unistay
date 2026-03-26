@@ -1268,3 +1268,183 @@
     padding: 40px 20px;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   FOOD ORDERS SECTION
+═══════════════════════════════════════════════════ */
+.sd-food-section {
+  background: white;
+  border: 1px solid #e8ebf7;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(91, 108, 242, 0.05);
+}
+
+.sd-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sd-order-card {
+  border: 1px solid #e8ebf7;
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: #fdfdff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sd-order-card:hover {
+  border-color: #c7d4ff;
+  background: #fafbff;
+  box-shadow: 0 4px 14px rgba(91, 108, 242, 0.08);
+  transform: translateY(-1px);
+}
+
+.sd-order-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f8f9fe;
+  border: 1px solid #e8ebf7;
+  position: relative;
+}
+
+.sd-order-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sd-order-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+}
+
+.sd-order-image-placeholder svg {
+  width: 28px;
+  height: 28px;
+  color: #5b6cf2;
+}
+
+.sd-order-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.sd-order-item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sd-order-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sd-order-meta-item {
+  font-size: 0.7rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sd-order-meta-item svg {
+  width: 11px;
+  height: 11px;
+  opacity: 0.7;
+}
+
+.sd-order-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+.sd-order-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.sd-order-status-accepted {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.sd-order-status-completed {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.sd-order-status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.sd-order-status-rejected {
+  background: #ffe4e6;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+}
+
+.sd-order-chevron {
+  width: 15px;
+  height: 15px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.18s;
+}
+
+.sd-order-card:hover .sd-order-chevron {
+  color: #5b6cf2;
+  transform: translateX(2px);
+}
+
+/* Mobile responsive for orders */
+@media (max-width: 680px) {
+  .sd-order-card {
+    flex-wrap: wrap;
+  }
+
+  .sd-order-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .sd-order-status {
+    order: 3;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .sd-order-chevron {
+    order: 2;
+  }
+}

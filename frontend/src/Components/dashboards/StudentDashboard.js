@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getMyTickets } from '../../services/ticketApi';
+import { getStudentOrders } from '../../services/orderApi';
 import TicketStatusBadge from '../tickets/TicketStatusBadge';
 import TicketPriorityBadge from '../tickets/TicketPriorityBadge';
 import './StudentDashboard.css';
@@ -78,6 +79,11 @@ function StudentDashboard() {
   const [error,     setError]     = useState('');
   const [activeTab, setActiveTab] = useState('');
 
+  /* ── Food orders state ── */
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState('');
+
   /* ── Fetch tickets (unchanged) ── */
   const fetchTickets = useCallback(async () => {
     try {
@@ -94,6 +100,31 @@ function StudentDashboard() {
   }, [activeTab]);
 
   useEffect(() => { fetchTickets(); }, [fetchTickets]);
+
+  /* ── Fetch orders ── */
+  const fetchOrders = useCallback(async () => {
+    try {
+      setOrdersLoading(true);
+      setOrdersError('');
+      const res = await getStudentOrders();
+      if (res.success) {
+        setOrders(res.data || []);
+      } else {
+        setOrdersError(res.message || 'Failed to load orders');
+      }
+    } catch (err) {
+      console.error('Error fetching orders:', err);
+      setOrdersError(err.response?.data?.message || 'Failed to load food orders.');
+    } finally {
+      setOrdersLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeModule === 'food') {
+      fetchOrders();
+    }
+  }, [activeModule, fetchOrders]);
 
   /* ── Derived stats (unchanged) ── */
   const totalTickets  = tickets.length;
@@ -423,10 +454,180 @@ function StudentDashboard() {
               </section>
             )}
 
-            {/* ===== FOOD STATUS MODULE (empty for friend to dev) ===== */}
+            {/* ===== FOOD STATUS MODULE ===== */}
             {activeModule === 'food' && (
-              <div className="sd-food-status" id="sd-food-status">
-              </div>
+              <section className="sd-food-section" id="sd-food-section">
+                {/* Header */}
+                <div className="sd-complaints-head">
+                  <div className="sd-complaints-head-top">
+                    <div className="sd-complaints-head-info">
+                      <span className="sd-complaints-label">Food Orders</span>
+                      <h2 className="sd-complaints-title">My Food Orders</h2>
+                      <p className="sd-complaints-desc">Track your food orders and delivery status.</p>
+                    </div>
+
+                    <button
+                      className="sd-new-complaint-btn"
+                      id="sd-place-order-btn"
+                      onClick={() => navigate('/services')}
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                      Place New Order
+                    </button>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="sd-complaints-body">
+                  {/* Error */}
+                  {ordersError && (
+                    <div className="sd-error-banner">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      {ordersError}
+                    </div>
+                  )}
+
+                  {/* Loading */}
+                  {ordersLoading ? (
+                    <div className="sd-loading-state">
+                      <div className="sd-loading-spinner" />
+                      <p className="sd-loading-text">Loading your orders…</p>
+                    </div>
+
+                  /* Empty */
+                  ) : orders.length === 0 ? (
+                    <div className="sd-empty-state" id="sd-empty-orders">
+                      <div className="sd-empty-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                          <line x1="6" y1="1" x2="6" y2="4"/>
+                          <line x1="10" y1="1" x2="10" y2="4"/>
+                          <line x1="14" y1="1" x2="14" y2="4"/>
+                        </svg>
+                      </div>
+                      <h3 className="sd-empty-title">No food orders yet</h3>
+                      <p className="sd-empty-desc">
+                        You have not placed any food orders yet. Once you place an order, it will appear here.
+                      </p>
+                      <button
+                        className="sd-empty-action-btn"
+                        id="sd-empty-order-action-btn"
+                        onClick={() => navigate('/services')}
+                      >
+                        Browse Food Menu
+                      </button>
+                    </div>
+
+                  /* Orders list */
+                  ) : (
+                    <div className="sd-orders-list" id="sd-orders-list">
+                      {orders.map(order => {
+                        const statusClass = order.status?.toLowerCase() || 'pending';
+                        return (
+                          <div
+                            key={order._id}
+                            className="sd-order-card"
+                            id={`sd-order-${order._id}`}
+                            onClick={() => navigate(`/student/orders/${order._id}`)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => e.key === 'Enter' && navigate(`/student/orders/${order._id}`)}
+                          >
+                            {/* Order image */}
+                            <div className="sd-order-image">
+                              {order.itemImage ? (
+                                <img 
+                                  src={`http://localhost:5000/${order.itemImage}`} 
+                                  alt={order.itemName}
+                                  onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <div className="sd-order-image-placeholder" style={{ display: order.itemImage ? 'none' : 'flex' }}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                                  <line x1="6" y1="1" x2="6" y2="4"/>
+                                  <line x1="10" y1="1" x2="10" y2="4"/>
+                                  <line x1="14" y1="1" x2="14" y2="4"/>
+                                </svg>
+                              </div>
+                            </div>
+
+                            {/* Order details */}
+                            <div className="sd-order-details">
+                              <h3 className="sd-order-item-name">{order.itemName}</h3>
+                              <div className="sd-order-meta">
+                                <span className="sd-order-meta-item">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="1"/>
+                                    <circle cx="12" cy="5" r="1"/>
+                                    <circle cx="12" cy="19" r="1"/>
+                                  </svg>
+                                  Qty: {order.quantity}
+                                </span>
+                                <span className="sd-order-meta-item">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                  </svg>
+                                  {formatDate(order.createdAt)}
+                                </span>
+                                <span className="sd-order-meta-item">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                  </svg>
+                                  Rs. {order.totalPrice}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Status badge */}
+                            <div className={`sd-order-status sd-order-status-${statusClass}`}>
+                              {order.status || 'Pending'}
+                            </div>
+
+                            {/* Chevron */}
+                            <svg className="sd-order-chevron" viewBox="0 0 24 24" fill="none"
+                              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer */}
+                {!ordersLoading && orders.length > 0 && (
+                  <div className="sd-complaints-footer">
+                    <span className="sd-complaints-count-info">
+                      Showing {orders.length} order{orders.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                )}
+              </section>
             )}
 
           </div>{/* end sd-module-area */}
