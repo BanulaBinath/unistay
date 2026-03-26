@@ -37,10 +37,14 @@ function ExternalStudentRegister() {
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
+    } else if (/\d/.test(formData.fullName)) {
+      newErrors.fullName = 'Full name cannot contain numbers';
     }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+    } else if (!formData.email.includes('@')) {
+      newErrors.email = 'Personal email must contain "@"';
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Please provide a valid email';
     } else if (formData.email.endsWith('@my.sliit.lk')) {
