@@ -23,16 +23,10 @@ import LaundryVendorDashboard from './Components/dashboards/LaundryVendorDashboa
 import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashboard';
 
 import AdminDashboard from './Components/admin/AdminDashboard';
-import UsersManagement from './Components/admin/UsersManagement';
-import PaymentsManagement from './Components/admin/PaymentsManagement';
-import SubscriptionsManagement from './Components/admin/SubscriptionsManagement';
 
 import CreateComplaintPage from './pages/student/CreateComplaintPage';
 import MyTicketsPage from './pages/student/MyTicketsPage';
 import TicketDetailsPage from './pages/student/TicketDetailsPage';
-
-import AdminTicketsPage from './pages/admin/AdminTicketsPage';
-import AdminTicketDetailsPage from './pages/admin/AdminTicketDetailsPage';
 
 import FoodVendor from './Components/foodvendor/foodvendor';
 import AddItem from './Components/foodvendor/addItem';
@@ -196,7 +190,7 @@ function App() {
             path="/admin/users" 
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <UsersManagement />
+                <AdminDashboard defaultTab="users" />
               </ProtectedRoute>
             } 
           />
@@ -205,7 +199,7 @@ function App() {
             path="/admin/payments" 
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <PaymentsManagement />
+                <AdminDashboard defaultTab="payments" />
               </ProtectedRoute>
             } 
           />
@@ -214,7 +208,7 @@ function App() {
             path="/admin/subscriptions" 
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <SubscriptionsManagement />
+                <AdminDashboard defaultTab="subscriptions" />
               </ProtectedRoute>
             } 
           />
@@ -223,7 +217,7 @@ function App() {
             path="/admin/tickets" 
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminTicketsPage />
+                <AdminDashboard defaultTab="tickets" />
               </ProtectedRoute>
             } 
           />
@@ -232,7 +226,7 @@ function App() {
             path="/admin/tickets/:id" 
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminTicketDetailsPage />
+                <AdminDashboard defaultTab="ticket-details" />
               </ProtectedRoute>
             } 
           />

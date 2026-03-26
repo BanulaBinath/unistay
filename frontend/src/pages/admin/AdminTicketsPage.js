@@ -75,56 +75,87 @@ const AdminTicketsPage = () => {
   };
 
   return (
-    <div className="admin-tickets-page">
-      <div className="page-header">
-        <button onClick={() => navigate('/admin/dashboard')} className="back-button">
-          ← Back to Dashboard
-        </button>
-        <h1>Ticket Management</h1>
-      </div>
+    <div className="modern-tickets-container">
+      <header className="page-heading-row">
+        <div>
+          <h1 className="page-title">Tickets Management</h1>
+          <p className="page-description">Monitor user issues, vendor warnings, and support tickets.</p>
+        </div>
+      </header>
+
+      {error && (
+        <div className="alert-banner alert-danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{error}</span>
+        </div>
+      )}
 
       {stats && (
-        <div className="stats-cards">
-          <div className="stat-card">
-            <div className="stat-value">{stats.total}</div>
-            <div className="stat-label">Total Tickets</div>
+        <div className="metrics-grid">
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Total Tickets</p>
+                <h3 className="metric-value">{stats.total}</h3>
+              </div>
+              <div className="metric-icon primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+              </div>
+            </div>
           </div>
-          <div className="stat-card open">
-            <div className="stat-value">{stats.byStatus.open}</div>
-            <div className="stat-label">Open</div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Open</p>
+                <h3 className="metric-value">{stats.byStatus?.open || 0}</h3>
+              </div>
+              <div className="metric-icon warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
           </div>
-          <div className="stat-card escalated">
-            <div className="stat-value">{stats.byStatus.escalated}</div>
-            <div className="stat-label">Escalated</div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Urgent</p>
+                <h3 className="metric-value">{stats.byPriority?.urgent || 0}</h3>
+              </div>
+              <div className="metric-icon danger" style={{ background: '#FEF2F2', color: 'var(--sm-danger)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+            </div>
           </div>
-          <div className="stat-card resolved">
-            <div className="stat-value">{stats.byStatus.resolved}</div>
-            <div className="stat-label">Resolved</div>
-          </div>
-          <div className="stat-card urgent">
-            <div className="stat-value">{stats.byPriority.urgent}</div>
-            <div className="stat-label">Urgent</div>
-          </div>
-          <div className="stat-card warned">
-            <div className="stat-value">{stats.warnedVendorsCount}</div>
-            <div className="stat-label">Warned Vendors</div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Resolved</p>
+                <h3 className="metric-value">{stats.byStatus?.resolved || 0}</h3>
+              </div>
+              <div className="metric-icon success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="filters-section">
-        <input
-          type="text"
-          name="search"
-          value={filters.search}
-          onChange={handleFilterChange}
-          placeholder="Search by ticket number or title..."
-          className="search-input"
-        />
-
-        <div className="filters-row">
-          <select name="status" value={filters.status} onChange={handleFilterChange}>
-            <option value="">All Status</option>
+      <div className="toolbar-card">
+        <div className="filters-wrapper" style={{ width: '100%', justifyContent: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <select name="status" value={filters.status} onChange={handleFilterChange} className="modern-select">
+            <option value="">Status: All</option>
             <option value="open">Open</option>
             <option value="in_progress">In Progress</option>
             <option value="waiting_vendor">Waiting Vendor</option>
@@ -136,24 +167,24 @@ const AdminTicketsPage = () => {
             <option value="rejected">Rejected</option>
           </select>
 
-          <select name="priority" value={filters.priority} onChange={handleFilterChange}>
-            <option value="">All Priority</option>
+          <select name="priority" value={filters.priority} onChange={handleFilterChange} className="modern-select">
+            <option value="">Priority: All</option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
             <option value="urgent">Urgent</option>
           </select>
 
-          <select name="serviceCategory" value={filters.serviceCategory} onChange={handleFilterChange}>
-            <option value="">All Categories</option>
+          <select name="serviceCategory" value={filters.serviceCategory} onChange={handleFilterChange} className="modern-select">
+            <option value="">Category: All</option>
             <option value="food">Food</option>
             <option value="boarding">Boarding</option>
             <option value="laundry">Laundry</option>
             <option value="cleaning">Cleaning</option>
           </select>
 
-          <select name="complaintType" value={filters.complaintType} onChange={handleFilterChange}>
-            <option value="">All Types</option>
+          <select name="complaintType" value={filters.complaintType} onChange={handleFilterChange} className="modern-select">
+            <option value="">Type: All</option>
             <option value="service_not_delivered">Service Not Delivered</option>
             <option value="poor_quality">Poor Quality</option>
             <option value="late_delivery">Late Delivery</option>
@@ -165,25 +196,32 @@ const AdminTicketsPage = () => {
             <option value="other">Other</option>
           </select>
 
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by ticket number or title..."
+            value={filters.search}
+            onChange={handleFilterChange}
+            className="modern-search-input"
+            style={{ padding: '0.5rem 1rem', border: '1px solid #E5E7EB', borderRadius: '8px', flex: '1', minWidth: '200px' }}
+          />
+
           {Object.values(filters).some(v => v) && (
-            <button onClick={clearFilters} className="clear-filters-button">
-              Clear Filters
-            </button>
+             <button onClick={clearFilters} className="action-btn" style={{ background: '#F1F5F9', color: '#475569', boxShadow: 'none' }}>
+               Clear
+             </button>
           )}
         </div>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
-
       {loading ? (
-        <div className="loading">Loading tickets...</div>
-      ) : tickets.length === 0 ? (
-        <div className="no-tickets">
-          <p>No tickets found</p>
-        </div>
+         <div className="loader-container">
+           <div className="modern-spinner"></div>
+           <p>Loading tickets...</p>
+         </div>
       ) : (
-        <div className="tickets-table-container">
-          <table className="tickets-table">
+         <div className="modern-table-card">
+          <table className="modern-table">
             <thead>
               <tr>
                 <th>Ticket #</th>
@@ -195,35 +233,71 @@ const AdminTicketsPage = () => {
                 <th>Priority</th>
                 <th>Status</th>
                 <th>Created</th>
-                <th>Actions</th>
+                <th className="actions-cell">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {tickets.map(ticket => (
-                <tr key={ticket._id} className={ticket.priority === 'urgent' ? 'urgent-row' : ''}>
-                  <td className="ticket-number-cell">{ticket.ticketNumber}</td>
-                  <td className="title-cell">{ticket.title}</td>
-                  <td>{ticket.studentId?.fullName || 'N/A'}</td>
-                  <td>{ticket.vendorId?.businessName || ticket.vendorId?.fullName || 'N/A'}</td>
-                  <td className="category-cell">{ticket.serviceCategory}</td>
-                  <td className="type-cell">{ticket.complaintType.replace(/_/g, ' ')}</td>
-                  <td>
-                    <TicketPriorityBadge priority={ticket.priority} />
-                  </td>
-                  <td>
-                    <TicketStatusBadge status={ticket.status} />
-                  </td>
-                  <td className="date-cell">{formatDate(ticket.createdAt)}</td>
-                  <td>
-                    <button
-                      className="view-button"
-                      onClick={() => navigate(`/admin/tickets/${ticket._id}`)}
-                    >
-                      View
-                    </button>
+              {tickets.length === 0 ? (
+                <tr>
+                  <td colSpan="10" className="empty-state">
+                    <div className="empty-state-content">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75" />
+                      </svg>
+                      <p>No tickets found</p>
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                tickets.map(ticket => (
+                  <tr key={ticket._id} style={{ background: ticket.priority === 'urgent' ? '#FEF2F2' : 'inherit' }}>
+                    <td>
+                      <span style={{ fontWeight: 600, color: 'var(--sm-text-primary)' }}>{ticket.ticketNumber}</span>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 500, color: 'var(--sm-text-primary)' }}>{ticket.title}</div>
+                    </td>
+                    <td>
+                      <div className="user-info-cell" style={{ display: 'flex', flexDirection: 'column' }}>
+                         <span className="user-name">{ticket.studentId?.fullName || 'N/A'}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="user-info-cell" style={{ display: 'flex', flexDirection: 'column' }}>
+                         <span className="user-name">{ticket.vendorId?.businessName || ticket.vendorId?.fullName || 'N/A'}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge badge-gray" style={{ textTransform: 'capitalize' }}>
+                        {ticket.serviceCategory}
+                      </span>
+                    </td>
+                    <td>
+                       <span style={{ fontSize: '0.85rem', color: 'var(--sm-text-secondary)', textTransform: 'capitalize' }}>
+                         {ticket.complaintType.replace(/_/g, ' ')}
+                       </span>
+                    </td>
+                    <td>
+                      <TicketPriorityBadge priority={ticket.priority} />
+                    </td>
+                    <td>
+                      <TicketStatusBadge status={ticket.status} />
+                    </td>
+                    <td>{formatDate(ticket.createdAt)}</td>
+                    <td className="actions-cell">
+                      <button
+                        className="action-btn"
+                        onClick={() => navigate(`/admin/tickets/${ticket._id}`)}
+                        style={{ padding: '0.25rem 0.75rem', fontSize: '0.8rem' }}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -233,3 +307,4 @@ const AdminTicketsPage = () => {
 };
 
 export default AdminTicketsPage;
+

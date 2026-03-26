@@ -2,20 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getDashboardStats } from '../../services/adminApi';
+import UsersManagement from './UsersManagement';
+import PaymentsManagement from './PaymentsManagement';
+import SubscriptionsManagement from './SubscriptionsManagement';
+import AdminTicketsPage from '../../pages/admin/AdminTicketsPage';
+import AdminTicketDetailsPage from '../../pages/admin/AdminTicketDetailsPage';
 import './AdminDashboard.css';
 
-function AdminDashboard() {
+function AdminDashboard({ defaultTab = 'dashboard' }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [activeMenu, setActiveMenu] = useState(defaultTab);
 
   useEffect(() => {
-    fetchStats();
-  }, []);
+    setActiveMenu(defaultTab);
+  }, [defaultTab]);
+
+  // Only load dashboard stats if the dashboard tab is active
+  useEffect(() => {
+    if (activeMenu === 'dashboard') {
+      fetchStats();
+    }
+  }, [activeMenu]);
 
   const fetchStats = async () => {
     try {
@@ -47,12 +59,12 @@ function AdminDashboard() {
 
   const handleMenuClick = (item) => {
     setActiveMenu(item.id);
-    if (item.path !== '/admin/dashboard') {
+    if (item.path) {
       navigate(item.path);
     }
   };
 
-  if (loading) {
+  if (loading && activeMenu === 'dashboard') {
     return (
       <div className="admin-loading-screen">
         <div className="loading-spinner"></div>
@@ -83,7 +95,7 @@ function AdminDashboard() {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`sidebar-nav-item ${activeMenu === item.id ? 'active' : ''}`}
+              className={`sidebar-nav-item ${(activeMenu === item.id || (activeMenu === 'ticket-details' && item.id === 'tickets')) ? 'active' : ''}`}
               onClick={() => handleMenuClick(item)}
             >
               {item.icon === 'dashboard' && (
@@ -136,33 +148,35 @@ function AdminDashboard() {
 
       {/* Main Content */}
       <main className="admin-main-content">
-        {/* Top Header */}
-        <header className="admin-top-header">
-          <div className="header-left">
-            <h1 className="page-title">Dashboard</h1>
-            <p className="page-subtitle">Welcome back, {user?.fullName}</p>
-          </div>
-          <div className="header-right">
-            <div className="admin-user-badge">
-              <div className="user-avatar">
-                {user?.fullName?.charAt(0).toUpperCase()}
+        {/* Render either Dashboard Stats or Active Tab Module */}
+        {activeMenu === 'dashboard' && (
+          <>
+            <header className="admin-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Dashboard</h1>
+                <p className="page-subtitle">Welcome back, {user?.fullName}</p>
               </div>
-              <div className="user-info">
-                <span className="user-name">{user?.fullName}</span>
-                <span className="user-role">Administrator</span>
+              <div className="header-right">
+                <div className="admin-user-badge">
+                  <div className="user-avatar">
+                    {user?.fullName?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="user-info">
+                    <span className="user-name">{user?.fullName}</span>
+                    <span className="user-role">Administrator</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </header>
+            </header>
 
-        {error && (
-          <div className="alert-error">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
+            {error && (
+              <div className="alert-error">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
 
         {/* Stats Cards */}
         {stats && (
@@ -497,6 +511,34 @@ function AdminDashboard() {
             </div>
           </>
         )}
+        </>
+      )}
+
+        {/* Users Management Tab */}
+        {activeMenu === 'users' && (
+          <UsersManagement />
+        )}
+        
+        {/* Payments Management Tab */}
+        {activeMenu === 'payments' && (
+          <PaymentsManagement />
+        )}
+        
+        {/* Subscriptions Management Tab */}
+        {activeMenu === 'subscriptions' && (
+          <SubscriptionsManagement />
+        )}
+
+        {/* Tickets Management Tab */}
+        {activeMenu === 'tickets' && (
+          <AdminTicketsPage />
+        )}
+        
+        {/* Ticket Details Tab */}
+        {activeMenu === 'ticket-details' && (
+          <AdminTicketDetailsPage />
+        )}
+
       </main>
     </div>
   );
