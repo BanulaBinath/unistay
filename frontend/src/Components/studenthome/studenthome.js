@@ -15,11 +15,11 @@ function studenthome() {
             <button>food vendor</button>
         </Link>
         
-        <Link to="/londriservices">
+        <Link to="/student/laundry">
             <button>londri services</button>
         </Link>
 
-        <Link to="/cleaningstaff">
+        <Link to="/student/cleaning">
             <button>cleaning staff</button>
         </Link>
 

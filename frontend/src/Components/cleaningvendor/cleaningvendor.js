@@ -6,11 +6,12 @@ function CleaningVendorDashboard() {
   const [activeTab, setActiveTab] = useState('profile');
   const [message, setMessage] = useState('');
   const [isAvailable, setIsAvailable] = useState(true);
+  const [formErrors, setFormErrors] = useState({});
 
   const [profile, setProfile] = useState({
     fullName: '',
     bio: '',
-    services: '',
+    services: [],
     photo: null
   });
 
@@ -36,24 +37,111 @@ function CleaningVendorDashboard() {
   ]);
 
   const [showStatusModal, setShowStatusModal] = useState(false);
-  const [showCancelModal, setShowCancelModal]   = useState(false);
-  const [selectedJob, setSelectedJob]           = useState(null);
-  const [newStatus, setNewStatus]               = useState('');
-  const [completionNote, setCompletionNote]     = useState('');
-  const [cancelReason, setCancelReason]         = useState('');
-  const [replyTexts, setReplyTexts]             = useState({});
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedJob, setSelectedJob]         = useState(null);
+  const [newStatus, setNewStatus]             = useState('');
+  const [completionNote, setCompletionNote]   = useState('');
+  const [cancelReason, setCancelReason]       = useState('');
+  const [replyTexts, setReplyTexts]           = useState({});
 
-  const handleProfileChange = (e) => setProfile({ ...profile, [e.target.name]: e.target.value });
-  const handleRatesChange   = (e) => setRates({ ...rates, [e.target.name]: e.target.value });
+  // ── SERVICE OPTIONS ──
+  const serviceOptions = ['Room Cleaning', 'Bathroom Cleaning', 'Room and Bathroom'];
+
+  // ── HANDLE CHECKBOX CHANGE ──
+  const handleServiceToggle = (service) => {
+    const updated = profile.services.includes(service)
+      ? profile.services.filter(s => s !== service)
+      : [...profile.services, service];
+    setProfile({ ...profile, services: updated });
+    setFormErrors({ ...formErrors, services: '' });
+  };
+
+  // ── VALIDATION FUNCTION ──
+  const validateProfile = () => {
+    const errors = {};
+    const onlyLetters   = /^[a-zA-Z\s]+$/;
+    const noSymbols     = /^[a-zA-Z0-9\s]+$/;
+
+    // Full Name
+    if (!profile.fullName.trim()) {
+      errors.fullName = '❌ Full name is required.';
+    } else if (profile.fullName.trim().length < 3) {
+      errors.fullName = '❌ Name must be at least 3 characters.';
+    } else if (!onlyLetters.test(profile.fullName.trim())) {
+      errors.fullName = '❌ Name must contain only letters and spaces.';
+    }
+
+    // Services
+    if (profile.services.length === 0) {
+      errors.services = '❌ Please select at least one service.';
+    }
+
+    // Bio — no symbols
+    if (profile.bio.trim() && !noSymbols.test(profile.bio.trim())) {
+      errors.bio = '❌ Description must not contain symbols.';
+    }
+
+    // Photo
+    if (profile.photo) {
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const maxSize = 2 * 1024 * 1024;
+      if (!allowedTypes.includes(profile.photo.type)) {
+        errors.photo = '❌ Only JPG, PNG, or WEBP images are allowed.';
+      } else if (profile.photo.size > maxSize) {
+        errors.photo = '❌ Photo size must be less than 2MB.';
+      }
+    }
+
+    // Rates
+    if (!rates.room || rates.room < 1)                 errors.room         = '❌ Minimum rate is Rs. 1.';
+    if (!rates.bathroom || rates.bathroom < 1)         errors.bathroom     = '❌ Minimum rate is Rs. 1.';
+    if (!rates.roomBathroom || rates.roomBathroom < 1) errors.roomBathroom = '❌ Minimum rate is Rs. 1.';
+
+    return errors;
+  };
+
+  const handleProfileChange = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, [e.target.name]: '' });
+  };
+
+  const handleRatesChange = (e) => {
+    setRates({ ...rates, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, [e.target.name]: '' });
+  };
+
+  // ── PHOTO CHANGE WITH INSTANT VALIDATION ──
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 2 * 1024 * 1024;
+    if (!allowedTypes.includes(file.type)) {
+      setFormErrors({ ...formErrors, photo: '❌ Only JPG, PNG, or WEBP images are allowed.' });
+      return;
+    }
+    if (file.size > maxSize) {
+      setFormErrors({ ...formErrors, photo: '❌ Photo size must be less than 2MB.' });
+      return;
+    }
+    setProfile({ ...profile, photo: file });
+    setFormErrors({ ...formErrors, photo: '' });
+  };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+    const errors = validateProfile();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setMessage('❌ Please fix the errors before saving.');
+      return;
+    }
     const token = localStorage.getItem('token');
     try {
       const res = await fetch('http://localhost:5000/api/cleaning/vendor/profile', {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...profile, ...rates, isAvailable })
+        body: JSON.stringify({ ...profile, services: profile.services.join(', '), ...rates, isAvailable })
       });
       setMessage(res.ok ? '✅ Profile updated successfully!' : '❌ Failed to update profile.');
     } catch {
@@ -78,8 +166,12 @@ function CleaningVendorDashboard() {
   };
 
   const handleComplaintReply = (index) => {
+    if (!replyTexts[index] || !replyTexts[index].trim()) {
+      setMessage('❌ Reply cannot be empty!');
+      return;
+    }
     const updated = [...complaints];
-    updated[index].reply = replyTexts[index] || '';
+    updated[index].reply = replyTexts[index];
     setComplaints(updated);
     setMessage('✅ Reply sent to student!');
     setReplyTexts({ ...replyTexts, [index]: '' });
@@ -126,24 +218,74 @@ function CleaningVendorDashboard() {
               <h3 className="cv-section-title">👤 Profile Setup</h3>
 
               <div className="cv-form-row">
+                {/* Full Name */}
                 <div className="cv-form-group">
                   <label>Full Name *</label>
-                  <input type="text" name="fullName" value={profile.fullName} onChange={handleProfileChange} placeholder="Your full name" required minLength={3}/>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={profile.fullName}
+                    onChange={handleProfileChange}
+                    placeholder="Your full name (letters only)"
+                    style={{ borderColor: formErrors.fullName ? '#ef4444' : '' }}
+                  />
+                  {formErrors.fullName && <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.fullName}</span>}
                 </div>
+
+                {/* ── SERVICES OFFERED → CHECKBOXES ── */}
                 <div className="cv-form-group">
-                  <label>Services Offered</label>
-                  <input type="text" name="services" value={profile.services} onChange={handleProfileChange} placeholder="e.g. Room, Bathroom, Room+Bathroom" />
+                  <label>Services Offered *</label>
+                  <div style={{
+                    display: 'flex', flexDirection: 'column', gap: '8px',
+                    padding: '10px 14px', border: `1.5px solid ${formErrors.services ? '#ef4444' : '#e5e7eb'}`,
+                    borderRadius: '10px', background: '#fafafa'
+                  }}>
+                    {serviceOptions.map(option => (
+                      <label key={option} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={profile.services.includes(option)}
+                          onChange={() => handleServiceToggle(option)}
+                          style={{ width: '16px', height: '16px', accentColor: '#1e3a8a' }}
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+                  {formErrors.services && <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.services}</span>}
                 </div>
               </div>
 
+              {/* ── DESCRIPTION — NO SYMBOLS ── */}
               <div className="cv-form-group">
                 <label>Description / Bio</label>
-                <textarea name="bio" rows="3" value={profile.bio} onChange={handleProfileChange} placeholder="Tell students about your cleaning service..." />
+                <textarea
+                  name="bio"
+                  rows="3"
+                  value={profile.bio}
+                  onChange={handleProfileChange}
+                  placeholder="Tell students about your cleaning service (no symbols)"
+                  style={{ borderColor: formErrors.bio ? '#ef4444' : '' }}
+                />
+                {formErrors.bio
+                  ? <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.bio}</span>
+                  : <span style={{ fontSize: '11px', color: '#9ca3af' }}>Letters and numbers only — no symbols</span>
+                }
               </div>
 
+              {/* Profile Photo */}
               <div className="cv-form-group">
                 <label>Profile Photo</label>
-                <input type="file" accept="image/*" onChange={(e) => setProfile({ ...profile, photo: e.target.files[0] })} />
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handlePhotoChange}
+                  style={{ borderColor: formErrors.photo ? '#ef4444' : '' }}
+                />
+                {formErrors.photo
+                  ? <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.photo}</span>
+                  : <span style={{ fontSize: '11px', color: '#9ca3af' }}>JPG, PNG, WEBP only • Max 2MB</span>
+                }
               </div>
 
               <h3 className="cv-section-title" style={{ marginTop: '28px' }}>💰 Rates Setup (Rs per service)</h3>
@@ -151,19 +293,22 @@ function CleaningVendorDashboard() {
                 <div className="cv-rate-card">
                   <span className="cv-rate-icon">🛏️</span>
                   <label>Room Cleaning</label>
-                  <input type="number" name="room" value={rates.room} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="room" value={rates.room} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.room ? '#ef4444' : '' }} />
+                  {formErrors.room && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.room}</span>}
                   <span className="cv-rate-unit">Rs / service</span>
                 </div>
                 <div className="cv-rate-card">
                   <span className="cv-rate-icon">🚿</span>
                   <label>Bathroom Cleaning</label>
-                  <input type="number" name="bathroom" value={rates.bathroom} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="bathroom" value={rates.bathroom} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.bathroom ? '#ef4444' : '' }} />
+                  {formErrors.bathroom && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.bathroom}</span>}
                   <span className="cv-rate-unit">Rs / service</span>
                 </div>
                 <div className="cv-rate-card">
                   <span className="cv-rate-icon">🏠</span>
                   <label>Room + Bathroom</label>
-                  <input type="number" name="roomBathroom" value={rates.roomBathroom} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="roomBathroom" value={rates.roomBathroom} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.roomBathroom ? '#ef4444' : '' }} />
+                  {formErrors.roomBathroom && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.roomBathroom}</span>}
                   <span className="cv-rate-unit">Rs / service</span>
                 </div>
               </div>
@@ -305,7 +450,7 @@ function CleaningVendorDashboard() {
               <p style={{ color: '#6b7280', fontSize: '13px', margin: '8px 0 16px' }}>Job: <strong>{selectedJob.id}</strong> — {selectedJob.student}</p>
               <div className="cv-form-group">
                 <label>Cancel Reason *</label>
-                <textarea rows="4" value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder="Explain why you're cancelling (student will be notified)..." required />
+                <textarea rows="4" value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder="Explain why you're cancelling (student will be notified)..." />
               </div>
               <div className="cv-modal-actions">
                 <button className="cv-modal-cancel" onClick={() => setShowCancelModal(false)}>Back</button>

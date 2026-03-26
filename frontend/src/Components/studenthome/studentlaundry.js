@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './studentlaundry.css';
 import ServicesSidebar from './ServicesSidebar';
 
-
 function StudentLaundry() {
   const [activeTab, setActiveTab] = useState('vendors');
-  const [vendors, setVendors] = useState([
+  const [vendors] = useState([
     { id: 1, name: 'CleanPro Laundry', rate: 100, rating: 4.5, location: 'Block A' },
     { id: 2, name: 'FreshWash Services', rate: 150, rating: 4.2, location: 'Block B' },
     { id: 3, name: 'QuickClean', rate: 75, rating: 4.8, location: 'Block C' },
@@ -34,31 +33,26 @@ function StudentLaundry() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showComplaintModal, setShowComplaintModal] = useState(false);
 
-
   useEffect(() => {
     if (selectedVendor && formData.numberOfDresses) {
       setTotalPrice(selectedVendor.rate * formData.numberOfDresses);
     }
   }, [selectedVendor, formData.numberOfDresses]);
 
-
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
 
   const handleSelectVendor = (vendor) => {
     setSelectedVendor(vendor);
     setActiveTab('request');
   };
 
-
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
     if (!selectedVendor) { setMessage('❌ Please select a vendor first!'); return; }
     setLoading(true);
     const token = localStorage.getItem('token');
-
 
     try {
       const response = await fetch('http://localhost:5000/api/laundry/request', {
@@ -88,7 +82,6 @@ function StudentLaundry() {
         setMessage(`❌ ${data.message}`);
       }
     } catch (error) {
-      // Using mock data for now until backend is ready
       const newRequest = {
         id: `LND00${requests.length + 1}`,
         vendor: selectedVendor.name,
@@ -105,14 +98,12 @@ function StudentLaundry() {
     }
   };
 
-
   const handleRatingSubmit = (e) => {
     e.preventDefault();
     setMessage('✅ Rating submitted successfully!');
     setShowRatingModal(false);
     setRatingData({ serviceId: '', stars: 0, review: '' });
   };
-
 
   const handleComplaintSubmit = (e) => {
     e.preventDefault();
@@ -121,27 +112,26 @@ function StudentLaundry() {
     setComplaintData({ serviceId: '', description: '' });
   };
 
-
   const openRating = (reqId) => {
     setRatingData({ ...ratingData, serviceId: reqId });
     setShowRatingModal(true);
   };
-
 
   const openComplaint = (reqId) => {
     setComplaintData({ ...complaintData, serviceId: reqId });
     setShowComplaintModal(true);
   };
 
-
   const getStatusColor = (status) => {
     const colors = { 'Pending': '#f59e0b', 'Picked Up': '#3b82f6', 'In Progress': '#8b5cf6', 'Completed': '#10b981' };
     return colors[status] || '#6b7280';
   };
 
+  
 
-  const renderStars = (count) => '★'.repeat(count) + '☆'.repeat(5 - count);
-
+  // ── DATE & TIME VALIDATION ──
+  const today = new Date().toISOString().split('T')[0];
+  const currentTime = new Date().toTimeString().slice(0, 5);
 
   return (
     <div style={{ display: 'flex' }}>
@@ -156,7 +146,6 @@ function StudentLaundry() {
           </div>
         </div>
 
-
         {/* Message */}
         {message && (
           <div className={`alert ${message.includes('✅') ? 'alert-success' : 'alert-error'}`}>
@@ -164,7 +153,6 @@ function StudentLaundry() {
             <button onClick={() => setMessage('')}>✕</button>
           </div>
         )}
-
 
         {/* Tab Navigation */}
         <div className="tab-nav">
@@ -178,7 +166,6 @@ function StudentLaundry() {
             </button>
           ))}
         </div>
-
 
         {/* TAB 1: Browse Vendors */}
         {activeTab === 'vendors' && (
@@ -201,7 +188,6 @@ function StudentLaundry() {
           </div>
         )}
 
-
         {/* TAB 2: New Request Form */}
         {activeTab === 'request' && (
           <div className="request-section">
@@ -215,7 +201,6 @@ function StudentLaundry() {
                 ⚠️ No vendor selected. <button onClick={() => setActiveTab('vendors')}>Browse Vendors</button>
               </div>
             )}
-
 
             <form onSubmit={handleSubmitRequest} className="request-form">
               <div className="form-row">
@@ -234,7 +219,6 @@ function StudentLaundry() {
                 </div>
               </div>
 
-
               <div className="form-row">
                 <div className="form-group">
                   <label>Hostel Name *</label>
@@ -252,30 +236,42 @@ function StudentLaundry() {
                 </div>
               </div>
 
-
               <div className="form-row">
+                {/* ── UPDATED DATE INPUT ── */}
                 <div className="form-group">
                   <label>Pickup Date *</label>
-                  <input type="date" name="pickupDate" value={formData.pickupDate} onChange={handleFormChange} required />
+                  <input
+                    type="date"
+                    name="pickupDate"
+                    value={formData.pickupDate}
+                    onChange={handleFormChange}
+                    min={today}
+                    required
+                  />
                 </div>
+                {/* ── UPDATED TIME INPUT ── */}
                 <div className="form-group">
                   <label>Pickup Time *</label>
-                  <input type="time" name="pickupTime" value={formData.pickupTime} onChange={handleFormChange} required />
+                  <input
+                    type="time"
+                    name="pickupTime"
+                    value={formData.pickupTime}
+                    onChange={handleFormChange}
+                    min={formData.pickupDate === today ? currentTime : '00:00'}
+                    required
+                  />
                 </div>
               </div>
-
 
               <div className="form-group">
                 <label>Optional Notes</label>
                 <textarea name="notes" placeholder="Any special instructions..." value={formData.notes} onChange={handleFormChange} rows="3" />
               </div>
 
-
               <div className="form-group">
                 <label>📍 Location Pin (Google Maps link)</label>
                 <input type="text" name="location" placeholder="Paste Google Maps link here" value={formData.location} onChange={handleFormChange} />
               </div>
-
 
               {/* Price Calculator */}
               {selectedVendor && formData.numberOfDresses > 0 && (
@@ -286,14 +282,12 @@ function StudentLaundry() {
                 </div>
               )}
 
-
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? 'Submitting...' : '🚀 Submit Request'}
               </button>
             </form>
           </div>
         )}
-
 
         {/* TAB 3: My Requests */}
         {activeTab === 'myRequests' && (
@@ -339,7 +333,6 @@ function StudentLaundry() {
           </div>
         )}
 
-
         {/* Rating Modal */}
         {showRatingModal && (
           <div className="modal-overlay">
@@ -364,7 +357,6 @@ function StudentLaundry() {
             </div>
           </div>
         )}
-
 
         {/* Complaint Modal */}
         {showComplaintModal && (
@@ -394,6 +386,5 @@ function StudentLaundry() {
     </div>
   );
 }
-
 
 export default StudentLaundry;

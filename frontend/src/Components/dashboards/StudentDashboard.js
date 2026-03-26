@@ -45,13 +45,23 @@ function StudentDashboard() {
           <div className="dashboard-card">
             <h3>Laundry Services</h3>
             <p>Schedule laundry pickups</p>
-            <button className="card-button">Coming Soon</button>
+            <button 
+              className="card-button"
+              onClick={() => navigate('/student/laundry')}
+            >
+              Laundry Services
+            </button>
           </div>
 
           <div className="dashboard-card">
             <h3>Cleaning Services</h3>
             <p>Request cleaning services</p>
-            <button className="card-button">Coming Soon</button>
+            <button 
+              className="card-button"
+              onClick={() => navigate('/student/cleaning')}
+            >
+              Cleaning Services
+            </button>
           </div>
 
           <div className="dashboard-card">

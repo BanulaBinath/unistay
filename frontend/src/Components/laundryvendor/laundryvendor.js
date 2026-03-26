@@ -6,6 +6,7 @@ function LaundryVendorDashboard() {
   const [activeTab, setActiveTab] = useState('profile');
   const [message, setMessage] = useState('');
   const [isAvailable, setIsAvailable] = useState(true);
+  const [formErrors, setFormErrors] = useState({});
 
   const [profile, setProfile] = useState({
     fullName: '',
@@ -38,17 +39,105 @@ function LaundryVendorDashboard() {
 
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [selectedJob, setSelectedJob]     = useState(null);
-  const [newStatus, setNewStatus]         = useState('');
-  const [completionNote, setCompletionNote] = useState('');
-  const [cancelReason, setCancelReason]   = useState('');
-  const [replyTexts, setReplyTexts]       = useState({});
+  const [selectedJob, setSelectedJob]         = useState(null);
+  const [newStatus, setNewStatus]             = useState('');
+  const [completionNote, setCompletionNote]   = useState('');
+  const [cancelReason, setCancelReason]       = useState('');
+  const [replyTexts, setReplyTexts]           = useState({});
 
-  const handleProfileChange = (e) => setProfile({ ...profile, [e.target.name]: e.target.value });
-  const handleRatesChange   = (e) => setRates({ ...rates, [e.target.name]: e.target.value });
+  // ── PICKUP HOURS TIME SLOT OPTIONS ──
+  const pickupHourOptions = [
+    '06:00 - 08:00',
+    '08:00 - 10:00',
+    '10:00 - 12:00',
+    '12:00 - 14:00',
+    '14:00 - 16:00',
+    '16:00 - 18:00',
+    '18:00 - 20:00',
+    '08:00 - 18:00',
+    '06:00 - 20:00',
+  ];
+
+  // ── VALIDATION FUNCTION ──
+  const validateProfile = () => {
+    const errors = {};
+    const onlyLetters       = /^[a-zA-Z\s]+$/;
+    const lettersAndCommas  = /^[a-zA-Z\s,&]+$/;
+
+    // Full Name
+    if (!profile.fullName.trim()) {
+      errors.fullName = '❌ Full name is required.';
+    } else if (profile.fullName.trim().length < 3) {
+      errors.fullName = '❌ Name must be at least 3 characters.';
+    } else if (!onlyLetters.test(profile.fullName.trim())) {
+      errors.fullName = '❌ Name must contain only letters and spaces.';
+    }
+
+    // Pickup Hours
+    if (!profile.pickupHours) {
+      errors.pickupHours = '❌ Please select a pickup time slot.';
+    }
+
+    // Services Offered
+    if (profile.services.trim() && !lettersAndCommas.test(profile.services.trim())) {
+      errors.services = '❌ Services must contain only letters (no numbers or symbols).';
+    }
+
+    // Photo validation
+    if (profile.photo) {
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (!allowedTypes.includes(profile.photo.type)) {
+        errors.photo = '❌ Only JPG, PNG, or WEBP images are allowed.';
+      } else if (profile.photo.size > maxSize) {
+        errors.photo = '❌ Photo size must be less than 2MB.';
+      }
+    }
+
+    // Rates
+    if (!rates.washFold || rates.washFold < 1)     errors.washFold    = '❌ Minimum rate is Rs. 1.';
+    if (!rates.dryCleaning || rates.dryCleaning < 1) errors.dryCleaning = '❌ Minimum rate is Rs. 1.';
+    if (!rates.ironPress || rates.ironPress < 1)   errors.ironPress   = '❌ Minimum rate is Rs. 1.';
+
+    return errors;
+  };
+
+  const handleProfileChange = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, [e.target.name]: '' });
+  };
+
+  const handleRatesChange = (e) => {
+    setRates({ ...rates, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, [e.target.name]: '' });
+  };
+
+  // ── PHOTO CHANGE WITH INSTANT VALIDATION ──
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 2 * 1024 * 1024;
+    if (!allowedTypes.includes(file.type)) {
+      setFormErrors({ ...formErrors, photo: '❌ Only JPG, PNG, or WEBP images are allowed.' });
+      return;
+    }
+    if (file.size > maxSize) {
+      setFormErrors({ ...formErrors, photo: '❌ Photo size must be less than 2MB.' });
+      return;
+    }
+    setProfile({ ...profile, photo: file });
+    setFormErrors({ ...formErrors, photo: '' });
+  };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+    const errors = validateProfile();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setMessage('❌ Please fix the errors before saving.');
+      return;
+    }
     const token = localStorage.getItem('token');
     try {
       const res = await fetch('http://localhost:5000/api/laundry/vendor/profile', {
@@ -79,8 +168,12 @@ function LaundryVendorDashboard() {
   };
 
   const handleComplaintReply = (index) => {
+    if (!replyTexts[index] || !replyTexts[index].trim()) {
+      setMessage('❌ Reply cannot be empty!');
+      return;
+    }
     const updated = [...complaints];
-    updated[index].reply = replyTexts[index] || '';
+    updated[index].reply = replyTexts[index];
     setComplaints(updated);
     setMessage('✅ Reply sent to student!');
     setReplyTexts({ ...replyTexts, [index]: '' });
@@ -127,13 +220,35 @@ function LaundryVendorDashboard() {
               <h3 className="lv-section-title">👤 Profile Setup</h3>
 
               <div className="lv-form-row">
+                {/* Full Name */}
                 <div className="lv-form-group">
                   <label>Full Name *</label>
-                  <input type="text" name="fullName" value={profile.fullName} onChange={handleProfileChange} placeholder="Your full name" required minLength={3} />
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={profile.fullName}
+                    onChange={handleProfileChange}
+                    placeholder="Your full name (letters only)"
+                    style={{ borderColor: formErrors.fullName ? '#ef4444' : '' }}
+                  />
+                  {formErrors.fullName && <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.fullName}</span>}
                 </div>
+
+                {/* ── PICKUP HOURS → DROPDOWN ── */}
                 <div className="lv-form-group">
                   <label>Available Pickup Hours *</label>
-                  <input type="text" name="pickupHours" value={profile.pickupHours} onChange={handleProfileChange} placeholder="e.g. 08:00 - 18:00" required minLength={3} />
+                  <select
+                    name="pickupHours"
+                    value={profile.pickupHours}
+                    onChange={handleProfileChange}
+                    style={{ borderColor: formErrors.pickupHours ? '#ef4444' : '' }}
+                  >
+                    <option value="">-- Select Time Slot --</option>
+                    {pickupHourOptions.map(slot => (
+                      <option key={slot} value={slot}>{slot}</option>
+                    ))}
+                  </select>
+                  {formErrors.pickupHours && <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.pickupHours}</span>}
                 </div>
               </div>
 
@@ -142,14 +257,34 @@ function LaundryVendorDashboard() {
                 <textarea name="bio" rows="3" value={profile.bio} onChange={handleProfileChange} placeholder="Tell students about your service..." />
               </div>
 
+              {/* ── SERVICES OFFERED → LETTERS ONLY ── */}
               <div className="lv-form-group">
                 <label>Services Offered</label>
-                <input type="text" name="services" value={profile.services} onChange={handleProfileChange} placeholder="e.g. Wash & Fold, Dry Cleaning, Iron & Press" />
+                <input
+                  type="text"
+                  name="services"
+                  value={profile.services}
+                  onChange={handleProfileChange}
+                  placeholder="e.g. Wash and Fold, Dry Cleaning, Iron and Press"
+                  style={{ borderColor: formErrors.services ? '#ef4444' : '' }}
+                />
+                {formErrors.services && <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.services}</span>}
+                <span style={{ fontSize: '11px', color: '#9ca3af' }}>Letters and commas only — no numbers or symbols</span>
               </div>
 
+              {/* ── PROFILE PHOTO → FILE TYPE & SIZE VALIDATION ── */}
               <div className="lv-form-group">
                 <label>Profile Photo</label>
-                <input type="file" accept="image/*" onChange={(e) => setProfile({ ...profile, photo: e.target.files[0] })} />
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handlePhotoChange}
+                  style={{ borderColor: formErrors.photo ? '#ef4444' : '' }}
+                />
+                {formErrors.photo
+                  ? <span style={{ color: '#ef4444', fontSize: '12px' }}>{formErrors.photo}</span>
+                  : <span style={{ fontSize: '11px', color: '#9ca3af' }}>JPG, PNG, WEBP only • Max 2MB</span>
+                }
               </div>
 
               <h3 className="lv-section-title" style={{ marginTop: '28px' }}>💰 Rates Setup (Rs per dress)</h3>
@@ -157,19 +292,22 @@ function LaundryVendorDashboard() {
                 <div className="lv-rate-card">
                   <span className="lv-rate-icon">👕</span>
                   <label>Wash & Fold</label>
-                  <input type="number" name="washFold" value={rates.washFold} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="washFold" value={rates.washFold} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.washFold ? '#ef4444' : '' }} />
+                  {formErrors.washFold && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.washFold}</span>}
                   <span className="lv-rate-unit">Rs / dress</span>
                 </div>
                 <div className="lv-rate-card">
                   <span className="lv-rate-icon">🧴</span>
                   <label>Dry Cleaning</label>
-                  <input type="number" name="dryCleaning" value={rates.dryCleaning} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="dryCleaning" value={rates.dryCleaning} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.dryCleaning ? '#ef4444' : '' }} />
+                  {formErrors.dryCleaning && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.dryCleaning}</span>}
                   <span className="lv-rate-unit">Rs / dress</span>
                 </div>
                 <div className="lv-rate-card">
                   <span className="lv-rate-icon">♨️</span>
                   <label>Iron & Press</label>
-                  <input type="number" name="ironPress" value={rates.ironPress} onChange={handleRatesChange} min="1" required />
+                  <input type="number" name="ironPress" value={rates.ironPress} onChange={handleRatesChange} min="1" style={{ borderColor: formErrors.ironPress ? '#ef4444' : '' }} />
+                  {formErrors.ironPress && <span style={{ color: '#ef4444', fontSize: '11px' }}>{formErrors.ironPress}</span>}
                   <span className="lv-rate-unit">Rs / dress</span>
                 </div>
               </div>
@@ -315,7 +453,7 @@ function LaundryVendorDashboard() {
               <p style={{ color: '#6b7280', fontSize: '13px', margin: '8px 0 16px' }}>Job: <strong>{selectedJob.id}</strong> — {selectedJob.student}</p>
               <div className="lv-form-group">
                 <label>Cancel Reason *</label>
-                <textarea rows="4" value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder="Explain why you're cancelling (student will be notified)..." required />
+                <textarea rows="4" value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} placeholder="Explain why you're cancelling (student will be notified)..." />
               </div>
               <div className="lv-modal-actions">
                 <button className="lv-modal-cancel" onClick={() => setShowCancelModal(false)}>Back</button>

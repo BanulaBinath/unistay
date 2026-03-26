@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './studentcleaning.css';
 import ServicesSidebar from './ServicesSidebar';
 
-
 function StudentCleaning() {
   const [activeTab, setActiveTab] = useState('vendors');
   const [vendors] = useState([
@@ -33,7 +32,6 @@ function StudentCleaning() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showComplaintModal, setShowComplaintModal] = useState(false);
 
-
   useEffect(() => {
     if (selectedVendor && formData.serviceType) {
       if (formData.serviceType === 'Room') setTotalPrice(selectedVendor.roomRate);
@@ -43,24 +41,20 @@ function StudentCleaning() {
     }
   }, [selectedVendor, formData.serviceType]);
 
-
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
 
   const handleSelectVendor = (vendor) => {
     setSelectedVendor(vendor);
     setActiveTab('request');
   };
 
-
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
     if (!selectedVendor) { setMessage('❌ Please select a vendor first!'); return; }
     setLoading(true);
     const token = localStorage.getItem('token');
-
 
     try {
       const response = await fetch('http://localhost:5000/api/cleaning/request', {
@@ -86,7 +80,6 @@ function StudentCleaning() {
     }
   };
 
-
   const addNewRequest = () => {
     const newRequest = {
       id: `CLN00${requests.length + 1}`,
@@ -102,14 +95,12 @@ function StudentCleaning() {
     setActiveTab('myRequests');
   };
 
-
   const handleRatingSubmit = (e) => {
     e.preventDefault();
     setMessage('✅ Rating submitted successfully!');
     setShowRatingModal(false);
     setRatingData({ serviceId: '', stars: 0, review: '' });
   };
-
 
   const handleComplaintSubmit = (e) => {
     e.preventDefault();
@@ -118,18 +109,15 @@ function StudentCleaning() {
     setComplaintData({ serviceId: '', description: '' });
   };
 
-
   const openRating = (reqId) => {
     setRatingData({ ...ratingData, serviceId: reqId });
     setShowRatingModal(true);
   };
 
-
   const openComplaint = (reqId) => {
     setComplaintData({ ...complaintData, serviceId: reqId });
     setShowComplaintModal(true);
   };
-
 
   const getStatusColor = (status) => {
     const colors = {
@@ -140,13 +128,14 @@ function StudentCleaning() {
     return colors[status] || '#6b7280';
   };
 
-
   const getServiceIcon = (service) => {
     if (service === 'Room') return '🛏️';
     if (service === 'Bathroom') return '🚿';
     return '🏠';
   };
 
+  // ── DATE VALIDATION ──
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <div style={{ display: 'flex' }}>
@@ -161,7 +150,6 @@ function StudentCleaning() {
           </div>
         </div>
 
-
         {/* Message */}
         {message && (
           <div className={`cl-alert ${message.includes('✅') ? 'cl-alert-success' : 'cl-alert-error'}`}>
@@ -169,7 +157,6 @@ function StudentCleaning() {
             <button onClick={() => setMessage('')}>✕</button>
           </div>
         )}
-
 
         {/* Tab Navigation */}
         <div className="cl-tab-nav">
@@ -184,7 +171,6 @@ function StudentCleaning() {
           ))}
         </div>
 
-
         {/* TAB 1: Browse Vendors */}
         {activeTab === 'vendors' && (
           <div className="cl-vendors-grid">
@@ -193,8 +179,6 @@ function StudentCleaning() {
                 <div className="cl-vendor-avatar">{vendor.name.charAt(0)}</div>
                 <h3>{vendor.name}</h3>
                 <p className="cl-vendor-location">📍 {vendor.location}</p>
-
-
                 <div className="cl-rates-table">
                   <div className="cl-rate-row">
                     <span>🛏️ Room only</span>
@@ -209,8 +193,6 @@ function StudentCleaning() {
                     <span className="cl-rate-val">Rs. {vendor.bothRate}</span>
                   </div>
                 </div>
-
-
                 <button className="cl-select-btn" onClick={() => handleSelectVendor(vendor)}>
                   Select Vendor
                 </button>
@@ -218,7 +200,6 @@ function StudentCleaning() {
             ))}
           </div>
         )}
-
 
         {/* TAB 2: New Request Form */}
         {activeTab === 'request' && (
@@ -234,10 +215,7 @@ function StudentCleaning() {
               </div>
             )}
 
-
             <form onSubmit={handleSubmitRequest} className="cl-form">
-
-
               <div className="cl-form-group">
                 <label>Service Type *</label>
                 <div className="cl-service-options">
@@ -263,7 +241,6 @@ function StudentCleaning() {
                 </div>
               </div>
 
-
               <div className="cl-form-row">
                 <div className="cl-form-group">
                   <label>Hostel Name *</label>
@@ -281,11 +258,18 @@ function StudentCleaning() {
                 </div>
               </div>
 
-
               <div className="cl-form-row">
+                {/* ── UPDATED DATE INPUT ── */}
                 <div className="cl-form-group">
                   <label>Preferred Date *</label>
-                  <input type="date" name="preferredDate" value={formData.preferredDate} onChange={handleFormChange} required />
+                  <input
+                    type="date"
+                    name="preferredDate"
+                    value={formData.preferredDate}
+                    onChange={handleFormChange}
+                    min={today}
+                    required
+                  />
                 </div>
                 <div className="cl-form-group">
                   <label>Preferred Time Slot *</label>
@@ -300,18 +284,15 @@ function StudentCleaning() {
                 </div>
               </div>
 
-
               <div className="cl-form-group">
                 <label>📍 Location Pin (Google Maps link)</label>
                 <input type="text" name="location" placeholder="Paste Google Maps link here" value={formData.location} onChange={handleFormChange} />
               </div>
 
-
               <div className="cl-form-group">
                 <label>Optional Notes</label>
                 <textarea name="notes" placeholder="Any special instructions..." value={formData.notes} onChange={handleFormChange} rows="3" />
               </div>
-
 
               {/* Price Display */}
               {selectedVendor && formData.serviceType && (
@@ -322,14 +303,12 @@ function StudentCleaning() {
                 </div>
               )}
 
-
               <button type="submit" className="cl-submit-btn" disabled={loading}>
                 {loading ? '⏳ Submitting...' : '✅ Submit Cleaning Request'}
               </button>
             </form>
           </div>
         )}
-
 
         {/* TAB 3: My Requests Table */}
         {activeTab === 'myRequests' && (
@@ -377,7 +356,6 @@ function StudentCleaning() {
           </div>
         )}
 
-
         {/* Rating Modal */}
         {showRatingModal && (
           <div className="cl-modal-overlay">
@@ -416,7 +394,6 @@ function StudentCleaning() {
           </div>
         )}
 
-
         {/* Complaint Modal */}
         {showComplaintModal && (
           <div className="cl-modal-overlay">
@@ -450,6 +427,5 @@ function StudentCleaning() {
     </div>
   );
 }
-
 
 export default StudentCleaning;
