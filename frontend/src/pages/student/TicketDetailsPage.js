@@ -138,8 +138,8 @@ const TicketDetailsPage = () => {
     return (
       <div className="error-container">
         <div className="error-message">{error}</div>
-        <button onClick={() => navigate('/student/complaints')} className="back-button">
-          ← Back to My Complaints
+        <button onClick={() => navigate('/student/dashboard')} className="back-button">
+          ← Back to Dashboard
         </button>
       </div>
     );
@@ -157,8 +157,8 @@ const TicketDetailsPage = () => {
   return (
     <div className="ticket-details-page">
       <div className="page-header">
-        <button onClick={() => navigate('/student/complaints')} className="back-button">
-          ← Back to My Complaints
+        <button onClick={() => navigate('/student/dashboard')} className="back-button">
+          ← Back to Dashboard
         </button>
       </div>
 

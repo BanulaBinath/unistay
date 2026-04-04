@@ -1,0 +1,469 @@
+/* ============================================================
+   My Food Orders Page — UniStay Design System
+   Font: Poppins | Primary Color: #5b6cf2
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+.mfo-container {
+  min-height: 100vh;
+  background: #fafbfc;
+  font-family: 'Poppins', sans-serif;
+  padding: 32px;
+}
+
+.mfo-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════ */
+.mfo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+}
+
+.mfo-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mfo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f4ff;
+  border: 1px solid #d9e2ff;
+  color: #5b6cf2;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.mfo-badge-dot {
+  width: 6px;
+  height: 6px;
+  background: #5b6cf2;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mfo-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a202c;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.mfo-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.mfo-place-order-btn {
+  background: linear-gradient(135deg, #5b6cf2 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(91, 108, 242, 0.28);
+}
+
+.mfo-place-order-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(91, 108, 242, 0.38);
+}
+
+.mfo-place-order-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ═══════════════════════════════════════════════════
+   BODY
+═══════════════════════════════════════════════════ */
+.mfo-body {
+  background: white;
+  border: 1px solid #e8ebf7;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(91, 108, 242, 0.05);
+}
+
+/* Error banner */
+.mfo-error-banner {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Success banner */
+.mfo-success-banner {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: mfo-slideIn 0.3s ease-out;
+}
+
+@keyframes mfo-slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading */
+.mfo-loading-state {
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.mfo-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e8ebf7;
+  border-top-color: #5b6cf2;
+  border-radius: 50%;
+  animation: mfo-spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes mfo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mfo-loading-text {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Empty state */
+.mfo-empty-state {
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.mfo-empty-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+  border: 1px solid #d9e2ff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.mfo-empty-icon svg {
+  width: 32px;
+  height: 32px;
+  color: #5b6cf2;
+}
+
+.mfo-empty-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.mfo-empty-desc {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mfo-empty-action-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  padding: 11px 24px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(91, 108, 242, 0.25);
+}
+
+.mfo-empty-action-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(91, 108, 242, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════
+   ORDERS LIST
+═══════════════════════════════════════════════════ */
+.mfo-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mfo-order-card {
+  border: 1px solid #e8ebf7;
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fdfdff;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mfo-order-card:hover {
+  border-color: #c7d4ff;
+  background: #fafbff;
+  box-shadow: 0 4px 16px rgba(91, 108, 242, 0.1);
+  transform: translateY(-2px);
+}
+
+.mfo-order-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+  border: 1px solid #d9e2ff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mfo-order-icon svg {
+  width: 26px;
+  height: 26px;
+  color: #5b6cf2;
+}
+
+.mfo-order-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.mfo-order-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 8px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mfo-order-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.mfo-meta-item {
+  font-size: 0.74rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.mfo-meta-item svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.7;
+}
+
+/* Status badges */
+.mfo-status {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+.mfo-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.mfo-status-accepted {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.mfo-status-completed {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.mfo-status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.mfo-status-rejected {
+  background: #ffe4e6;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+}
+
+.mfo-chevron {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.mfo-order-card:hover .mfo-chevron {
+  color: #5b6cf2;
+  transform: translateX(3px);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .mfo-container {
+    padding: 24px 20px;
+  }
+
+  .mfo-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mfo-place-order-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mfo-title {
+    font-size: 1.5rem;
+  }
+
+  .mfo-body {
+    padding: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .mfo-container {
+    padding: 16px;
+  }
+
+  .mfo-title {
+    font-size: 1.3rem;
+  }
+
+  .mfo-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .mfo-body {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .mfo-order-card {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+  }
+
+  .mfo-order-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mfo-order-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mfo-order-name {
+    font-size: 0.88rem;
+  }
+
+  .mfo-meta-item {
+    font-size: 0.7rem;
+  }
+
+  .mfo-status {
+    order: 3;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .mfo-chevron {
+    order: 2;
+  }
+
+  .mfo-empty-state,
+  .mfo-loading-state {
+    padding: 40px 16px;
+  }
+}

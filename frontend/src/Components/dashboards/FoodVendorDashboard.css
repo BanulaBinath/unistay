@@ -1,0 +1,47 @@
+/* MAIN LAYOUT */
+.vendor-dashboard-wrapper {
+  display: flex;
+  background: #f8f9ff;
+  min-height: 100vh;
+}
+
+/* CONTENT AREA */
+.vendor-dashboard-content {
+  margin-left: 260px; /* keep space for sidebar */
+  padding: 40px;
+  width: 100%;
+}
+
+/* WELCOME CARD */
+.vendor-dashboard-card {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  width: 420px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vendor-dashboard-title {
+  font-size: 26px;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+}
+
+/* INFO TEXT */
+.vendor-dashboard-info {
+  font-size: 16px;
+  color: #334155;
+  margin: 8px 0;
+}
+
+/* STATUS BADGE */
+.vendor-dashboard-status {
+  margin-top: 15px;
+  padding: 8px 14px;
+  display: inline-block;
+  background: #0d9488;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
 import './ExternalStudentRegister.css';
 
 function ExternalStudentRegister() {
@@ -35,10 +37,14 @@ function ExternalStudentRegister() {
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
+    } else if (/\d/.test(formData.fullName)) {
+      newErrors.fullName = 'Full name cannot contain numbers';
     }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+    } else if (!formData.email.includes('@')) {
+      newErrors.email = 'Personal email must contain "@"';
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Please provide a valid email';
     } else if (formData.email.endsWith('@my.sliit.lk')) {
@@ -105,148 +111,161 @@ function ExternalStudentRegister() {
   };
 
   return (
-    <div className="external-register-container">
-      <div className="external-register-wrapper">
-        {/* Left Side */}
-        <div className="external-register-left">
-          <div className="external-badge">ENROLLMENT PHASE</div>
-          <h1 className="external-title">External Student Enrollment</h1>
-          <p className="external-description">
-            Join the premier academic housing network. Secure your place in high-standard accommodation curated for serious scholars.
-          </p>
+    <>
+      <Navbar />
+      <div className="external-register-container">
+        <div className="external-register-wrapper">
+          {/* Left Side - Purple Section */}
+          <div className="external-register-left">
+            <div className="external-badge">EXTERNAL STUDENT</div>
+            
+            <h1 className="external-title">External Student Enrollment</h1>
+            
+            <p className="external-description">
+              Join the premier academic housing network. Secure your place in high-standard accommodation curated for serious scholars.
+            </p>
 
-          <div className="progress-section">
-            <div className="progress-header">
-              <span className="progress-label">Step 1 of 2: Registration</span>
-              <span className="progress-step">50% Complete</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: '50%' }}></div>
-            </div>
-          </div>
+            <p className="external-description-secondary">
+              Access premium stays and community features across all listed locations. Your profile activates instantly upon payment confirmation.
+            </p>
 
-          <div className="feature-box">
-            <div className="feature-icon">⚡</div>
-            <h3>Instant Activation</h3>
-            <p>Profile activates instantly upon payment success. Your academic journey begins the moment your subscription is confirmed.</p>
-          </div>
-
-          <div className="security-badge">
-            <span className="security-icon">🔒</span>
-            <span>Bank-grade 256-bit encryption</span>
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div className="external-register-right">
-          <form onSubmit={handleSubmit} className="external-register-form">
-            <div className="form-header">
-              <div className="form-group-inline">
-                <div className="form-group">
-                  <label htmlFor="fullName">Full Name</label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    placeholder="e.g. Alexander Thorne"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    className={errors.fullName ? 'error' : ''}
-                  />
-                  {errors.fullName && <span className="error-text">{errors.fullName}</span>}
+            <div className="external-insights-card">
+              <div className="insights-header">
+                <div className="insights-title-section">
+                  <span className="insights-label">PREMIUM ACCESS</span>
+                  <h3>Network Coverage</h3>
                 </div>
+                <div className="insights-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="insights-chart">
+                <div className="chart-bar" style={{ height: '50%' }}></div>
+                <div className="chart-bar" style={{ height: '70%' }}></div>
+                <div className="chart-bar" style={{ height: '60%' }}></div>
+                <div className="chart-bar" style={{ height: '85%' }}></div>
+                <div className="chart-bar" style={{ height: '75%' }}></div>
+                <div className="chart-bar" style={{ height: '95%' }}></div>
+              </div>
+              
+              <p className="insights-footer">Access to 200+ verified properties across 15 locations</p>
+            </div>
+          </div>
 
-                <div className="form-group">
-                  <label>Account Role</label>
-                  <div className="role-display">
-                    <span>student_external</span>
+          {/* Right Side - Form Section */}
+          <div className="external-register-right">
+            <div className="form-header">
+              <h2>Create Premium Account</h2>
+              <p>Complete the details below to unlock full access</p>
+            </div>
+
+            <div className="form-card">
+              <form onSubmit={handleSubmit} className="external-register-form">
+                <div className="form-row-two">
+                  <div className="form-group">
+                    <label htmlFor="fullName">FULL NAME</label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      placeholder="Alexander Thorne"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className={errors.fullName ? 'error' : ''}
+                    />
+                    {errors.fullName && <span className="error-text">{errors.fullName}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email">PERSONAL EMAIL</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="alex.thorne@example.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={errors.email ? 'error' : ''}
+                    />
+                    {errors.email && <span className="error-text">{errors.email}</span>}
                   </div>
                 </div>
-              </div>
+
+                <div className="form-row-two">
+                  <div className="form-group">
+                    <label htmlFor="password">PASSWORD</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={errors.password ? 'error' : ''}
+                    />
+                    {errors.password && <span className="error-text">{errors.password}</span>}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="••••••••"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className={errors.confirmPassword ? 'error' : ''}
+                    />
+                    {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+                  </div>
+                </div>
+
+                {apiError && (
+                  <div className="api-error-message">
+                    {apiError}
+                  </div>
+                )}
+
+                <div className="subscription-info">
+                  <div className="subscription-header">
+                    <span className="subscription-label">Annual Subscription</span>
+                    <span className="subscription-price">Rs.1000<span className="price-period">/YEAR</span></span>
+                  </div>
+                  <p className="subscription-description">
+                    Billed once a year. Full access to all properties and premium features.
+                  </p>
+                </div>
+
+                <div className="form-footer-new">
+                  <div className="form-footer-left">
+                    <div className="info-text">
+                      🔒 Bank-grade 256-bit encryption. PCI DSS compliant payment processing.
+                    </div>
+
+                    <div className="signin-link">
+                      By registering, you agree to our <a href="/terms">Terms of Service</a>
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="submit-btn"
+                    disabled={loading}
+                  >
+                    {loading ? 'Processing...' : 'Register & Pay Subscription'}
+                  </button>
+                </div>
+              </form>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Personal Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="alex.thorne@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                className={errors.email ? 'error' : ''}
-              />
-              {errors.email && <span className="error-text">{errors.email}</span>}
-            </div>
-
-            <div className="form-group-inline">
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? 'error' : ''}
-                />
-                {errors.password && <span className="error-text">{errors.password}</span>}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? 'error' : ''}
-                />
-                {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-              </div>
-            </div>
-
-            {apiError && (
-              <div className="api-error-message">
-                {apiError}
-              </div>
-            )}
-
-            <div className="subscription-info">
-              <div className="subscription-header">
-                <span>Annual subscription activation required.</span>
-                <span className="subscription-price">$120<span className="price-period">/ YEAR</span></span>
-              </div>
-              <p className="subscription-description">
-                Billed once a year. Full access to all properties.
-              </p>
-            </div>
-
-            <button 
-              type="submit" 
-              className="submit-btn"
-              disabled={loading}
-            >
-              <span className="btn-icon">💳</span>
-              {loading ? 'Processing...' : 'Register & Pay Annual Subscription'}
-            </button>
-
-            <div className="payment-badges">
-              <div className="payment-badge">💳</div>
-              <div className="payment-badge">💳</div>
-              <span className="pci-text">PCI DSS COMPLIANT</span>
-            </div>
-
-            <div className="terms-text">
-              By clicking register, you agree to our <a href="/terms">Terms of Service</a> and <a href="/guidelines">Institutional Guidelines</a>.
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

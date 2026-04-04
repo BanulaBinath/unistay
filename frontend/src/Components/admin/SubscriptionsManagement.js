@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllSubscriptions, updateSubscriptionStatus } from '../../services/adminApi';
 import './SubscriptionsManagement.css';
 
 function SubscriptionsManagement() {
-  const navigate = useNavigate();
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,7 +27,7 @@ function SubscriptionsManagement() {
         setPagination(response.data.pagination);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load subscriptions');
+      setError(err?.response?.data?.message || 'Failed to load subscriptions');
     } finally {
       setLoading(false);
     }
@@ -42,7 +40,7 @@ function SubscriptionsManagement() {
         fetchSubscriptions();
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to update subscription status');
+      alert(err?.response?.data?.message || 'Failed to update subscription status');
     }
   };
 
@@ -67,32 +65,116 @@ function SubscriptionsManagement() {
     });
   };
 
+  const getStatusBadgeColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'active': return 'success';
+      case 'inactive': return 'warning';
+      case 'expired': return 'danger';
+      case 'completed': return 'success';
+      case 'pending': return 'warning';
+      case 'failed': return 'danger';
+      default: return 'gray';
+    }
+  };
+
   return (
-    <div className="subscriptions-management">
-      <div className="page-header">
-        <h1>Subscriptions Management</h1>
-        <button onClick={() => navigate('/admin/dashboard')} className="back-btn">
-          Back to Dashboard
-        </button>
-      </div>
+    <div className="modern-subscriptions-container">
+      <header className="page-heading-row">
+        <div>
+          <h1 className="page-title">Subscriptions Management</h1>
+          <p className="page-description">Monitor user plans, renewal dates, and payment statuses.</p>
+        </div>
+      </header>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="alert-banner alert-danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{error}</span>
+        </div>
+      )}
 
-      <div className="filters">
-        <select name="activationStatus" value={filters.activationStatus} onChange={handleFilterChange}>
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="expired">Expired</option>
-        </select>
+      {!loading && subscriptions.length > 0 && (
+        <div className="metrics-grid">
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Total Subscriptions</p>
+                <h3 className="metric-value">{pagination?.total || subscriptions.length}</h3>
+              </div>
+              <div className="metric-icon primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Active</p>
+                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'active').length}</h3>
+              </div>
+              <div className="metric-icon success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Inactive</p>
+                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'inactive').length}</h3>
+              </div>
+              <div className="metric-icon warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="metric-card complex-card">
+            <div className="card-inner-top">
+              <div className="metric-data">
+                <p className="metric-title">Expired</p>
+                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'expired').length}</h3>
+              </div>
+              <div className="metric-icon danger" style={{ background: '#FEF2F2', color: 'var(--sm-danger)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="toolbar-card">
+        <div className="filters-wrapper" style={{ width: '100%', justifyContent: 'flex-start' }}>
+          <select name="activationStatus" value={filters.activationStatus} onChange={handleFilterChange} className="modern-select">
+            <option value="">Status: All</option>
+            <option value="active">Active Only</option>
+            <option value="inactive">Inactive Only</option>
+            <option value="expired">Expired Only</option>
+          </select>
+        </div>
       </div>
 
       {loading ? (
-        <div className="loading">Loading subscriptions...</div>
+        <div className="loader-container">
+          <div className="modern-spinner"></div>
+          <p>Fetching subscriptions...</p>
+        </div>
       ) : (
         <>
-          <div className="table-container">
-            <table className="subscriptions-table">
+          <div className="modern-table-card">
+            <table className="modern-table">
               <thead>
                 <tr>
                   <th>User</th>
@@ -102,40 +184,64 @@ function SubscriptionsManagement() {
                   <th>Payment Status</th>
                   <th>Paid Date</th>
                   <th>Expiry Date</th>
-                  <th>Actions</th>
+                  <th className="actions-cell">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {subscriptions.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="no-data">No subscriptions found</td>
+                    <td colSpan="8" className="empty-state">
+                      <div className="empty-state-content">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                          <circle cx="9" cy="7" r="4" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75" />
+                        </svg>
+                        <p>No matching subscriptions found</p>
+                      </div>
+                    </td>
                   </tr>
                 ) : (
                   subscriptions.map((subscription) => (
                     <tr key={subscription._id}>
                       <td>
-                        {subscription.userId?.fullName || 'Unknown'}<br />
-                        <small>{subscription.userId?.email}</small>
+                        <div className="user-profile-cell">
+                          <div className="user-avatar-small">
+                            {subscription.userId?.fullName?.charAt(0).toUpperCase() || '?'}
+                          </div>
+                          <div className="user-profile-info">
+                            <span className="user-profile-name">{subscription.userId?.fullName || 'Unknown'}</span>
+                            <span className="user-profile-email">{subscription.userId?.email || 'N/A'}</span>
+                          </div>
+                        </div>
                       </td>
-                      <td>{subscription.subscriptionType}</td>
-                      <td>${subscription.amount.toFixed(2)}</td>
                       <td>
-                        <span className={`status-badge ${subscription.activationStatus}`}>
-                          {subscription.activationStatus}
+                         <span className="vendor-type-tag" style={{ textTransform: 'capitalize' }}>
+                            {subscription.subscriptionType}
+                         </span>
+                      </td>
+                      <td>
+                        <strong>${subscription.amount.toFixed(2)}</strong>
+                      </td>
+                      <td>
+                        <span className={`status-dot-badge ${subscription.activationStatus === 'active' ? 'active' : 'inactive'}`}>
+                          <span className="dot"></span>
+                          <span style={{ textTransform: 'capitalize' }}>{subscription.activationStatus}</span>
                         </span>
                       </td>
                       <td>
-                        <span className={`status-badge ${subscription.paymentStatus}`}>
-                          {subscription.paymentStatus}
-                        </span>
+                         <span className={`modern-badge badge-${getStatusBadgeColor(subscription.paymentStatus)}`}>
+                            {subscription.paymentStatus}
+                         </span>
                       </td>
                       <td>{formatDate(subscription.paidDate)}</td>
                       <td>{formatDate(subscription.expiryDate)}</td>
-                      <td>
+                      <td className="actions-cell">
                         <select
                           value={subscription.activationStatus}
                           onChange={(e) => handleStatusUpdate(subscription._id, e.target.value)}
-                          className="status-select"
+                          className="modern-select"
+                          style={{ padding: '6px 10px', fontSize: '0.8rem' }}
                         >
                           <option value="active">Active</option>
                           <option value="inactive">Inactive</option>
@@ -150,23 +256,31 @@ function SubscriptionsManagement() {
           </div>
 
           {pagination && pagination.pages > 1 && (
-            <div className="pagination">
-              <button
-                onClick={() => handlePageChange(filters.page - 1)}
-                disabled={filters.page === 1}
-                className="page-btn"
+            <div className="modern-pagination">
+              <button 
+                onClick={() => handlePageChange(filters.page - 1)} 
+                disabled={filters.page === 1} 
+                className="page-nav-btn"
               >
-                Previous
+                &larr; Prev
               </button>
-              <span className="page-info">
-                Page {pagination.page} of {pagination.pages}
-              </span>
-              <button
-                onClick={() => handlePageChange(filters.page + 1)}
-                disabled={filters.page === pagination.pages}
-                className="page-btn"
+              <div className="page-numbers-wrapper">
+                {[...Array(pagination.pages)].map((_, i) => (
+                  <button 
+                    key={i + 1} 
+                    onClick={() => handlePageChange(i + 1)} 
+                    className={`page-jump-btn ${filters.page === i + 1 ? 'active' : ''}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              <button 
+                onClick={() => handlePageChange(filters.page + 1)} 
+                disabled={filters.page === pagination.pages} 
+                className="page-nav-btn"
               >
-                Next
+                Next &rarr;
               </button>
             </div>
           )}

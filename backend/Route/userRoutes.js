@@ -70,7 +70,7 @@ router.get('/vendor/food/dashboard', verifyToken, isVendorType('food'), (req, re
 });
 
 // Protected Boarding Vendor Routes
-router.get('/vendor/boarding/dashboard', verifyToken, isVendorType('boarding'), (req, res) => {
+router.get('/vendor/food/dashboard', verifyToken, isVendorType('boarding'), (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Boarding vendor dashboard access granted',

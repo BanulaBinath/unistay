@@ -1,114 +1,126 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import "./reviewmaintenance.css";
 
-function ReviewMaintenance() {
+const VENDORS = [
+  { id: 1, name: "Sunil Repairs",  speciality: "Electrical", rating: 4.5 },
+  { id: 2, name: "Nimal Plumbing", speciality: "Plumbing",   rating: 4.2 },
+  { id: 3, name: "CoolFix Lanka",  speciality: "AC Service",  rating: 4.8 },
+];
 
-  const [reviews, setReviews] = useState([
-    {
-      id:1,
-      room:"Room A",
-      student:"Kamal",
-      rating:4,
-      comment:"Good environment",
-      reply:""
-    },
-    {
-      id:2,
-      room:"Room B",
-      student:"Nimal",
-      rating:3,
-      comment:"Water pressure low",
-      reply:""
-    }
-  ]);
+export default function ReviewMaintenance() {
+  const [reviews, setReviews]         = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [replyDrafts, setReplyDrafts] = useState({});
+  const [savingId, setSavingId]       = useState(null);
+  const [error, setError]             = useState("");
 
-  const [vendors] = useState([
-    {
-      id:1,
-      name:"Sunil Repairs",
-      speciality:"Electrical",
-      rating:4.5
-    },
-    {
-      id:2,
-      name:"Nimal Plumbing",
-      speciality:"Plumbing",
-      rating:4.2
-    },
-    {
-      id:3,
-      name:"CoolFix Lanka",
-      speciality:"AC Service",
-      rating:4.8
-    }
-  ]);
-
-  const handleReply = (id, text) => {
-    setReviews(
-      reviews.map(r =>
-        r.id === id ? { ...r, reply:text } : r
-      )
-    );
+  const fetchReviews = async () => {
+    setLoading(true);
+    try {
+      const res  = await fetch("http://localhost:5000/api/reviews");
+      const data = await res.json();
+      setReviews(data);
+    } catch { setError("Could not load reviews."); }
+    finally { setLoading(false); }
   };
 
-  const assignVendor = (name) => {
-    alert(name + " assigned");
+  useEffect(() => { fetchReviews(); }, []);
+
+  const submitReply = async (id) => {
+    const text = replyDrafts[id] || "";
+    if (!text.trim()) return;
+    setSavingId(id);
+    try {
+      const res = await fetch(`http://localhost:5000/api/reviews/${id}/reply`, {
+        method:  "PUT",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ reply: text }),
+      });
+      if (res.ok) { setReplyDrafts((p) => ({ ...p, [id]: "" })); fetchReviews(); }
+    } catch { alert("Failed to save reply."); }
+    finally { setSavingId(null); }
   };
+
+  const deleteReview = async (id) => {
+    if (!window.confirm("Delete this review?")) return;
+    try {
+      await fetch(`http://localhost:5000/api/reviews/${id}`, { method: "DELETE" });
+      fetchReviews();
+    } catch { alert("Failed to delete."); }
+  };
+
+  const renderStars = (rating) =>
+    Array.from({ length: 5 }, (_, i) => (
+      <span key={i} style={{ color: i < rating ? "#f59e0b" : "#ddd", fontSize: "18px" }}>★</span>
+    ));
+
+  const avg = reviews.length
+    ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+    : null;
 
   return (
     <div className="rm-container">
+      {/* Header */}
+      <div className="rm-header">
+        <div>
+          <h2 className="rm-title">⭐ Reviews</h2>
+          {avg && <p className="rm-avg">Average Rating: <b>{avg}</b> / 5 &nbsp;({reviews.length} reviews)</p>}
+        </div>
+      </div>
 
-      <h1>Reviews</h1>
+      {error   && <p style={{ color: "red" }}>{error}</p>}
+      {loading && <p className="rm-loading">Loading reviews...</p>}
 
-      <div className="reviews-section">
-        {reviews.map(r => (
-          <div key={r.id} className="review-card">
+      {!loading && reviews.length === 0 && <p className="rm-empty">No reviews yet.</p>}
 
-            <h3>{r.room}</h3>
-
-            <p><b>{r.student}</b></p>
-
-            <p>Rating: {r.rating} ⭐</p>
-
-            <p>{r.comment}</p>
-
-            <input
-              placeholder="Reply to review"
-              onChange={(e)=>handleReply(r.id,e.target.value)}
-            />
-
-            {r.reply && (
-              <div className="reply">
-                Owner Reply: {r.reply}
+      {!loading && (
+        <div className="rm-reviews-grid">
+          {reviews.map((r) => (
+            <div key={r._id} className="rm-review-card">
+              <div className="rm-review-header">
+                <div>
+                  <h3 className="rm-review-room">{r.roomTitle || "Room"}</h3>
+                  <span className="rm-review-student">👤 {r.student}</span>
+                </div>
+                <button className="rm-delete-btn" onClick={() => deleteReview(r._id)}>🗑️</button>
               </div>
-            )}
 
+              <div className="rm-stars">{renderStars(r.rating)}</div>
+              <p className="rm-comment">"{r.comment}"</p>
+              <p className="rm-date">{new Date(r.createdAt).toLocaleDateString()}</p>
+
+              {r.reply && (
+                <div className="rm-reply-display">💬 <b>Your reply:</b> {r.reply}</div>
+              )}
+
+              <div className="rm-reply-box">
+                <input
+                  className="rm-reply-input"
+                  placeholder={r.reply ? "Update reply..." : "Write a reply..."}
+                  value={replyDrafts[r._id] || ""}
+                  onChange={(e) => setReplyDrafts((p) => ({ ...p, [r._id]: e.target.value }))}
+                />
+                <button className="rm-reply-btn" onClick={() => submitReply(r._id)} disabled={savingId === r._id}>
+                  {savingId === r._id ? "..." : "Send"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Vendors */}
+      <h2 className="rm-title rm-vendor-title">🔧 Maintenance Vendors</h2>
+      <div className="rm-vendor-grid">
+        {VENDORS.map((v) => (
+          <div key={v.id} className="rm-vendor-card">
+            <h3 className="rm-vendor-name">{v.name}</h3>
+            <p className="rm-vendor-info">🛠️ {v.speciality}</p>
+            <p className="rm-vendor-info">⭐ {v.rating} / 5</p>
+            <button className="rm-assign-btn" onClick={() => alert(`✅ ${v.name} assigned!`)}>Assign Vendor</button>
           </div>
         ))}
       </div>
-
-      <h1 className="vendor-title">Maintenance Vendors</h1>
-
-      <div className="vendor-grid">
-        {vendors.map(v => (
-          <div key={v.id} className="vendor-card">
-
-            <h3>{v.name}</h3>
-
-            <p>Speciality: {v.speciality}</p>
-
-            <p>Rating: {v.rating} ⭐</p>
-
-            <button onClick={()=>assignVendor(v.name)}>
-              Assign Vendor
-            </button>
-
-          </div>
-        ))}
-      </div>
-
     </div>
   );
 }
-
-export default ReviewMaintenance;

@@ -7,7 +7,7 @@ function studenthome() {
     <div>
         <h1>Student Home</h1>
 
-        <Link to="/bookroom">
+        <Link to="/room-booking">
         <button>book room</button>
         </Link>
 

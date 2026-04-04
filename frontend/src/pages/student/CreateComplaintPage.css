@@ -1,157 +1,409 @@
+/* ============================================================
+   Create Complaint Page — Unistay Design System
+   Matches: Home · Sign-in · Sign-up · Student Dashboard
+   Font: Poppins | Primary: #5b6cf2 | Accent: #7c3aed
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Page shell ── */
 .create-complaint-page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  background: #fafbfc;
+  font-family: 'Poppins', sans-serif;
+  color: #1a202c;
 }
 
-.page-header {
-  margin-bottom: 30px;
+/* ══════════════════════════════════════════
+   TOP NAV
+══════════════════════════════════════════ */
+.ccp-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e8ebf7;
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 8px rgba(91, 108, 242, 0.06);
 }
 
-.page-header h1 {
-  font-size: 28px;
-  color: #333;
-  margin: 10px 0;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  color: #1976d2;
-  font-size: 14px;
+.ccp-topbar-brand {
+  color: #5b6cf2;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
-  padding: 8px 0;
-  margin-bottom: 10px;
+  transition: color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ccp-topbar-brand:hover {
+  color: #4a5ae0;
+}
+
+.ccp-logo-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* ── back link in topbar ── */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1.5px solid #e2e8f0;
+  color: #5b6cf2;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-decoration: none;
 }
 
 .back-button:hover {
-  text-decoration: underline;
+  background: #f0f4ff;
+  border-color: #5b6cf2;
 }
 
+/* ══════════════════════════════════════════
+   PAGE BODY WRAPPER
+══════════════════════════════════════════ */
+.ccp-body {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 36px 24px 64px;
+}
+
+/* ══════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════ */
+.ccp-page-header {
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ccp-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f4ff;
+  border: 1px solid #d9e2ff;
+  color: #5b6cf2;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.ccp-header-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #5b6cf2;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ccp-page-header h1 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #1a202c;
+  letter-spacing: -0.4px;
+  margin-bottom: 5px;
+}
+
+.ccp-header-sub {
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+/* ══════════════════════════════════════════
+   ERROR BANNER
+══════════════════════════════════════════ */
 .error-message {
-  background-color: #ffebee;
-  color: #c62828;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
   padding: 12px 16px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  border-left: 4px solid #c62828;
+  margin-bottom: 22px;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
+/* ══════════════════════════════════════════
+   FORM CARD
+══════════════════════════════════════════ */
 .complaint-form {
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border: 1px solid #e8ebf7;
+  border-radius: 16px;
+  padding: 32px 36px;
+  box-shadow: 0 2px 14px rgba(91, 108, 242, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
+/* ── Section divider inside form ── */
+.ccp-form-section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f0f1f7;
+}
+
+.ccp-form-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.ccp-section-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5b6cf2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.ccp-section-label::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: #5b6cf2;
+  border-radius: 50%;
+}
+
+/* ── Form group ── */
 .form-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 0;
 }
 
 .form-group label {
-  display: block;
+  font-size: 0.76rem;
   font-weight: 600;
-  margin-bottom: 8px;
-  color: #333;
-  font-size: 14px;
+  color: #374151;
+  letter-spacing: 0.01em;
 }
 
+/* Required star embedded in label */
+.form-group label .req {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+/* ── Inputs, selects, textarea ── */
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.3s;
+  padding: 10px 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  font-size: 0.83rem;
+  font-family: 'Poppins', sans-serif;
+  color: #1a202c;
+  background: #f8f9fc;
+  transition: all 0.18s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #1976d2;
+  border-color: #5b6cf2;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(91, 108, 242, 0.08);
 }
 
+/* Select wrapper for custom arrow */
+.ccp-select-wrapper {
+  position: relative;
+}
+
+.ccp-select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #94a3b8;
+  pointer-events: none;
+}
+
+.ccp-select-wrapper select {
+  padding-right: 36px;
+  cursor: pointer;
+  background: #f8f9fc;
+}
+
+/* Textarea */
 .form-group textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 130px;
+  line-height: 1.6;
 }
 
+/* Char counter */
 .form-group small {
-  display: block;
-  margin-top: 4px;
-  color: #666;
-  font-size: 12px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 400;
+  text-align: right;
+  margin-top: 2px;
 }
 
+/* ── Two-column row ── */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
 }
 
+/* ══════════════════════════════════════════
+   FORM ACTIONS
+══════════════════════════════════════════ */
 .form-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid #f0f1f7;
+  margin-top: 24px;
 }
 
-.cancel-button,
-.submit-button {
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-}
-
+/* Cancel */
 .cancel-button {
-  background-color: #f5f5f5;
-  color: #666;
+  background: transparent;
+  color: #64748b;
+  border: 1.5px solid #e2e8f0;
+  padding: 10px 22px;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.18s;
 }
 
 .cancel-button:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background: #f8f9fc;
+  border-color: #cbd5e1;
+  color: #374151;
 }
 
+/* Submit */
 .submit-button {
-  background-color: #1976d2;
+  background: linear-gradient(135deg, #5b6cf2 0%, #7c3aed 100%);
   color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(91, 108, 242, 0.28);
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #1565c0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(91, 108, 242, 0.38);
 }
 
 .cancel-button:disabled,
 .submit-button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none;
 }
 
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
+/* loading spinner inline */
+.ccp-btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: ccp-spin 0.7s linear infinite;
+  display: inline-block;
+}
 
-  .complaint-form {
-    padding: 20px;
-  }
+@keyframes ccp-spin { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .ccp-topbar { padding: 0 16px; }
+
+  .ccp-body { padding: 24px 16px 52px; }
+
+  .complaint-form { padding: 24px 20px; }
+
+  .form-row { grid-template-columns: 1fr; gap: 0; }
 
   .form-actions {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    gap: 10px;
   }
 
   .cancel-button,
   .submit-button {
     width: 100%;
+    justify-content: center;
   }
+}
+
+@media (max-width: 480px) {
+  .ccp-page-header h1 { font-size: 1.3rem; }
+  .complaint-form  { padding: 20px 16px; border-radius: 12px; }
 }

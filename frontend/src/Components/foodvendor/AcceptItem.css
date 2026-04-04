@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Page layout */
+.accept-item-container {
+  display: flex;
+  min-height: 100vh;
+  background: #F5F5FF;
+}
+
+/* MAIN CONTENT FIX */
+.table-container {
+  margin-left: 260px; /* matches sidebar width */
+  padding: 30px;
+  width: calc(100% - 260px); /* prevents overlap */
+  overflow: hidden; /* prevent page scroll */
+}
+
+/* Title */
+.table-container h1 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* Error */
+.error-message {
+  background: #ffdddd;
+  color: #d8000c;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-left: 5px solid red;
+}
+
+/* TABLE SCROLL FIX */
+.table-container table {
+  display: block;
+  width: 100%;
+  overflow-x: auto; /* ONLY table scrolls */
+  white-space: nowrap;
+}
+
+/* Table base */
+table {
+  border-collapse: collapse;
+  min-width: 1200px; /* ensures full content visible */
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Header */
+thead {
+  background: #4A4CE8;
+  color: white;
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+}
+
+/* Body */
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Hover */
+tbody tr:hover {
+  background: #f4f6ff;
+}
+
+/* Buttons */
+.update-btn {
+  background: #4A4CE8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #ff4e4e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Disabled */
+.update-btn:disabled,
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

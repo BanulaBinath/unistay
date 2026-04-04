@@ -1,0 +1,193 @@
+/* Layout */
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6ff;
+}
+
+/* Sidebar */
+.item-sidebar, .sidebar {
+  width: 260px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #fff;
+  padding: 20px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed; /* keep it fixed */
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+  animation: slideIn 0.6s ease;
+}
+
+/* Slide-in animation */
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Sidebar title */
+.sidebar h1 {
+  font-size: 22px;
+  margin-bottom: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Sidebar list */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  flex: 1;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar ul li a:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateX(5px);
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.sidebar ul li a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover::after {
+  width: 100%;
+}
+
+/* Logout button */
+.sidebar button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #ef4444;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar button:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(239,68,68,0.6);
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  margin-left: 260px; /* push content to the right of fixed sidebar */
+}
+
+/* Card */
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.management-header h2 {
+  margin: 0 0 5px 0;
+  font-size: 24px;
+}
+
+.management-header h3 {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+/* Image preview */
+.form-group img {
+  margin-top: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Errors */
+.error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Submit button */
+.btn-submit {
+  width: 100%;
+  background: #1976d2;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background: #624bff;
+}

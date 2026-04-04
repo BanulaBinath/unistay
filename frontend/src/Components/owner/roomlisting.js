@@ -1,161 +1,112 @@
 ﻿import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./roomlisting.css";
+import "./owner.css";
 
-function RoomListing() {
+const FACILITIES_OPTIONS = [
+  "WiFi", "AC", "Attached Bathroom", "Hot Water",
+  "Parking", "TV", "Washing Machine", "Kitchen Access", "CCTV", "24hr Security",
+];
 
-  const navigate = useNavigate();
+export default function RoomListing({ onSuccess }) {
+  const [title, setTitle]                           = useState("");
+  const [price, setPrice]                           = useState("");
+  const [selectedFacilities, setSelectedFacilities] = useState([]);
+  const [image, setImage]                           = useState(null);
+  const [preview, setPreview]                       = useState(null);
+  const [loading, setLoading]                       = useState(false);
+  const [error, setError]                           = useState("");
 
-  const [form, setForm] = useState({
-    title: "",
-    price: "",
-    facilities: "",
-    description: "",
-    occupancy: "vacant"
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) setPreview(URL.createObjectURL(file));
   };
 
-  const validate = () => {
-    let newErrors = {};
+  const toggleFacility = (f) =>
+    setSelectedFacilities((prev) =>
+      prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
+    );
 
-    if (!form.title.trim())
-      newErrors.title = "Room title is required";
-
-    if (!form.price)
-      newErrors.price = "Price is required";
-    else if (form.price < 1000)
-      newErrors.price = "Minimum price is 1000";
-
-    if (!form.facilities.trim())
-      newErrors.facilities = "Enter at least one facility";
-
-    if (!form.description.trim())
-      newErrors.description = "Description is required";
-
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const validationErrors = validate();
+    if (!title.trim() || !price) { setError("Title and price are required."); return; }
+    if (!image) { setError("Please upload a room image."); return; }
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+    const formData = new FormData();
+    formData.append("title",      title.trim());
+    formData.append("price",      price);
+    formData.append("facilities", selectedFacilities.join(","));
+    formData.append("image",      image);
+
+    setLoading(true);
+    try {
+      const res  = await fetch("http://localhost:5000/api/rooms", { method: "POST", body: formData });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Room added successfully!");
+        onSuccess && onSuccess();
+      } else {
+        setError(data.message || "Failed to add room.");
+      }
+    } catch (err) {
+      setError("Could not connect to server.");
+    } finally {
+      setLoading(false);
     }
-
-    const newRoom = {
-      title: form.title,
-      price: Number(form.price),
-      facilities: form.facilities.split(",").map(f => f.trim()),
-      description: form.description,
-      occupied: form.occupancy === "occupied",
-      bookings: 0,
-      reviews: []
-    };
-
-    const existingRooms =
-      JSON.parse(localStorage.getItem("rooms")) || [];
-
-    const updatedRooms = [...existingRooms, newRoom];
-
-    localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-
-    alert("Room Added Successfully");
-
-    navigate("/");
-  };
-
-  const handleCancel = () => {
-    if (
-      form.title ||
-      form.price ||
-      form.facilities ||
-      form.description
-    ) {
-      const confirmLeave = window.confirm(
-        "You have unsaved changes. Leave page?"
-      );
-      if (!confirmLeave) return;
-    }
-
-    navigate("/");
   };
 
   return (
-    <div className="roomlisting-container">
-
-      <form className="room-form" onSubmit={handleSubmit}>
-
-        <h1>Add New Room</h1>
-
-        <label>Room Title</label>
+    <div className="form-card">
+      <h2>Add Room</h2>
+      {error && (
+        <p style={{ color: "#ef4444", marginBottom: "12px", fontSize: "14px", fontWeight: "500" }}>
+          ⚠️ {error}
+        </p>
+      )}
+      <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
+          type="text" placeholder="Room Title" required
+          value={title} onChange={(e) => setTitle(e.target.value)}
         />
-        {errors.title && <span className="error">{errors.title}</span>}
-
-        <label>Price (LKR)</label>
         <input
-          type="number"
-          name="price"
-          value={form.price}
-          onChange={handleChange}
+          type="number" placeholder="Price (LKR)" required
+          value={price} onChange={(e) => setPrice(e.target.value)}
         />
-        {errors.price && <span className="error">{errors.price}</span>}
 
-        <label>Facilities (comma separated)</label>
-        <input
-          type="text"
-          name="facilities"
-          value={form.facilities}
-          onChange={handleChange}
-        />
-        {errors.facilities && <span className="error">{errors.facilities}</span>}
+        <div>
+          <span className="facilities-label">Facilities</span>
+          <div className="facilities-grid">
+            {FACILITIES_OPTIONS.map((f) => (
+              <label key={f} className="facility-item">
+                <input
+                  type="checkbox"
+                  checked={selectedFacilities.includes(f)}
+                  onChange={() => toggleFacility(f)}
+                />
+                {f}
+              </label>
+            ))}
+          </div>
+        </div>
 
-        <label>Description</label>
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-        />
-        {errors.description && (
-          <span className="error">{errors.description}</span>
-        )}
+        {/* File input with visual indicator */}
+        <div>
+          <span className="facilities-label">Room Image <span style={{ color: "#ef4444" }}>*</span></span>
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {!image && (
+            <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "6px" }}>
+              📷 A room image is required.
+            </p>
+          )}
+        </div>
 
-        <label>Status</label>
-        <select
-          name="occupancy"
-          value={form.occupancy}
-          onChange={handleChange}
-        >
-          <option value="vacant">Vacant</option>
-          <option value="occupied">Occupied</option>
-        </select>
+        {preview && <img src={preview} alt="preview" className="image-preview" />}
 
-        <button type="submit">Add Room</button>
-
-        <button
-          type="button"
-          className="cancel-btn"
-          onClick={handleCancel}
-        >
-          Cancel
+        <button type="submit" className="primary-btn" disabled={loading}>
+          {loading ? "Adding..." : "Add Room"}
         </button>
-
       </form>
-
     </div>
   );
 }
-
-export default RoomListing;

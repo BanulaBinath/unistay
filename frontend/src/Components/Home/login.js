@@ -4,8 +4,20 @@ import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../services/api';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
-import { HiHome, HiChatAlt2 } from 'react-icons/hi';
+import { FaHome, FaLifeRing } from 'react-icons/fa';
 import './login.css';
+
+const HomeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
+    <path d="M12 3.172 3 10.2V21h6v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6h6V10.2l-9-7.028Z" />
+  </svg>
+);
+
+const ChatIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
+    <path d="M4 4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3v3a1 1 0 0 0 1.555.832L13.303 17H20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4Z" />
+  </svg>
+);
 
 function Login() {
   const navigate = useNavigate();
@@ -44,7 +56,8 @@ function Login() {
         if (role === 'admin') {
           navigate('/admin/dashboard');
         } else if (role === 'student_sliit' || role === 'student_external') {
-          navigate('/student/dashboard');
+          // Navigate to home page instead of dashboard for students
+          navigate('/');
         } else if (role === 'vendor') {
           navigate(`/vendor/${vendorType}/dashboard`);
         }
@@ -72,8 +85,8 @@ function Login() {
           
           <div className="feature-cards">
             <div className="feature-card">
-              <div className="feature-icon blue">
-                <HiHome />
+              <div className="feature-icon-wrapper blue">
+                <FaHome className="feature-icon" />
               </div>
               <div className="feature-content">
                 <h3>Verified Student Housing</h3>
@@ -82,8 +95,8 @@ function Login() {
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon purple">
-                <HiChatAlt2 />
+              <div className="feature-icon-wrapper purple">
+                <FaLifeRing className="feature-icon" />
               </div>
               <div className="feature-content">
                 <h3>24/7 Support</h3>
