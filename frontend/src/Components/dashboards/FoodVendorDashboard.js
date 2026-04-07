@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import NotificationBell from '../common/NotificationBell';
 import './FoodVendorDashboard.css';
 import ItemSidebar from '../foodvendor/itemsidebar'; 
 
@@ -12,7 +13,9 @@ function FoodVendorDashboard() {
       <ItemSidebar />
 
       <div className="vendor-dashboard-content">
-
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+          <NotificationBell />
+        </div>
         <div className="vendor-dashboard-card">
           <h2 className="vendor-dashboard-title">
             Welcome, {user?.fullName}!

@@ -38,6 +38,7 @@ import AddItem from './Components/foodvendor/addItem';
 import UpdateItem from './Components/foodvendor/updateitem';
 import AcceptItem from './Components/foodvendor/AcceptItem';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
+import FoodVendorComplaintDetails from './Components/foodvendor/FoodVendorComplaintDetails';
 import BuyOrderPage from './Components/studenthome/foodorder';
 
 function App() {
@@ -204,6 +205,15 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
                   <Complaint />
+                </ProtectedRoute>
+              } 
+            />
+
+              <Route 
+                path="/foodVendorcomplaint/:id" 
+              element={
+                <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                  <FoodVendorComplaintDetails />
                 </ProtectedRoute>
               } 
             />

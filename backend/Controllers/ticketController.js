@@ -75,6 +75,28 @@ const createTicket = async (req, res) => {
       notes: 'Ticket created by student'
     });
 
+    // Send notification to student
+    const { createNotification } = require('../services/notificationService');
+    await createNotification({
+      recipientId: req.user.userId,
+      recipientRole: 'student',
+      type: 'COMPLAINT_SUBMITTED',
+      title: 'Complaint properly tracked',
+      message: `Your complaint ${ticketNumber} has been logged.`,
+      relatedComplaintId: ticket._id
+    });
+
+    if (ticket.vendorId) {
+      await createNotification({
+        recipientId: ticket.vendorId,
+        recipientRole: 'food_vendor', // assuming food vendor based on instructions
+        type: 'NEW_COMPLAINT_RECEIVED',
+        title: 'New Complaint Assigned',
+        message: `A new complaint ${ticketNumber} requires your response.`,
+        relatedComplaintId: ticket._id
+      });
+    }
+
     // Populate student info
     await ticket.populate('studentId', 'fullName email');
     if (ticket.vendorId) {

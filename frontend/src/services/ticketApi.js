@@ -161,3 +161,37 @@ export const addAdminMessage = async (ticketId, message) => {
   );
   return response.data;
 };
+
+// Vendor Ticket APIs
+export const getVendorTickets = async (filters = {}) => {
+  const params = new URLSearchParams(filters).toString();
+  const response = await axios.get(`${API_URL}/vendor/tickets?${params}`, {
+    headers: getAuthHeader()
+  });
+  return response.data;
+};
+
+export const getVendorTicketById = async (ticketId) => {
+  const response = await axios.get(`${API_URL}/vendor/tickets/${ticketId}`, {
+    headers: getAuthHeader()
+  });
+  return response.data;
+};
+
+export const addVendorReply = async (ticketId, message) => {
+  const response = await axios.post(
+    `${API_URL}/vendor/tickets/${ticketId}/reply`,
+    { message },
+    { headers: getAuthHeader() }
+  );
+  return response.data;
+};
+
+export const resolveVendorTicket = async (ticketId, notes) => {
+  const response = await axios.patch(
+    `${API_URL}/vendor/tickets/${ticketId}/resolve`,
+    { notes },
+    { headers: getAuthHeader() }
+  );
+  return response.data;
+};
