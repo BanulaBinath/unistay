@@ -5,6 +5,9 @@ import { getMyTickets } from '../../services/ticketApi';
 import { getStudentOrders } from '../../services/orderApi';
 import TicketStatusBadge from '../tickets/TicketStatusBadge';
 import TicketPriorityBadge from '../tickets/TicketPriorityBadge';
+import CreateComplaintWizard from './CreateComplaintWizard';
+import TicketDetailsPage from '../../pages/student/TicketDetailsPage';
+import NotificationBell from '../common/NotificationBell';
 import './StudentDashboard.css';
 
 /* ── Helper: initials from name ── */
@@ -24,9 +27,6 @@ const stripeClass = (status) => status?.replace(/[^a-z_]/g, '') || 'open';
 const STATUS_TABS = [
   { key: '',               label: 'All' },
   { key: 'open',          label: 'Open' },
-  { key: 'in_progress',   label: 'In Progress' },
-  { key: 'waiting_vendor', label: 'Waiting' },
-  { key: 'escalated',    label: 'Escalated' },
   { key: 'resolved',     label: 'Resolved' },
   { key: 'closed',       label: 'Closed' },
   { key: 'rejected',     label: 'Rejected' },
@@ -72,6 +72,10 @@ function StudentDashboard() {
 
   /* ── Active sidebar module ── */
   const [activeModule, setActiveModule] = useState('complaints');
+
+  /* ── Complaint wizard state ── */
+  const [viewMode, setViewMode] = useState('list');
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
 
   /* ── Ticket state (unchanged) ── */
   const [tickets,   setTickets]   = useState([]);
@@ -153,6 +157,7 @@ function StudentDashboard() {
         </a>
 
         <div className="sd-topbar-right">
+          <NotificationBell />
           <div className="sd-user-pill">
             <div className="sd-user-avatar">{getInitials(user?.fullName)}</div>
             <div className="sd-user-info">
@@ -194,7 +199,7 @@ function StudentDashboard() {
                   activeModule === mod.key ? 'active' : '',
                   !mod.active ? 'disabled' : '',
                 ].join(' ').trim()}
-                onClick={() => mod.active && setActiveModule(mod.key)}
+                onClick={() => mod.active && (setActiveModule(mod.key), setViewMode('list'), setSelectedTicketId(null))}
                 aria-disabled={!mod.active}
                 title={!mod.active ? `${mod.label} — Coming Soon` : mod.label}
               >
@@ -277,42 +282,50 @@ function StudentDashboard() {
                       <p className="sd-complaints-desc">Track status, view progress, and submit new issues.</p>
                     </div>
 
-                    <button
-                      className="sd-new-complaint-btn"
-                      id="sd-submit-complaint-btn"
-                      onClick={() => navigate('/student/complaints/new')}
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                      </svg>
-                      Submit New Complaint
-                    </button>
+                    {viewMode === 'list' && (
+                      <button
+                        className="sd-new-complaint-btn"
+                        id="sd-submit-complaint-btn"
+                        onClick={() => setViewMode('create')}
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="12" y1="5" x2="12" y2="19"/>
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Submit New Complaint
+                      </button>
+                    )}
                   </div>
 
                   {/* Status filter tabs */}
-                  <div className="sd-status-tabs" role="tablist">
-                    {STATUS_TABS.map(tab => (
-                      <button
-                        key={tab.key}
-                        role="tab"
-                        aria-selected={activeTab === tab.key}
-                        className={`sd-tab${activeTab === tab.key ? ' active' : ''}`}
-                        onClick={() => setActiveTab(tab.key)}
-                        id={`sd-tab-${tab.key || 'all'}`}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
+                  {viewMode === 'list' && (
+                    <div className="sd-status-tabs" role="tablist">
+                      {STATUS_TABS.map(tab => (
+                        <button
+                          key={tab.key}
+                          role="tab"
+                          aria-selected={activeTab === tab.key}
+                          className={`sd-tab${activeTab === tab.key ? ' active' : ''}`}
+                          onClick={() => setActiveTab(tab.key)}
+                          id={`sd-tab-${tab.key || 'all'}`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Body */}
                 <div className="sd-complaints-body">
 
-                  {/* Error */}
-                  {error && (
+                  {/* Complaint wizard */}
+                  {viewMode === 'create' ? (
+                    <CreateComplaintWizard onCancel={() => setViewMode('list')} onSuccess={() => { setViewMode('list'); fetchTickets(); }} />
+                  ) : viewMode === 'details' && selectedTicketId ? (
+                    <TicketDetailsPage ticketId={selectedTicketId} />
+                  ) : error ? (
                     <div className="sd-error-banner">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -322,16 +335,12 @@ function StudentDashboard() {
                       </svg>
                       {error}
                     </div>
-                  )}
-
-                  {/* Loading */}
-                  {loading ? (
+                  ) : loading ? (
                     <div className="sd-loading-state">
                       <div className="sd-loading-spinner" />
                       <p className="sd-loading-text">Loading your complaints…</p>
                     </div>
 
-                  /* Empty */
                   ) : displayTickets.length === 0 ? (
                     <div className="sd-empty-state" id="sd-empty-complaints">
                       <div className="sd-empty-icon">
@@ -351,13 +360,12 @@ function StudentDashboard() {
                       <button
                         className="sd-empty-action-btn"
                         id="sd-empty-action-btn"
-                        onClick={() => navigate('/student/complaints/new')}
+                        onClick={() => setViewMode('create')}
                       >
                         Submit Your First Complaint
                       </button>
                     </div>
 
-                  /* Ticket list */
                   ) : (
                     <div className="sd-tickets-list" id="sd-tickets-list">
                       {displayTickets.map(ticket => (
@@ -365,10 +373,10 @@ function StudentDashboard() {
                           key={ticket._id}
                           className="sd-ticket-row"
                           id={`sd-ticket-${ticket._id}`}
-                          onClick={() => navigate(`/student/complaints/${ticket._id}`)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={e => e.key === 'Enter' && navigate(`/student/complaints/${ticket._id}`)}
+                            onClick={() => { setViewMode('details'); setSelectedTicketId(ticket._id); }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => e.key === 'Enter' && (() => { setViewMode('details'); setSelectedTicketId(ticket._id); })()}
                         >
                           {/* Left status stripe */}
                           <div className={`sd-ticket-status-stripe ${stripeClass(ticket.status)}`} />
