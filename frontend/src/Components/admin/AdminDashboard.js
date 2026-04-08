@@ -7,7 +7,6 @@ import PaymentsManagement from './PaymentsManagement';
 import SubscriptionsManagement from './SubscriptionsManagement';
 import AdminTicketsPage from '../../pages/admin/AdminTicketsPage';
 import AdminTicketDetailsPage from '../../pages/admin/AdminTicketDetailsPage';
-import NotificationBell from '../common/NotificationBell';
 import './AdminDashboard.css';
 
 function AdminDashboard({ defaultTab = 'dashboard' }) {
@@ -158,7 +157,6 @@ function AdminDashboard({ defaultTab = 'dashboard' }) {
                 <p className="page-subtitle">Welcome back, {user?.fullName}</p>
               </div>
               <div className="header-right">
-                <NotificationBell />
                 <div className="admin-user-badge">
                   <div className="user-avatar">
                     {user?.fullName?.charAt(0).toUpperCase()}
