@@ -30,7 +30,7 @@ import ReviewMaintenance from './Components/owner/reviewmaintenance';
 import AdminDashboard from './Components/admin/AdminDashboard';
 
 // 🔹 Student
-import StudentDashboard from './Components/studenthome/studenthome';
+import StudentDashboard from './Components/dashboards/StudentDashboard';
 import CreateComplaintPage from './pages/student/CreateComplaintPage';
 import MyTicketsPage from './pages/student/MyTicketsPage';
 import TicketDetailsPage from './pages/student/TicketDetailsPage';
@@ -38,7 +38,7 @@ import OrderHistoryPage from './pages/student/OrderHistoryPage';
 import OrderDetailsPage from './pages/student/OrderDetailsPage';
 import MyFoodOrders from './pages/student/MyFoodOrders';
 import RoomsDashboard from './Components/studenthome/roombooking';
-import BuyOrderPage from './Components/studenthome/foodorder';
+
 
 // 🔹 Vendor
 import FoodVendorDashboard from './Components/foodvendor/foodvendor';
@@ -47,6 +47,8 @@ import AddItem from './Components/foodvendor/addItem';
 import UpdateItem from './Components/foodvendor/updateitem';
 import AcceptItem from './Components/foodvendor/AcceptItem';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
+import FoodVendorComplaintDetails from './Components/foodvendor/FoodVendorComplaintDetails';
+import BuyOrderPage from './Components/studenthome/foodorder';
 
 function App() {
   return (
@@ -151,37 +153,69 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* ── Admin Routes ── */}
-          <Route path="/admin/dashboard" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/users" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard defaultTab="users" />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/payments" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard defaultTab="payments" />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/subscriptions" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard defaultTab="subscriptions" />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/tickets" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard defaultTab="tickets" />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/tickets/:id" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard defaultTab="ticket-details" />
-            </ProtectedRoute>
-          } />
+              <Route 
+                path="/foodVendorcomplaint/:id" 
+              element={
+                <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+                  <FoodVendorComplaintDetails />
+                </ProtectedRoute>
+              } 
+            />
+
+          {/* Admin */}
+          <Route 
+            path="/admin/dashboard" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/users" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="users" />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/payments" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="payments" />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/subscriptions" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="subscriptions" />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="tickets" />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin/tickets/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="ticket-details" />
+              </ProtectedRoute>
+            } 
+          />
 
         </Routes>
       </div>

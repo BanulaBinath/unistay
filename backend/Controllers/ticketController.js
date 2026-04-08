@@ -49,6 +49,9 @@ const createTicket = async (req, res) => {
     // Auto-assign priority
     const priority = assignPriority(complaintType);
 
+    // Handle optional image upload
+    const complaintImage = req.file ? `/uploads/${req.file.filename}` : null;
+
     // Create ticket
     const ticket = new Ticket({
       ticketNumber,
@@ -60,6 +63,7 @@ const createTicket = async (req, res) => {
       vendorId: vendorId || null,
       vendorReference: vendorReference || null,
       serviceItemReference: serviceItemReference || null,
+      complaintImage,
       priority,
       status: 'open'
     });
@@ -74,6 +78,28 @@ const createTicket = async (req, res) => {
       newValue: 'open',
       notes: 'Ticket created by student'
     });
+
+    // Send notification to student
+    const { createNotification } = require('../services/notificationService');
+    await createNotification({
+      recipientId: req.user.userId,
+      recipientRole: 'student',
+      type: 'COMPLAINT_SUBMITTED',
+      title: 'Complaint properly tracked',
+      message: `Your complaint ${ticketNumber} has been logged.`,
+      relatedComplaintId: ticket._id
+    });
+
+    if (ticket.vendorId) {
+      await createNotification({
+        recipientId: ticket.vendorId,
+        recipientRole: 'food_vendor', // assuming food vendor based on instructions
+        type: 'NEW_COMPLAINT_RECEIVED',
+        title: 'New Complaint Assigned',
+        message: `A new complaint ${ticketNumber} requires your response.`,
+        relatedComplaintId: ticket._id
+      });
+    }
 
     // Populate student info
     await ticket.populate('studentId', 'fullName email');

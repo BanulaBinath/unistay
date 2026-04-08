@@ -4,15 +4,15 @@ import {
   getTicketById,
   addTicketMessage,
   closeTicket,
-  reopenTicket,
-  escalateTicket
+  reopenTicket
 } from '../../services/ticketApi';
 import TicketStatusBadge from '../../Components/tickets/TicketStatusBadge';
 import TicketPriorityBadge from '../../Components/tickets/TicketPriorityBadge';
 import './TicketDetailsPage.css';
 
-const TicketDetailsPage = () => {
-  const { id } = useParams();
+const TicketDetailsPage = ({ ticketId }) => {
+  const params = useParams();
+  const id = ticketId || params.id;
   const navigate = useNavigate();
   const [ticket, setTicket] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -21,9 +21,7 @@ const TicketDetailsPage = () => {
   const [error, setError] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
-  const [showEscalateModal, setShowEscalateModal] = useState(false);
   const [showReopenModal, setShowReopenModal] = useState(false);
-  const [escalateReason, setEscalateReason] = useState('');
   const [reopenReason, setReopenReason] = useState('');
 
   useEffect(() => {
@@ -102,23 +100,6 @@ const TicketDetailsPage = () => {
     }
   };
 
-  const handleEscalateTicket = async () => {
-    try {
-      setActionLoading(true);
-      const response = await escalateTicket(id, escalateReason);
-      
-      if (response.success) {
-        setShowEscalateModal(false);
-        setEscalateReason('');
-        fetchTicketDetails();
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to escalate ticket');
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-US', {
@@ -138,9 +119,11 @@ const TicketDetailsPage = () => {
     return (
       <div className="error-container">
         <div className="error-message">{error}</div>
-        <button onClick={() => navigate('/student/dashboard')} className="back-button">
-          ← Back to Dashboard
-        </button>
+        {!ticketId && (
+          <button onClick={() => navigate('/student/dashboard')} className="back-button">
+            ← Back to Dashboard
+          </button>
+        )}
       </div>
     );
   }
@@ -152,15 +135,16 @@ const TicketDetailsPage = () => {
   const canAddMessage = ticket.status !== 'closed';
   const canClose = ticket.status !== 'closed' && ticket.status !== 'resolved';
   const canReopen = ticket.status === 'closed' || ticket.status === 'resolved';
-  const canEscalate = ticket.status !== 'closed' && ticket.status !== 'resolved' && ticket.escalationLevel < 3;
 
   return (
     <div className="ticket-details-page">
-      <div className="page-header">
-        <button onClick={() => navigate('/student/dashboard')} className="back-button">
-          ← Back to Dashboard
-        </button>
-      </div>
+      {!ticketId && (
+        <div className="page-header">
+          <button onClick={() => navigate('/student/dashboard')} className="back-button">
+            ← Back to Dashboard
+          </button>
+        </div>
+      )}
 
       <div className="ticket-details-container">
         <div className="ticket-info-section">
@@ -225,6 +209,28 @@ const TicketDetailsPage = () => {
             <p>{ticket.description}</p>
           </div>
 
+          {ticket.complaintImage && (
+            <div className="description-section">
+              <h3>Attached Image</h3>
+              <div style={{ marginTop: '12px' }}>
+                <img 
+                  src={`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${ticket.complaintImage}`}
+                  alt="Complaint evidence"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '400px',
+                    borderRadius: '8px',
+                    border: '1px solid #e5e7eb',
+                    objectFit: 'contain'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {ticket.rejectionReason && (
             <div className="rejection-section">
               <h3>Rejection Reason</h3>
@@ -233,20 +239,6 @@ const TicketDetailsPage = () => {
           )}
 
           <div className="action-buttons">
-            {canAddMessage && (
-              <button className="action-btn primary" disabled>
-                Reply Below
-              </button>
-            )}
-            {canEscalate && (
-              <button
-                className="action-btn warning"
-                onClick={() => setShowEscalateModal(true)}
-                disabled={actionLoading}
-              >
-                Escalate
-              </button>
-            )}
             {canClose && (
               <button
                 className="action-btn secondary"
@@ -309,33 +301,6 @@ const TicketDetailsPage = () => {
         </div>
       </div>
 
-      {showEscalateModal && (
-        <div className="modal-overlay" onClick={() => setShowEscalateModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Escalate Ticket</h3>
-            <p>Please provide a reason for escalating this ticket:</p>
-            <textarea
-              value={escalateReason}
-              onChange={(e) => setEscalateReason(e.target.value)}
-              placeholder="Reason for escalation..."
-              rows="4"
-            />
-            <div className="modal-actions">
-              <button onClick={() => setShowEscalateModal(false)} className="cancel-btn">
-                Cancel
-              </button>
-              <button
-                onClick={handleEscalateTicket}
-                className="confirm-btn"
-                disabled={actionLoading || !escalateReason.trim()}
-              >
-                {actionLoading ? 'Escalating...' : 'Escalate'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {showReopenModal && (
         <div className="modal-overlay" onClick={() => setShowReopenModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -367,3 +332,4 @@ const TicketDetailsPage = () => {
 };
 
 export default TicketDetailsPage;
+
