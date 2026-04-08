@@ -13,11 +13,21 @@ function Londriservices() {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState('');
 
+  const isValidLaundryVendor = (vendor) => {
+    const rates = vendor.rates || {};
+    return [
+      'Wash & Fold',
+      'Dry Cleaning',
+      'Iron Press'
+    ].some(key => Number(rates[key]) > 0);
+  };
+
   useEffect(() => {
     const fetchVendors = async () => {
       try {
         const res = await api.get('/laundry/vendors');
-        setVendors(res.data.data || []);
+        const results = (res.data.data || []).filter(isValidLaundryVendor);
+        setVendors(results);
       } catch (err) {
         console.error(err);
         setError('Failed to load vendors. Please try again.');

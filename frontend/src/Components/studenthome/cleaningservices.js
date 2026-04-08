@@ -14,11 +14,21 @@ function Cleaningservices() {
   const [error, setError]     = useState('');
 
   // ── Load vendors on mount ──
+  const isValidCleaningVendor = (vendor) => {
+    const rates = vendor.rates || {};
+    return [
+      'Room Cleaning',
+      'Bathroom Cleaning',
+      'Room + Bathroom Cleaning'
+    ].some(key => Number(rates[key]) > 0);
+  };
+
   useEffect(() => {
     const fetchVendors = async () => {
       try {
         const res = await api.get('/cleaning/vendors');
-        setVendors(res.data.data || []);
+        const results = (res.data.data || []).filter(isValidCleaningVendor);
+        setVendors(results);
       } catch (err) {
         console.error(err);
         setError('Failed to load vendors. Please try again.');
