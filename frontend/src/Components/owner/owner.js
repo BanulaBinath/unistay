@@ -6,6 +6,8 @@ import RoomListing from "./roomlisting";
 import ManageRooms from "./manageroom";
 import BookingRequest from "./bookingrequest";
 import ReviewMaintenance from "./reviewmaintenance";
+import BoardingVendorComplaint from "./BoardingVendorComplaint";
+import BoardingVendorComplaintDetails from "./BoardingVendorComplaintDetails";
 
 const NAV_ITEMS = [
   { key: "dashboard", label: "Dashboard",    icon: "🏠" },
@@ -13,12 +15,14 @@ const NAV_ITEMS = [
   { key: "manage",    label: "Manage Rooms", icon: "🛏️" },
   { key: "bookings",  label: "Requests",     icon: "📋" },
   { key: "reviews",   label: "Reviews",      icon: "⭐" },
+  { key: "complaints", label: "Complaints",  icon: "📝" },
 ];
 
 export default function Owner() {
   const [activeTab, setActiveTab]         = useState("dashboard");
   const [rooms, setRooms]                 = useState([]);
   const [profileOpen, setProfileOpen]     = useState(false);
+  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const profileRef                        = useRef(null);
   const navigate                          = useNavigate();
   const { user, logout }                  = useAuth();
@@ -190,6 +194,18 @@ export default function Owner() {
           {activeTab === "manage"   && <ManageRooms rooms={rooms} onUpdate={fetchRooms} />}
           {activeTab === "bookings" && <BookingRequest />}
           {activeTab === "reviews"  && <ReviewMaintenance />}
+          {activeTab === "complaints" && (
+            selectedComplaintId ? (
+              <BoardingVendorComplaintDetails 
+                ticketId={selectedComplaintId}
+                onBack={() => setSelectedComplaintId(null)} 
+              />
+            ) : (
+              <BoardingVendorComplaint 
+                onViewDetails={(ticketId) => setSelectedComplaintId(ticketId)}
+              />
+            )
+          )}
         </div>
       </div>
     </div>

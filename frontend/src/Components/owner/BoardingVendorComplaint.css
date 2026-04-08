@@ -1,0 +1,207 @@
+/* Boarding Vendor Complaint Styles */
+.boarding-complaint-container {
+  width: 100%;
+}
+
+.boarding-complaint-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.boarding-complaint-header h2 {
+  font-size: 22px;
+  color: #111827;
+  margin: 0 0 6px 0;
+  font-weight: 700;
+}
+
+.boarding-complaint-header p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Filters */
+.boarding-complaint-filters { 
+  display: flex; 
+  gap: 12px; 
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.boarding-complaint-select { 
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Poppins', sans-serif;
+  color: #374151;
+}
+
+.boarding-complaint-select:hover {
+  border-color: #5b6cf2;
+}
+
+.boarding-complaint-select:focus {
+  outline: none;
+  border-color: #5b6cf2;
+  box-shadow: 0 0 0 3px rgba(91, 108, 242, 0.1);
+}
+
+/* Table Wrapper */
+.boarding-complaint-table-wrapper {
+  background: white;
+  border-radius: 16px;
+  overflow-x: auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #f3f4f6;
+}
+
+/* Table */
+.boarding-complaint-table { 
+  width: 100%; 
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: auto;
+}
+
+.boarding-complaint-table th { 
+  padding: 14px 16px;
+  background: #f9fafb;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.boarding-complaint-table td { 
+  padding: 14px 16px;
+  border-top: 1px solid #f3f4f6;
+  color: #111827;
+  font-size: 14px;
+}
+
+.boarding-complaint-table th:last-child,
+.boarding-complaint-table td:last-child {
+  text-align: center;
+  width: 140px;
+}
+
+.boarding-complaint-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.boarding-complaint-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* Priority Badges */
+.priority-low { 
+  color: #10b981; 
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priority-medium { 
+  color: #f59e0b; 
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priority-high { 
+  color: #ef4444; 
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priority-urgent { 
+  color: #dc2626; 
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+/* Status Badge */
+.status-badge { 
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Buttons */
+.boarding-complaint-btn { 
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.boarding-complaint-btn-view { 
+  background: #5b6cf2;
+  color: white;
+  min-width: 120px;
+}
+
+.boarding-complaint-btn-view:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91, 108, 242, 0.4);
+}
+
+.boarding-complaint-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Messages */
+.boarding-complaint-error { 
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin: 12px 0;
+  border-left: 3px solid #dc2626;
+  font-size: 14px;
+}
+
+.boarding-complaint-loading { 
+  text-align: center;
+  padding: 40px;
+  font-style: italic;
+  color: #64748b;
+}
+
+.boarding-complaint-no-items { 
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .boarding-complaint-table {
+    font-size: 13px;
+  }
+  
+  .boarding-complaint-table th,
+  .boarding-complaint-table td {
+    padding: 10px 12px;
+  }
+}
