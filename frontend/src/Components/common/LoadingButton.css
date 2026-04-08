@@ -1,0 +1,139 @@
+.loading-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.loading-button:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+/* Sizes */
+.loading-button-small {
+  padding: 6px 14px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+.loading-button-medium {
+  padding: 10px 20px;
+  font-size: 14px;
+  min-height: 40px;
+}
+
+.loading-button-large {
+  padding: 12px 28px;
+  font-size: 16px;
+  min-height: 48px;
+}
+
+/* Variants */
+.loading-button-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  color: white;
+}
+
+.loading-button-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.loading-button-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.loading-button-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.loading-button-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.loading-button-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.loading-button-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.loading-button-outline {
+  background: transparent;
+  border: 2px solid #7c3aed;
+  color: #7c3aed;
+}
+
+.loading-button-outline:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.05);
+  transform: translateY(-1px);
+}
+
+.loading-button-ghost {
+  background: transparent;
+  color: #7c3aed;
+}
+
+.loading-button-ghost:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+/* Full width */
+.loading-button-full {
+  width: 100%;
+}
+
+/* Loading state */
+.loading-button-loading {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.loading-button-spinner {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-button-spinner svg {
+  width: 18px;
+  height: 18px;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-button-text-hidden {
+  opacity: 0;
+}
+
+/* Disabled state */
+.loading-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

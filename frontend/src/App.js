@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import './App.css';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import PageTransition from './Components/common/PageTransition';
 
 // 🔹 Auth
 import { AuthProvider } from "./context/AuthContext";
@@ -51,10 +52,13 @@ import FoodVendorComplaintDetails from './Components/foodvendor/FoodVendorCompla
 import BuyOrderPage from './Components/studenthome/foodorder';
 
 function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <div className="App">
-        <Routes>
+        <PageTransition key={location.pathname}>
+          <Routes location={location}>
 
           {/* ── Public Routes ── */}
           <Route path="/" element={<NomalHome />} />
@@ -226,7 +230,8 @@ function App() {
             } 
           />
 
-        </Routes>
+          </Routes>
+        </PageTransition>
       </div>
     </AuthProvider>
   );
