@@ -181,17 +181,26 @@ function App() {
             } 
           />
 
-          <Route 
-            path="/admin/payments" 
+          <Route
+            path="/admin/vendors"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="vendors" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/payments"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard defaultTab="payments" />
               </ProtectedRoute>
-            } 
+            }
           />
 
-          <Route 
-            path="/admin/subscriptions" 
+          <Route
+            path="/admin/subscriptions"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard defaultTab="subscriptions" />

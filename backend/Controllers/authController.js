@@ -243,7 +243,7 @@ const registerExternalStudent = async (req, res) => {
       userId: user._id,
       email: user.email,
       subscriptionType: 'annual_student',
-      amount: 120 // $120/year
+      amount: 500 // Rs. 500/year
     });
 
     res.status(201).json({
@@ -304,7 +304,7 @@ const registerVendor = async (req, res) => {
       userId: user._id,
       email: user.email,
       subscriptionType: 'annual_vendor',
-      amount: 200 // $200/year for vendors
+      amount: 1000 // Rs. 1000/year for vendors
     });
 
     res.status(201).json({
@@ -345,7 +345,7 @@ const processPaymentSuccess = async (req, res) => {
 
     // Determine subscription type and amount
     const subscriptionType = user.role === 'vendor' ? 'annual_vendor' : 'annual_student';
-    const amount = user.role === 'vendor' ? 200 : 120;
+    const amount = user.role === 'vendor' ? 1000 : 500;
 
     // Process payment (mock)
     const paymentResult = await processPayment({

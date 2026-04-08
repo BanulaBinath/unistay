@@ -51,7 +51,7 @@ function AdminDashboard({ defaultTab = 'dashboard' }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', path: '/admin/dashboard' },
     { id: 'users', label: 'Users', icon: 'users', path: '/admin/users' },
-    { id: 'vendors', label: 'Vendors', icon: 'vendors', path: '/admin/users' },
+    { id: 'vendors', label: 'Vendors', icon: 'vendors', path: '/admin/vendors' },
     { id: 'payments', label: 'Payments', icon: 'payments', path: '/admin/payments' },
     { id: 'subscriptions', label: 'Subscriptions', icon: 'subscriptions', path: '/admin/subscriptions' },
     { id: 'tickets', label: 'Tickets', icon: 'tickets', path: '/admin/tickets' },
@@ -516,9 +516,14 @@ function AdminDashboard({ defaultTab = 'dashboard' }) {
 
         {/* Users Management Tab */}
         {activeMenu === 'users' && (
-          <UsersManagement />
+          <UsersManagement userType="users" />
         )}
-        
+
+        {/* Vendors Management Tab */}
+        {activeMenu === 'vendors' && (
+          <UsersManagement userType="vendors" />
+        )}
+
         {/* Payments Management Tab */}
         {activeMenu === 'payments' && (
           <PaymentsManagement />

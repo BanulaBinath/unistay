@@ -7,12 +7,19 @@ const Subscription = require('../Model/Subscription');
 // Get all users with filters
 const getAllUsers = async (req, res) => {
   try {
-    const { role, isActive, vendorType, page = 1, limit = 10 } = req.query;
+    const { role, isActive, vendorType, userType, page = 1, limit = 10 } = req.query;
 
     // Build filter object
     const filter = {};
-    if (role) filter.role = role;
-    if (isActive !== undefined) filter.isActive = isActive === 'true';
+    if (role) {
+      filter.role = role;
+    } else if (userType === 'users') {
+      filter.role = { $in: ['student_sliit', 'student_external'] };
+    } else if (userType === 'vendors') {
+      filter.role = 'vendor';
+    }
+
+    if (isActive !== undefined && isActive !== '') filter.isActive = isActive === 'true';
     if (vendorType) filter.vendorType = vendorType;
 
     // Pagination
@@ -246,7 +253,13 @@ const getAllSubscriptions = async (req, res) => {
     res.status(200).json({
       success: true,
       data: {
-        subscriptions,
+        metrics: {
+        total: await Subscription.countDocuments(),
+        active: await Subscription.countDocuments({ activationStatus: 'active' }),
+        inactive: await Subscription.countDocuments({ activationStatus: 'inactive' }),
+        expired: await Subscription.countDocuments({ activationStatus: 'expired' })
+      },
+      subscriptions,
         pagination: {
           total,
           page: parseInt(page),
@@ -424,3 +437,4 @@ module.exports = {
   updateSubscriptionStatus,
   getDashboardStats
 };
+

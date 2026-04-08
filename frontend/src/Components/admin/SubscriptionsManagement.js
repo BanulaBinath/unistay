@@ -12,6 +12,7 @@ function SubscriptionsManagement() {
     limit: 10
   });
   const [pagination, setPagination] = useState(null);
+  const [metrics, setMetrics] = useState(null);
 
   useEffect(() => {
     fetchSubscriptions();
@@ -25,6 +26,7 @@ function SubscriptionsManagement() {
       if (response.success) {
         setSubscriptions(response.data.subscriptions);
         setPagination(response.data.pagination);
+        setMetrics(response.data.metrics);
       }
     } catch (err) {
       setError(err?.response?.data?.message || 'Failed to load subscriptions');
@@ -101,7 +103,7 @@ function SubscriptionsManagement() {
             <div className="card-inner-top">
               <div className="metric-data">
                 <p className="metric-title">Total Subscriptions</p>
-                <h3 className="metric-value">{pagination?.total || subscriptions.length}</h3>
+                <h3 className="metric-value">{metrics?.total || 0}</h3>
               </div>
               <div className="metric-icon primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -115,7 +117,7 @@ function SubscriptionsManagement() {
             <div className="card-inner-top">
               <div className="metric-data">
                 <p className="metric-title">Active</p>
-                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'active').length}</h3>
+                <h3 className="metric-value">{metrics?.active || 0}</h3>
               </div>
               <div className="metric-icon success">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -129,7 +131,7 @@ function SubscriptionsManagement() {
             <div className="card-inner-top">
               <div className="metric-data">
                 <p className="metric-title">Inactive</p>
-                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'inactive').length}</h3>
+                <h3 className="metric-value">{metrics?.inactive || 0}</h3>
               </div>
               <div className="metric-icon warning">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -143,7 +145,7 @@ function SubscriptionsManagement() {
             <div className="card-inner-top">
               <div className="metric-data">
                 <p className="metric-title">Expired</p>
-                <h3 className="metric-value">{subscriptions.filter(s => s.activationStatus === 'expired').length}</h3>
+                <h3 className="metric-value">{metrics?.expired || 0}</h3>
               </div>
               <div className="metric-icon danger" style={{ background: '#FEF2F2', color: 'var(--sm-danger)' }}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -221,7 +223,7 @@ function SubscriptionsManagement() {
                          </span>
                       </td>
                       <td>
-                        <strong>${subscription.amount.toFixed(2)}</strong>
+                        <strong>Rs. {subscription.amount.toFixed(2)}</strong>
                       </td>
                       <td>
                         <span className={`status-dot-badge ${subscription.activationStatus === 'active' ? 'active' : 'inactive'}`}>
@@ -291,3 +293,6 @@ function SubscriptionsManagement() {
 }
 
 export default SubscriptionsManagement;
+
+
+
