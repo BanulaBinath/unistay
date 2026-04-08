@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
 import { createTicket } from '../../services/ticketApi';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 import axios from 'axios';
 import './CreateComplaintPage.css';
 
 const CreateComplaintPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [vendors, setVendors] = useState([]);
+
+  const prefill = location.state || {};
+  const categoryMap = {
+  'Cleaning': 'cleaning',
+  'Laundry': 'laundry',
+  'Food': 'food',
+  'Boarding': 'boarding'
+};
   
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     complaintType: '',
-    serviceCategory: '',
+    serviceCategory: categoryMap[prefill.serviceType] || '',
     vendorId: '',
-    vendorReference: '',
-    serviceItemReference: ''
+    vendorReference: prefill.vendorName || '',
+    serviceItemReference: prefill.serviceId || ''
   });
 
   const complaintTypes = [
@@ -97,13 +107,29 @@ const CreateComplaintPage = () => {
 
     try {
       setLoading(true);
-      const response = await createTicket(formData);
-      
-      if (response.success) {
+      let responseData;
+
+      const requestId = prefill.serviceId;
+      if (requestId && ['laundry', 'cleaning'].includes(formData.serviceCategory)) {
+        const path = formData.serviceCategory === 'laundry'
+          ? `/laundry/request/${requestId}/complaint`
+          : `/cleaning/request/${requestId}/complaint`;
+
+        const response = await api.post(path, {
+          description: formData.description
+        });
+        responseData = response.data;
+      } else {
+        responseData = await createTicket(formData);
+      }
+
+      if (responseData.success) {
         navigate('/student/dashboard');
+      } else {
+        setError(responseData.message || 'Failed to create complaint');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create complaint');
+      setError(err.response?.data?.message || err.message || 'Failed to create complaint');
     } finally {
       setLoading(false);
     }

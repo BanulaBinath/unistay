@@ -59,7 +59,13 @@ function Login() {
           // Navigate to home page instead of dashboard for students
           navigate('/');
         } else if (role === 'vendor') {
-          navigate(`/vendor/${vendorType}/dashboard`);
+          if (vendorType === 'laundry') {
+            navigate('/laundry-vendor/dashboard');
+          } else if (vendorType === 'cleaning') {
+            navigate('/cleaning-vendor/dashboard');
+          } else {
+            navigate('/');
+          }
         }
       }
     } catch (err) {

@@ -5,28 +5,28 @@
 }
 
 /* ── Quote Section ── */
-.laundry-quote-section {
+.cleaning-quote-section {
   max-width: 900px;
   margin: 40px auto 10px;
   padding: 0 20px;
   text-align: center;
 }
 
-.laundry-quote-section h2 {
+.cleaning-quote-section h2 {
   font-size: 1.3rem;
   font-weight: 700;
   color: #1a1a2e;
   margin-bottom: 12px;
 }
 
-.laundry-quote-section p {
+.cleaning-quote-section p {
   font-size: 0.95rem;
   color: #555;
   line-height: 1.7;
 }
 
 /* ── Vendor Section Wrapper ── */
-.vendors-section {
+.cleaning-vendors-section {
   background-color: transparent;
   padding: 30px 20px 60px;
   display: flex;
@@ -34,7 +34,7 @@
 }
 
 /* ── Cards Grid ── */
-.vendors-grid {
+.cleaning-vendors-grid {
   display: flex;
   gap: 24px;
   justify-content: center;
@@ -44,7 +44,7 @@
 }
 
 /* ── Single Card ── */
-.vendor-card {
+.cleaning-vendor-card {
   background: #ffffff;
   border-radius: 16px;
   padding: 28px 24px;
@@ -57,13 +57,13 @@
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.vendor-card:hover {
+.cleaning-vendor-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 /* ── Avatar Circle ── */
-.vendor-avatar {
+.cleaning-vendor-avatar {
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -77,51 +77,57 @@
   margin-bottom: 14px;
 }
 
-.vendor-card h3 {
+.cleaning-vendor-card h3 {
   font-size: 17px;
   font-weight: 700;
   color: #1a1a2e;
   margin-bottom: 6px;
 }
 
-.vendor-location {
+.cleaning-vendor-location {
   color: #888888;
   font-size: 13px;
   margin-bottom: 4px;
 }
 
-.vendor-rating {
+.cleaning-vendor-rating {
   color: #f59e0b;
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 16px;
 }
 
-/* ── Rate Row ── */
-.vendor-rate {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ── Rates Box ── */
+.cleaning-rates-box {
   width: 100%;
   background: #f5f6fa;
   border-radius: 8px;
   padding: 10px 14px;
   margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.rate-label {
-  color: #888888;
-  font-size: 13px;
+.cleaning-rate-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.rate-value {
+.cleaning-rate-label {
+  color: #555;
+  font-size: 12px;
+}
+
+.cleaning-rate-value {
   color: #2d3db5;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* ── Select Button ── */
-.select-vendor-btn {
+.cleaning-select-btn {
   width: 100%;
   padding: 12px;
   background-color: #2d3db5;
@@ -134,17 +140,17 @@
   transition: background-color 0.2s;
 }
 
-.select-vendor-btn:hover {
+.cleaning-select-btn:hover {
   background-color: #1e2d9e;
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .vendors-grid {
+  .cleaning-vendors-grid {
     flex-direction: column;
     align-items: center;
   }
-  .vendor-card {
+  .cleaning-vendor-card {
     width: 100%;
     max-width: 360px;
   }

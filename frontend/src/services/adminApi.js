@@ -1,22 +1,15 @@
 import axios from 'axios';
+import { getAuthHeader } from './api';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-// Get auth token from localStorage
-const getAuthToken = () => {
-  return localStorage.getItem('token');
-};
-
 // Create axios instance with auth header
-const createAuthRequest = () => {
-  const token = getAuthToken();
-  return {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  };
-};
+const createAuthRequest = () => ({
+  headers: {
+    ...getAuthHeader(),
+    'Content-Type': 'application/json'
+  }
+});
 
 // Dashboard Stats
 export const getDashboardStats = async () => {

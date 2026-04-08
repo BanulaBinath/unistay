@@ -12,6 +12,8 @@ const adminTicketRoutes = require('./routes/adminTicketRoutes');
 const vendorTicketRoutes = require('./routes/vendorTicketRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const laundryRoutes = require('./Route/laundryRoutes');
+const cleaningRoutes = require('./Route/cleaningRoutes');
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.use('/api/admin/tickets', adminTicketRoutes);
 app.use('/api/vendor/tickets', vendorTicketRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/laundry', laundryRoutes);
+app.use('/api/cleaning', cleaningRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

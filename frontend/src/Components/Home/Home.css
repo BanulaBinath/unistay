@@ -297,6 +297,16 @@
   position: relative;
 }
 
+.service-content-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-content-link:hover .service-title {
+  text-decoration: underline;
+}
+
 .service-title {
   font-size: 1rem;
   font-weight: 600;

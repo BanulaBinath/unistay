@@ -85,12 +85,14 @@ function NomalHome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
-              <div className="service-content">
-                <h3 className="service-title">Boarding</h3>
-                <p className="service-description">
-                  Comfortable and affordable accommodation options near your campus with all amenities included.
-                </p>
-              </div>
+              <Link to="/room-booking" className="service-content-link">
+                <div className="service-content">
+                  <h3 className="service-title">Boarding</h3>
+                  <p className="service-description">
+                    Comfortable and affordable accommodation options near your campus with all amenities included.
+                  </p>
+                </div>
+              </Link>
               <div className="service-card-pattern"></div>
             </div>
             <div className="service-card service-card-laundry">
@@ -103,12 +105,14 @@ function NomalHome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
-              <div className="service-content">
-                <h3 className="service-title">Laundry</h3>
-                <p className="service-description">
-                  Professional laundry services that save you time. Pick-up and delivery at your convenience.
-                </p>
-              </div>
+              <Link to="/laundry" className="service-content-link">
+                <div className="service-content">
+                  <h3 className="service-title">Laundry</h3>
+                  <p className="service-description">
+                    Professional laundry services that save you time. Pick-up and delivery at your convenience.
+                  </p>
+                </div>
+              </Link>
               <div className="service-card-pattern"></div>
             </div>
             <div className="service-card service-card-cleaning">
@@ -121,12 +125,14 @@ function NomalHome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
-              <div className="service-content">
-                <h3 className="service-title">Cleaning</h3>
-                <p className="service-description">
-                  Keep your living space spotless with our reliable cleaning services. Flexible scheduling available.
-                </p>
-              </div>
+              <Link to="/cleaning" className="service-content-link">
+                <div className="service-content">
+                  <h3 className="service-title">Cleaning</h3>
+                  <p className="service-description">
+                    Keep your living space spotless with our reliable cleaning services. Flexible scheduling available.
+                  </p>
+                </div>
+              </Link>
               <div className="service-card-pattern"></div>
             </div>
           </div>

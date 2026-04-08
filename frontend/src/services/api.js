@@ -1,6 +1,35 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const TOKEN_PREFIX = 'token_';
+const ACTIVE_AUTH_ROLE_KEY = 'activeAuthRole';
+
+const getActiveAuthRole = () => sessionStorage.getItem(ACTIVE_AUTH_ROLE_KEY) || localStorage.getItem(ACTIVE_AUTH_ROLE_KEY);
+export const getAuthToken = () => {
+  const activeRole = getActiveAuthRole();
+  if (activeRole) {
+    return localStorage.getItem(`${TOKEN_PREFIX}${activeRole}`) || localStorage.getItem('token');
+  }
+  return localStorage.getItem('token');
+};
+
+export const getAuthHeader = () => {
+  const token = getAuthToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+const removeCurrentAuth = () => {
+  const activeRole = getActiveAuthRole();
+  if (activeRole) {
+    localStorage.removeItem(`${TOKEN_PREFIX}${activeRole}`);
+    localStorage.removeItem(`user_${activeRole}`);
+  } else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+  localStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
+  sessionStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
+};
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -16,7 +45,7 @@ api.interceptors.request.use(
       return config;
     }
 
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -36,14 +65,13 @@ api.interceptors.response.use(
     const isCreateOrderRequest = requestMethod === 'post' && requestUrl.includes('/orders');
 
     if (
-      error.response?.status === 401 &&
+      (error.response?.status === 401 || error.response?.status === 403) &&
       !error.config?.skipAuth &&
       !error.config?.skipAuthRedirect &&
       !isCreateOrderRequest
     ) {
       // Token expired or invalid
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      removeCurrentAuth();
       window.location.href = '/login';
     }
     return Promise.reject(error);

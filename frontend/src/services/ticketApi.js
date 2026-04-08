@@ -1,12 +1,7 @@
 import axios from 'axios';
+import { getAuthHeader } from './api';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
-// Get auth token from localStorage
-const getAuthHeader = () => {
-  const token = localStorage.getItem('token');
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
 
 // Student Ticket APIs
 export const createTicket = async (ticketData) => {

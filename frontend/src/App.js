@@ -39,6 +39,18 @@ import UpdateItem from './Components/foodvendor/updateitem';
 import AcceptItem from './Components/foodvendor/AcceptItem';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
 import BuyOrderPage from './Components/studenthome/foodorder';
+import Londriservices from './Components/studenthome/londriservices';
+import Cleaningservices from './Components/studenthome/cleaningservices';
+import LaundryRequestPage from './pages/student/LaundryRequestPage';
+import CleaningRequestPage from './pages/student/CleaningRequestPage';  
+import LaundryProfile      from './Components/laundrystaff/LaundryProfile';
+import LaundryAssignedJobs from './Components/laundrystaff/LaundryAssignedJobs';
+import LaundryRatings      from './Components/laundrystaff/LaundryRatings';
+import LaundryComplaints   from './Components/laundrystaff/LaundryComplaints';    
+import CleaningProfile      from './Components/cleaningstaff/CleaningProfile';
+import CleaningAssignedJobs from './Components/cleaningstaff/CleaningAssignedJobs';
+import CleaningRatings      from './Components/cleaningstaff/CleaningRatings';
+import CleaningComplaints   from './Components/cleaningstaff/CleaningComplaints';
 
 function App() {
   return (
@@ -59,6 +71,95 @@ function App() {
           <Route path="/register/vendor" element={<VendorRegister />} />
           <Route path="/payment/process" element={<PaymentProcess />} />
           <Route path="/buyorder" element={<BuyOrderPage />} />
+          <Route path="/laundry" element={<Londriservices />} />
+          <Route path="/cleaning" element={<Cleaningservices />} />
+          <Route path="/student-laundry" element={<LaundryRequestPage />} />
+          <Route path="/student-cleaning" element={<CleaningRequestPage />} />
+          
+          {/* ── Laundry Vendor ── */}
+          <Route
+            path="/laundry-vendor/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
+                <LaundryVendorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/laundry-vendor/profile"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
+                <LaundryProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/laundry-vendor/assigned-jobs"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
+                <LaundryAssignedJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/laundry-vendor/ratings"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
+                <LaundryRatings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/laundry-vendor/complaints"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
+                <LaundryComplaints />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ── Cleaning Vendor ── */}
+          <Route
+            path="/cleaning-vendor/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
+                <CleaningVendorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cleaning-vendor/profile"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
+                <CleaningProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cleaning-vendor/assigned-jobs"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
+                <CleaningAssignedJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cleaning-vendor/ratings"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
+                <CleaningRatings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cleaning-vendor/complaints"
+            element={
+              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
+                <CleaningComplaints />
+              </ProtectedRoute>
+            }
+          />
+
 
 
           {/* Student */}

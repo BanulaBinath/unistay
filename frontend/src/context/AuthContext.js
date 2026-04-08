@@ -1,6 +1,26 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
+const AUTH_TOKEN_PREFIX = 'token_';
+const AUTH_USER_PREFIX = 'user_';
+const ACTIVE_AUTH_ROLE_KEY = 'activeAuthRole';
+
+const getRoleKey = (role) => role?.replace(/\s+/g, '_') || 'default';
+const getTokenStorageKey = (role) => `${AUTH_TOKEN_PREFIX}${getRoleKey(role)}`;
+const getUserStorageKey = (role) => `${AUTH_USER_PREFIX}${getRoleKey(role)}`;
+const getActiveAuthRole = () => sessionStorage.getItem(ACTIVE_AUTH_ROLE_KEY) || localStorage.getItem(ACTIVE_AUTH_ROLE_KEY);
+
+// Helper: Check if JWT token is expired
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Date.now() / 1000;
+    return payload.exp < currentTime;
+  } catch (e) {
+    return true; // Invalid token
+  }
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -9,30 +29,58 @@ export const AuthProvider = ({ children }) => {
 
   // Load user and token from localStorage on mount
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const activeRole = getActiveAuthRole();
+    const storedToken = activeRole
+      ? localStorage.getItem(getTokenStorageKey(activeRole))
+      : localStorage.getItem('token');
+    const storedUser = activeRole
+      ? localStorage.getItem(getUserStorageKey(activeRole))
+      : localStorage.getItem('user');
 
-    if (storedToken && storedUser) {
+    // Only set if token exists, user exists, and token is not expired
+    if (storedToken && storedUser && !isTokenExpired(storedToken)) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
+    } else {
+      // Clear expired/invalid auth data
+      if (activeRole) {
+        localStorage.removeItem(getTokenStorageKey(activeRole));
+        localStorage.removeItem(getUserStorageKey(activeRole));
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+      localStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
+      sessionStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
     }
     setLoading(false);
   }, []);
 
   // Login function
   const login = (userData, authToken) => {
+    const roleKey = getRoleKey(userData.role);
     setUser(userData);
     setToken(authToken);
-    localStorage.setItem('token', authToken);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem(getTokenStorageKey(roleKey), authToken);
+    localStorage.setItem(getUserStorageKey(roleKey), JSON.stringify(userData));
+    localStorage.setItem(ACTIVE_AUTH_ROLE_KEY, roleKey);
+    sessionStorage.setItem(ACTIVE_AUTH_ROLE_KEY, roleKey);
   };
 
   // Logout function
   const logout = () => {
+    const activeRole = getActiveAuthRole();
     setUser(null);
     setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (activeRole) {
+      localStorage.removeItem(getTokenStorageKey(activeRole));
+      localStorage.removeItem(getUserStorageKey(activeRole));
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    localStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
+    sessionStorage.removeItem(ACTIVE_AUTH_ROLE_KEY);
   };
 
   // Check if user is authenticated
