@@ -11,8 +11,8 @@ const registerSLIITStudent = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    // Check if verified user already exists
+    const existingUser = await User.findOne({ email, isVerified: true });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -20,54 +20,84 @@ const registerSLIITStudent = async (req, res) => {
       });
     }
 
+    // Check for pending OTP
+    const existingOTP = await OTP.findOne({ 
+      email, 
+      isUsed: false,
+      expiresAt: { $gt: new Date() }
+    });
+    
+    if (existingOTP) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP already sent to this email. Please check your inbox or wait for it to expire.'
+      });
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Create user
-    const user = new User({
-      fullName,
-      email,
-      password: hashedPassword,
-      role: 'student_sliit',
-      isVerified: false,
-      isActive: false,
-      subscriptionStatus: 'none' // SLIIT students don't need subscription
-    });
-
-    await user.save();
 
     // Generate OTP
     const otpCode = generateOTP();
     const otpExpiry = getOTPExpiry();
 
+    // Store user data in OTP record (DO NOT create user yet)
     const otp = new OTP({
-      userId: user._id,
-      email: user.email,
+      email: email,
       otp: otpCode,
-      expiresAt: otpExpiry
+      expiresAt: otpExpiry,
+      tempUserData: {
+        fullName,
+        password: hashedPassword,
+        role: 'student_sliit',
+        subscriptionStatus: 'none'
+      }
     });
 
     await otp.save();
 
     // Send OTP email
-    await sendOTPEmail(email, otpCode, fullName);
+    let emailSent = false;
+    let emailError = null;
+    
+    try {
+      await sendOTPEmail(email, otpCode, fullName);
+      emailSent = true;
+      console.log(`✅ OTP sent for ${email} - User will be created after verification`);
+    } catch (emailErr) {
+      emailError = emailErr;
+      console.error('⚠️  OTP generated but email sending failed:', emailErr.message);
+      console.log(`📋 OTP for ${email}: ${otpCode} (Use this for testing)`);
+    }
 
     res.status(201).json({
       success: true,
-      message: 'Registration successful! Please check your email for OTP verification.',
+      message: emailSent 
+        ? 'Registration successful! Please check your email for OTP verification.'
+        : 'Registration successful! Email sending failed - check server console for OTP.',
+      emailSent,
+      emailError: emailError ? emailError.message : null,
       data: {
-        userId: user._id,
-        email: user.email,
-        role: user.role
+        email: email,
+        role: 'student_sliit'
       }
     });
 
   } catch (error) {
     console.error('SLIIT Registration Error:', error);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Registration failed. Please try again.';
+    if (error.code === 11000) {
+      errorMessage = 'Email already registered. Please use a different email or login.';
+    } else if (error.name === 'ValidationError') {
+      errorMessage = 'Invalid registration data. Please check your inputs.';
+    }
+    
     res.status(500).json({
       success: false,
-      message: 'Registration failed. Please try again.',
-      error: error.message
+      message: errorMessage,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -77,26 +107,9 @@ const verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
-
-    // Check if already verified
-    if (user.isVerified && user.isActive) {
-      return res.status(400).json({
-        success: false,
-        message: 'Account already verified and active'
-      });
-    }
-
     // Find valid OTP
     const otpRecord = await OTP.findOne({
-      userId: user._id,
+      email: email,
       otp: otp,
       isUsed: false,
       expiresAt: { $gt: new Date() }
@@ -109,34 +122,85 @@ const verifyOTP = async (req, res) => {
       });
     }
 
-    // Mark OTP as used
-    otpRecord.isUsed = true;
-    await otpRecord.save();
+    // Check if this is a new registration (has tempUserData)
+    if (otpRecord.tempUserData) {
+      // CREATE USER NOW after successful OTP verification
+      const user = new User({
+        fullName: otpRecord.tempUserData.fullName,
+        email: email,
+        password: otpRecord.tempUserData.password,
+        role: otpRecord.tempUserData.role,
+        isVerified: true,
+        isActive: true,
+        subscriptionStatus: otpRecord.tempUserData.subscriptionStatus
+      });
 
-    // Activate user account
-    user.isVerified = true;
-    user.isActive = true;
-    await user.save();
+      await user.save();
 
-    // Send welcome email
-    await sendWelcomeEmail(user.email, user.fullName, user.role);
+      // Mark OTP as used
+      otpRecord.isUsed = true;
+      await otpRecord.save();
 
-    res.status(200).json({
-      success: true,
-      message: 'Account verified successfully! You can now log in.',
-      data: {
-        userId: user._id,
-        email: user.email,
-        isActive: user.isActive
+      // Send welcome email
+      await sendWelcomeEmail(user.email, user.fullName, user.role);
+
+      console.log(`✅ User created and verified: ${email}`);
+
+      res.status(200).json({
+        success: true,
+        message: 'Account verified successfully! You can now log in.',
+        data: {
+          userId: user._id,
+          email: user.email,
+          isActive: user.isActive
+        }
+      });
+    } else {
+      // Legacy: User already exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
       }
-    });
+
+      if (user.isVerified && user.isActive) {
+        return res.status(400).json({
+          success: false,
+          message: 'Account already verified and active'
+        });
+      }
+
+      // Mark OTP as used
+      otpRecord.isUsed = true;
+      await otpRecord.save();
+
+      // Activate user
+      user.isVerified = true;
+      user.isActive = true;
+      await user.save();
+
+      // Send welcome email
+      await sendWelcomeEmail(user.email, user.fullName, user.role);
+
+      res.status(200).json({
+        success: true,
+        message: 'Account verified successfully! You can now log in.',
+        data: {
+          userId: user._id,
+          email: user.email,
+          isActive: user.isActive
+        }
+      });
+    }
 
   } catch (error) {
     console.error('OTP Verification Error:', error);
     res.status(500).json({
       success: false,
       message: 'Verification failed. Please try again.',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -191,11 +255,25 @@ const resendOTP = async (req, res) => {
     await otp.save();
 
     // Send OTP email
-    await sendOTPEmail(email, otpCode, user.fullName);
+    let emailSent = false;
+    let emailError = null;
+    
+    try {
+      await sendOTPEmail(email, otpCode, user.fullName);
+      emailSent = true;
+    } catch (emailErr) {
+      emailError = emailErr;
+      console.error('Email sending failed:', emailErr.message);
+      console.log(`OTP for ${email}: ${otpCode} (Email service unavailable)`);
+    }
 
     res.status(200).json({
       success: true,
-      message: 'OTP resent successfully! Please check your email.'
+      message: emailSent
+        ? 'OTP resent successfully! Please check your email.'
+        : 'OTP generated but email sending failed - check server console.',
+      emailSent,
+      emailError: emailError ? emailError.message : null
     });
 
   } catch (error) {
@@ -203,7 +281,7 @@ const resendOTP = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to resend OTP. Please try again.',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

@@ -4,7 +4,7 @@ const otpSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: false // Made optional for pre-registration OTPs
   },
   email: {
     type: String,
@@ -22,6 +22,13 @@ const otpSchema = new mongoose.Schema({
   isUsed: {
     type: Boolean,
     default: false
+  },
+  // Temporary storage for user data before verification
+  tempUserData: {
+    fullName: String,
+    password: String, // Already hashed
+    role: String,
+    subscriptionStatus: String
   }
 }, {
   timestamps: true
