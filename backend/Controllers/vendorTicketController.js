@@ -1,7 +1,6 @@
 const Ticket = require('../models/Ticket');
 const TicketMessage = require('../models/TicketMessage');
 const TicketActionLog = require('../models/TicketActionLog');
-const Notification = require('../models/Notification');
 const User = require('../Model/User'); // Assuming User model path
 
 /**
@@ -152,20 +151,6 @@ const addVendorReply = async (req, res) => {
       await ticket.save();
     }
 
-    // Assign notification to student
-    try {
-      await Notification.create({
-        userId: ticket.studentId,
-        title: 'New Reply from Vendor',
-        message: `Vendor replied to your complaint: #${ticket.ticketNumber}`,
-        type: 'info',
-        referenceId: ticket._id,
-        referenceType: 'Ticket'
-      });
-    } catch (notifErr) {
-      console.error('Failed to create notification', notifErr);
-    }
-
     // Log action
     await TicketActionLog.create({
       ticketId: id,
@@ -229,32 +214,6 @@ const resolveVendorTicket = async (req, res) => {
     ticket.resolvedAt = new Date();
 
     await ticket.save();
-
-    // Create notifications for student and admin
-    try {
-      await Notification.create({
-        userId: ticket.studentId,
-        title: 'Issue Resolved By Vendor',
-        message: `Vendor has marked your complaint #${ticket.ticketNumber} as resolved. Please review.`,
-        type: 'success',
-        referenceId: ticket._id,
-        referenceType: 'Ticket'
-      });
-
-      // Find an admin to notify if assignedAdminId exists, else just skip
-      if (ticket.assignedAdminId) {
-        await Notification.create({
-          userId: ticket.assignedAdminId,
-          title: 'Ticket Resolved By Vendor',
-          message: `Ticket #${ticket.ticketNumber} has been resolved by vendor.`,
-          type: 'info',
-          referenceId: ticket._id,
-          referenceType: 'Ticket'
-        });
-      }
-    } catch (notifErr) {
-      console.error('Failed to create resolve notification', notifErr);
-    }
 
     // Log action
     await TicketActionLog.create({
