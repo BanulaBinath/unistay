@@ -1,0 +1,547 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── WRAPPER ── */
+.owner-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f9fafb;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── TOP HEADER ── */
+.owner-header {
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* Logo — same as Navbar */
+.owner-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5b6cf2;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.owner-logo-icon {
+  width: 26px;
+  height: 26px;
+}
+
+/* ── PROFILE BUTTON (top right) ── */
+.owner-profile-wrap {
+  position: relative;
+}
+
+.owner-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f3ff;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 40px;
+  padding: 6px 14px 6px 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.owner-profile-btn:hover {
+  background: #eef2ff;
+  border-color: #5b6cf2;
+}
+
+.owner-avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #5b6cf2, #4a5ae0);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.owner-avatar-lg {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+}
+
+.owner-profile-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.owner-profile-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.owner-profile-role {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.owner-profile-chevron {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-left: 2px;
+}
+
+/* ── PROFILE DROPDOWN ── */
+.owner-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  width: 240px;
+  padding: 8px;
+  z-index: 999;
+  animation: dropdownFade 0.15s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.owner-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px 12px;
+}
+
+.owner-dropdown-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.owner-dropdown-email {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.owner-dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 4px 0;
+}
+
+.owner-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.owner-dropdown-item:hover { background: #f9fafb; }
+.owner-dropdown-item.danger { color: #ef4444; }
+.owner-dropdown-item.danger:hover { background: #fef2f2; }
+
+/* ── BODY ── */
+.owner-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: calc(100vh - 64px);
+}
+
+/* ── SIDEBAR ── */
+.owner-sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: linear-gradient(180deg, #5b6cf2, #4a5ae0);
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.owner-sidebar-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1.5px;
+  margin: 0 0 10px 8px;
+}
+
+.owner-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.owner-nav-btn:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+.owner-nav-btn.active {
+  background: rgba(255,255,255,0.22);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.owner-nav-icon {
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+}
+
+.owner-nav-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.owner-nav-logout:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+
+/* ── CONTENT ── */
+.owner-content {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+/* ── PAGE HEADER ── */
+.owner-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.owner-page-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.owner-add-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.owner-add-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+/* ── EMPTY ── */
+.owner-empty {
+  text-align: center;
+  padding: 80px 0;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.owner-empty p { margin: 0; font-size: 15px; }
+
+/* ── ROOMS GRID ── */
+.owner-rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ── ROOM CARD ── */
+.owner-room-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+  border: 1px solid #f3f4f6;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.owner-room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(91,108,242,0.12);
+}
+
+.owner-room-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.owner-room-no-img {
+  width: 100%;
+  height: 170px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a5b4fc;
+  font-size: 13px;
+}
+
+.owner-room-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.owner-room-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.owner-room-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #5b6cf2;
+  margin: 0;
+}
+
+.owner-room-price span {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.owner-room-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.owner-room-status.occupied { background: #fee2e2; color: #991b1b; }
+.owner-room-status.vacant   { background: #d1fae5; color: #065f46; }
+
+.owner-room-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.owner-room-tag {
+  background: #eef2ff;
+  color: #5b6cf2;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  max-width: 520px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #f3f4f6;
+}
+
+.form-card h2 {
+  margin-bottom: 24px;
+  color: #111827;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-card input[type="text"],
+.form-card input[type="number"] {
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  background: #f9fafb;
+}
+
+.form-card input[type="text"]:focus,
+.form-card input[type="number"]:focus {
+  border-color: #5b6cf2;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.1);
+  background: white;
+}
+
+.form-card input[type="file"] {
+  font-size: 13px;
+  color: #555;
+  font-family: 'Poppins', sans-serif;
+}
+
+.facilities-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.facility-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  font-family: 'Poppins', sans-serif;
+}
+
+.facility-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #5b6cf2;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.primary-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.primary-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .owner-sidebar      { display: none; }
+  .owner-content      { padding: 20px 16px; }
+  .owner-profile-info { display: none; }
+}

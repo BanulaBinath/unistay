@@ -38,6 +38,7 @@ yarn-error.log*
 .vscode/
 .idea/
 *.code-workspace
+.vs/
 
 # OS
 Thumbs.db

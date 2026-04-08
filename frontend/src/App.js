@@ -1,9 +1,12 @@
-import React from "react";
+﻿import React from "react";
 import './App.css';
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './Components/ProtectedRoute';
 
+// 🔹 Auth
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./Components/ProtectedRoute";
+
+// 🔹 Public
 import NomalHome from './Components/Home/nomalhome';
 import Login from './Components/Home/login';
 import RegisterSelection from './Components/Home/RegisterSelection';
@@ -13,26 +16,32 @@ import ExternalStudentRegister from './Components/Home/ExternalStudentRegister';
 import VendorRegister from './Components/Home/VendorRegister';
 import PaymentProcess from './Components/Home/PaymentProcess';
 import Services from './Components/pages/Services';
-import About from './Components/pages/About';
 import AboutUs from './Components/Home/AboutUs';
-import ContactPage from './Components/pages/Contact';
 import Contact from './Components/Home/Contact';
 
-import StudentDashboard from './Components/dashboards/StudentDashboard';
-import FoodVendorDashboard from './Components/dashboards/FoodVendorDashboard';
-import BoardingVendorDashboard from './Components/dashboards/BoardingVendorDashboard';
-import LaundryVendorDashboard from './Components/dashboards/LaundryVendorDashboard';
-import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashboard';
+// 🔹 Owner
+import OwnerDashboard from './Components/owner/owner';
+import RoomListing from './Components/owner/roomlisting';
+import ManageRooms from './Components/owner/manageroom';
+import BookingRequest from './Components/owner/bookingrequest';
+import ReviewMaintenance from './Components/owner/reviewmaintenance';
 
+// 🔹 Admin
 import AdminDashboard from './Components/admin/AdminDashboard';
 
+// 🔹 Student
+import StudentDashboard from './Components/dashboards/StudentDashboard';
 import CreateComplaintPage from './pages/student/CreateComplaintPage';
 import MyTicketsPage from './pages/student/MyTicketsPage';
 import TicketDetailsPage from './pages/student/TicketDetailsPage';
 import OrderHistoryPage from './pages/student/OrderHistoryPage';
 import OrderDetailsPage from './pages/student/OrderDetailsPage';
 import MyFoodOrders from './pages/student/MyFoodOrders';
+import RoomsDashboard from './Components/studenthome/roombooking';
 
+
+// 🔹 Vendor
+import FoodVendorDashboard from './Components/foodvendor/foodvendor';
 import FoodVendor from './Components/foodvendor/foodvendor';
 import AddItem from './Components/foodvendor/addItem';
 import UpdateItem from './Components/foodvendor/updateitem';
@@ -47,7 +56,7 @@ function App() {
       <div className="App">
         <Routes>
 
-          {/* Public Routes */}
+          {/* ── Public Routes ── */}
           <Route path="/" element={<NomalHome />} />
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<AboutUs />} />
@@ -61,153 +70,88 @@ function App() {
           <Route path="/payment/process" element={<PaymentProcess />} />
           <Route path="/buyorder" element={<BuyOrderPage />} />
 
+          {/* ── Room Booking (Student) ── */}
+          <Route path="/room-booking" element={<RoomsDashboard />} />
 
-          {/* Student */}
-          <Route 
-            path="/student/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <StudentDashboard />
-              </ProtectedRoute>
-            } 
-          />
+          {/* ── Student Protected Routes ── */}
+          <Route path="/student/dashboard" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <StudentDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/complaints/new" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <CreateComplaintPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/complaints" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <MyTicketsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/complaints/:id" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <TicketDetailsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/orders" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <MyFoodOrders />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/orders/history" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <OrderHistoryPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/student/orders/:orderId" element={
+            <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
+              <OrderDetailsPage />
+            </ProtectedRoute>
+          } />
 
-          <Route 
-            path="/student/complaints/new" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <CreateComplaintPage />
-              </ProtectedRoute>
-            } 
-          />
+          {/* ── Owner Routes ── */}
+          <Route path="/vendor/boarding/dashboard" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['boarding']}>
+              <OwnerDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/roomlisting" element={<RoomListing />} />
+          <Route path="/manage-rooms" element={<ManageRooms />} />
+          <Route path="/booking-requests" element={<BookingRequest />} />
+          <Route path="/reviews-maintenance" element={<ReviewMaintenance />} />
 
-          <Route 
-            path="/student/complaints" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <MyTicketsPage />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/student/complaints/:id" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <TicketDetailsPage />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/student/orders" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <MyFoodOrders />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/student/orders/history" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <OrderHistoryPage />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/student/orders/:orderId" 
-            element={
-              <ProtectedRoute allowedRoles={['student_sliit', 'student_external']}>
-                <OrderDetailsPage />
-              </ProtectedRoute>
-            } 
-          />
-
-          {/* Vendor Dashboards */}
-          <Route 
-            path="/vendor/food/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <FoodVendorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/vendor/boarding/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['boarding']}>
-                <BoardingVendorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/vendor/laundry/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['laundry']}>
-                <LaundryVendorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/vendor/cleaning/dashboard" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['cleaning']}>
-                <CleaningVendorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-
-          {/* ✅ FIXED: Item Management Route */}
-          <Route 
-            path="/ItemManagement" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <FoodVendor />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/addItem" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <AddItem />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/updateItem/:id" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <UpdateItem />
-              </ProtectedRoute>
-            } 
-          />
-
-           <Route 
-            path="/accept-item" 
-            element={
-              <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                <AcceptItem />
-              </ProtectedRoute>
-              } 
-          />
-
-              <Route 
-                path="/complaint" 
-              element={
-                <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
-                  <Complaint />
-                </ProtectedRoute>
-              } 
-            />
+          {/* ── Food Vendor Routes ── */}
+          <Route path="/vendor/food/dashboard" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <FoodVendorDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/ItemManagement" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <FoodVendor />
+            </ProtectedRoute>
+          } />
+          <Route path="/addItem" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <AddItem />
+            </ProtectedRoute>
+          } />
+          <Route path="/updateItem/:id" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <UpdateItem />
+            </ProtectedRoute>
+          } />
+          <Route path="/accept-item" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <AcceptItem />
+            </ProtectedRoute>
+          } />
+          <Route path="/complaint" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <Complaint />
+            </ProtectedRoute>
+          } />
 
               <Route 
                 path="/foodVendorcomplaint/:id" 
