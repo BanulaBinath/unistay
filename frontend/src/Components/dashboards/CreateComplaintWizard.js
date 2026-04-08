@@ -101,6 +101,7 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
     if (isStep1Valid) {
       setStep(2);
       setError('');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setError('Please select both category and complaint type.');
     }
@@ -110,36 +111,46 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
     e.preventDefault();
     setError('');
 
-    if (!formData.title || !formData.description) {
-      setError('Please fill in all required fields (Title, Description).');
+    if (!formData.title || !formData.description || !formData.vendorId) {
+      setError('Please fill in all required fields (Title, Description, Vendor).');
       return;
     }
 
     try {
       setLoading(true);
-      // Construct FormData for multipart if attachment is present
-      let dataToSubmit = formData;
-      const willUploadFile = formData.attachment instanceof File;
-      if (willUploadFile) {
-        dataToSubmit = new FormData();
-        Object.keys(formData).forEach(key => {
-          if (formData[key] !== null) {
-            dataToSubmit.append(key, formData[key]);
-          }
-        });
-      }
-
-      // If backend uses JSON and doesn't handle FormData, strip attachment
-      // Actually we just call createTicket(formData). createTicket normally handles JSON.
-      // Assuming createTicket takes object, let's keep the existing signature to be safe and remove attachment from payload if it's not supported. 
-      // The original code didn't have attachment, I just added it to state as requested.
-      const payload = { ...formData };
-      delete payload.attachment;
-
-      const response = await createTicket(payload);
-
-      if (response.success) {
-        onSuccess();
+      
+      // Use FormData if there's an attachment
+      if (formData.attachment instanceof File) {
+        const formDataToSend = new FormData();
+        formDataToSend.append('title', formData.title);
+        formDataToSend.append('description', formData.description);
+        formDataToSend.append('complaintType', formData.complaintType);
+        formDataToSend.append('serviceCategory', formData.serviceCategory);
+        if (formData.vendorId) formDataToSend.append('vendorId', formData.vendorId);
+        if (formData.vendorReference) formDataToSend.append('vendorReference', formData.vendorReference);
+        if (formData.serviceItemReference) formDataToSend.append('serviceItemReference', formData.serviceItemReference);
+        formDataToSend.append('complaintImage', formData.attachment);
+        
+        const response = await createTicket(formDataToSend, true);
+        if (response.success) {
+          onSuccess();
+        }
+      } else {
+        // Send as JSON if no attachment
+        const payload = {
+          title: formData.title,
+          description: formData.description,
+          complaintType: formData.complaintType,
+          serviceCategory: formData.serviceCategory,
+          vendorId: formData.vendorId || undefined,
+          vendorReference: formData.vendorReference || undefined,
+          serviceItemReference: formData.serviceItemReference || undefined
+        };
+        
+        const response = await createTicket(payload);
+        if (response.success) {
+          onSuccess();
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create complaint');    
@@ -150,19 +161,19 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
 
   return (
     <div className="create-complaint-wizard complaint-card ccp-form">
-      <div className="wizard-header">
-        <h3>{step === 1 ? 'Step 1 of 2 — Complaint Basics' : 'Step 2 of 2 — Complaint Details'}</h3>
-        
-        {/* Step Indicator */}
-        <div className="step-indicator">
-          <div className={`step-dot ${step >= 1 ? 'active' : ''}`}>1</div>
-          <div className={`step-line ${step >= 2 ? 'active' : ''}`}></div>
-          <div className={`step-dot ${step === 2 ? 'active' : ''}`}>2</div>
+      <div className="wizard-header-minimal">
+        <div className="step-breadcrumb">
+          <span className={`breadcrumb-item ${step === 1 ? 'active' : 'completed'}`}>
+            {step > 1 ? '✓' : '1'}
+          </span>
+          <span className="breadcrumb-separator">—</span>
+          <span className={`breadcrumb-item ${step === 2 ? 'active' : ''}`}>2</span>
         </div>
+        <h3 className="wizard-title">{step === 1 ? 'Choose Issue' : 'Complaint Details'}</h3>
       </div>
 
       {error && (
-        <div className="error-message" id="ccp-error-banner" style={{ margin: '16px' }}>
+        <div className="error-message" id="ccp-error-banner">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">     
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
@@ -174,61 +185,113 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
 
         {step === 1 && (
           <div className="ccp-form-section">
-            <p className="ccp-section-label">Complaint Basics</p>
+            <p className="ccp-section-label">
+              <span>Step 1</span> Complaint Basics
+            </p>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="serviceCategory">
-                  Service Category <span className="req">*</span>
-                </label>
-                <div className="ccp-select-wrapper">
-                  <select
-                    id="serviceCategory"
-                    name="serviceCategory"
-                    value={formData.serviceCategory}
-                    onChange={handleChange}
-                    required
+            <div className="form-group" style={{ marginBottom: '32px' }}>
+              <label style={{ marginBottom: '16px', fontSize: '1rem' }}>
+                Service Category <span className="req">*</span>
+              </label>
+              <div className="category-grid">
+                {serviceCategories.map(cat => (
+                  <div
+                    key={cat.value}
+                    className={`category-card ${formData.serviceCategory === cat.value ? 'selected' : ''} category-${cat.value}`}
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        serviceCategory: cat.value,
+                        vendorId: '',
+                        complaintType: ''
+                      }));
+                    }}
                   >
-                    <option value="">Select Category</option>
-                    {serviceCategories.map(cat => (
-                      <option key={cat.value} value={cat.value}>{cat.label}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="complaintType">
-                  Complaint Type <span className="req">*</span>
-                </label>
-                <div className="ccp-select-wrapper">
-                  <select
-                    id="complaintType"
-                    name="complaintType"
-                    value={formData.complaintType}
-                    onChange={handleChange}
-                    required
-                    disabled={!formData.serviceCategory}
-                  >
-                    <option value="">{formData.serviceCategory ? "Select Type" : "Select Category First"}</option>
-                    {formData.serviceCategory && complaintTypes
-                      .filter(type => categoryToComplaintTypes[formData.serviceCategory]?.includes(type.value))
-                      .map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
-                    ))}
-                  </select>
-                </div>
+                    <div className="category-icon">
+                      {cat.value === 'food' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                          <line x1="6" y1="1" x2="6" y2="4"></line>
+                          <line x1="10" y1="1" x2="10" y2="4"></line>
+                          <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                      )}
+                      {cat.value === 'boarding' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                      )}
+                      {cat.value === 'laundry' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="1" width="18" height="22" rx="2" ry="2"></rect>
+                          <circle cx="12" cy="13" r="5"></circle>
+                          <path d="M12 18a5 5 0 0 1 0-10"></path>
+                        </svg>
+                      )}
+                      {cat.value === 'cleaning' && (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 3v15"></path>
+                          <path d="M6 21h12"></path>
+                          <path d="M6 18h12v3H6z"></path>
+                          <path d="M9 3h6"></path>
+                        </svg>
+                      )}
+                    </div>
+                    <div className="category-label">{cat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '24px' }}>
+            <div className="form-group">
+              <label style={{ marginBottom: '16px', fontSize: '1rem' }}>
+                Complaint Type <span className="req">*</span>
+              </label>
+              {!formData.serviceCategory ? (
+                <div className="empty-state-box">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <p>Please select a service category first</p>
+                </div>
+              ) : (
+                <div className="complaint-type-grid">
+                  {complaintTypes
+                    .filter(type => categoryToComplaintTypes[formData.serviceCategory]?.includes(type.value))
+                    .map(type => (
+                      <div
+                        key={type.value}
+                        className={`complaint-type-card ${formData.complaintType === type.value ? 'selected' : ''}`}
+                        onClick={() => setFormData(prev => ({ ...prev, complaintType: type.value }))}
+                      >
+                        <div className="complaint-type-radio">
+                          {formData.complaintType === type.value && <div className="radio-dot"></div>}
+                        </div>
+                        <div className="complaint-type-content">
+                          <div className="complaint-type-label">{type.label}</div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '32px' }}>
               <button
                 type="button"
                 className="submit-button"
                 onClick={handleNext}
                 disabled={!isStep1Valid}
               >
-                Next Step
+                Continue to Details
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
               </button>
             </div>
           </div>
@@ -236,7 +299,9 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
 
         {step === 2 && (
           <div className="ccp-form-section">
-            <p className="ccp-section-label">Complaint Details</p>
+            <p className="ccp-section-label">
+              <span>Step 2</span> Complaint Details
+            </p>
 
             <div className="form-group" style={{ marginBottom: '18px' }}>       
               <label htmlFor="title">
@@ -256,13 +321,14 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
 
             <div className="form-row" style={{ marginBottom: '18px' }}>
               <div className="form-group">
-                <label htmlFor="vendorId">Vendor <span className="opt">(optional)</span></label>
+                <label htmlFor="vendorId">Vendor <span className="req">*</span></label>
                 <div className="ccp-select-wrapper">
                   <select
                     id="vendorId"
                     name="vendorId"
                     value={formData.vendorId}
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Select Vendor</option>
                     {vendors.map(vendor => (
@@ -326,8 +392,17 @@ const CreateComplaintWizard = ({ onCancel, onSuccess }) => {
                 name="attachment"
                 onChange={handleFileChange}
                 accept="image/*,.pdf"
-                style={{ padding: '4px' }}
               />
+              {formData.attachment && (
+                <div className="file-upload-hint">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <small>
+                    {formData.attachment.name} ({(formData.attachment.size / 1024).toFixed(1)} KB)
+                  </small>
+                </div>
+              )}
             </div>
 
             <div className="form-actions" style={{ justifyContent: 'space-between', marginTop: '24px' }}>

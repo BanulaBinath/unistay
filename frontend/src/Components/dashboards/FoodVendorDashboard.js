@@ -13,10 +13,10 @@ function FoodVendorDashboard() {
       <ItemSidebar />
 
       <div className="vendor-dashboard-content">
-        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
-          <NotificationBell />
-        </div>
         <div className="vendor-dashboard-card">
+          <div className="card-notification-bell">
+            <NotificationBell />
+          </div>
           <h2 className="vendor-dashboard-title">
             Welcome, {user?.fullName}!
           </h2>

@@ -77,6 +77,11 @@ function StudentDashboard() {
   const [viewMode, setViewMode] = useState('list');
   const [selectedTicketId, setSelectedTicketId] = useState(null);
 
+  /* ── Scroll to top when viewMode changes ── */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [viewMode]);
+
   /* ── Ticket state (unchanged) ── */
   const [tickets,   setTickets]   = useState([]);
   const [loading,   setLoading]   = useState(true);

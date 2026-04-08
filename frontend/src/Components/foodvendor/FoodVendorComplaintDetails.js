@@ -119,6 +119,28 @@ function FoodVendorComplaintDetails() {
           <p>{ticketData.description}</p>
         </div>
 
+        {ticketData.complaintImage && (
+          <div className="description-card" style={{ marginTop: '20px' }}>
+            <h3>Attached Image</h3>
+            <div style={{ marginTop: '12px' }}>
+              <img 
+                src={`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${ticketData.complaintImage}`}
+                alt="Complaint evidence"
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '400px',
+                  borderRadius: '8px',
+                  border: '1px solid #ddd',
+                  objectFit: 'contain'
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         <div className="messages-section">
           <h3>Conversation History</h3>
           <div className="messages-container">

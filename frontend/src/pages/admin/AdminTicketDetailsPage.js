@@ -299,6 +299,29 @@ const AdminTicketDetailsPage = () => {
               </div>
             </div>
 
+            {ticket.complaintImage && (
+              <div className="dtl-desc-section" style={{ marginTop: '20px' }}>
+                <label>Attached Image</label>
+                <div style={{ marginTop: '12px' }}>
+                  <img 
+                    src={`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${ticket.complaintImage}`}
+                    alt="Complaint evidence"
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '400px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--sm-border)',
+                      objectFit: 'contain',
+                      background: '#f9fafb'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
             {ticket.rejectionReason && (
               <div className="dtl-desc-section" style={{ marginTop: '20px' }}>
                 <label style={{ color: '#991B1B' }}>Rejection Reason</label>
