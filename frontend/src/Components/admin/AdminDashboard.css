@@ -491,10 +491,10 @@
 .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a1a;
   margin: 0;
   letter-spacing: -0.5px;
   line-height: 1;
+  color: #1a1a1a;
 }
 
 .stat-details-row {
