@@ -15,7 +15,6 @@ const orderRoutes = require('./routes/orderRoutes');
 const roomRoutes = require("./routes/rooms");
 const reviewRoutes = require("./routes/reviewRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
-const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
@@ -40,7 +39,6 @@ app.use('/api/admin/tickets', adminTicketRoutes);
 app.use('/api/vendor/tickets', vendorTicketRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/notifications', notificationRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);

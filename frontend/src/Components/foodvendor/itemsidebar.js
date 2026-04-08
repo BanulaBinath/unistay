@@ -12,6 +12,7 @@ function ItemSidebar() {
     logout();
     navigate('/login');
   };
+  
 
   return (
     <div className="sidebar">
