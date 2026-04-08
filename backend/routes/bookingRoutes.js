@@ -8,9 +8,12 @@ router.post("/", async (req, res) => {
     const booking = new Booking({
       roomId:       req.body.roomId,
       roomTitle:    req.body.roomTitle,
-      studentId:    req.body.studentId,
+      
       studentName:  req.body.studentName,
       studentEmail: req.body.studentEmail,
+      phone:        req.body.phone,
+      checkIn:      req.body.checkIn,   // <- add this
+      checkOut:     req.body.checkOut,
     });
     const saved = await booking.save();
     res.status(201).json(saved);
@@ -19,7 +22,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET all bookings (owner sees all)
+// GET all bookings (owner)
 router.get("/", async (req, res) => {
   try {
     const bookings = await Booking.find().sort({ createdAt: -1 });
@@ -39,7 +42,7 @@ router.get("/student/:studentId", async (req, res) => {
   }
 });
 
-// PUT - owner accepts or rejects a booking
+// PUT - owner accepts or rejects
 router.put("/:id", async (req, res) => {
   try {
     const booking = await Booking.findByIdAndUpdate(
@@ -54,11 +57,11 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE - remove a booking
+// DELETE
 router.delete("/:id", async (req, res) => {
   try {
     await Booking.findByIdAndDelete(req.params.id);
-    res.json({ message: "Booking deleted" });
+    res.json({ message: "Deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

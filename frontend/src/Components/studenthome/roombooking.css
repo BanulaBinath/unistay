@@ -140,7 +140,7 @@
 /* ── GRID ── */
 .rb-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
@@ -621,3 +621,138 @@
 }
 
 .rb-login-popup-close:hover { color: #6b7280; }
+
+/* ================= FIX BOOKING MODAL (NO JSX CHANGE) ================= */
+
+/* Better modal look */
+.rb-booking-modal {
+  max-width: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  animation: rbFade 0.25s ease;
+}
+
+@keyframes rbFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Improve header */
+.rb-modal-header {
+  padding: 20px 24px 0;
+}
+
+.rb-modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rb-modal-avg {
+  color: #5b6cf2;
+  font-weight: 600;
+}
+
+/* Fix form spacing */
+.rb-booking-form {
+  padding: 16px 24px 24px;
+  gap: 16px;
+}
+
+/* Fix form row (your date inputs) */
+.rb-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Improve inputs */
+.rb-input {
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.rb-input:hover {
+  border-color: #c7d2fe;
+}
+
+.rb-input:focus {
+  border-color: #5b6cf2;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.12);
+}
+
+/* Readonly field */
+.rb-input-readonly {
+  background: #eef2ff;
+  font-weight: 500;
+}
+
+/* Fix summary box */
+.rb-booking-summary {
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  border: 1px solid #e0e7ff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Make summary text nicer */
+.rb-summary-row span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.rb-summary-row b {
+  display: block;
+  font-size: 15px;
+  color: #111827;
+}
+
+/* Improve error box */
+.rb-booking-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #fecaca;
+  font-size: 13px;
+}
+
+/* Improve submit button */
+.rb-submit-btn {
+  background: linear-gradient(135deg, #5b6cf2, #4a5ae0);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.rb-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(91,108,242,0.35);
+}
+
+.rb-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Small polish */
+.rb-form-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Smooth scroll */
+.rb-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rb-modal::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
