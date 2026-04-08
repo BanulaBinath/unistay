@@ -7,7 +7,6 @@ import TicketStatusBadge from '../tickets/TicketStatusBadge';
 import TicketPriorityBadge from '../tickets/TicketPriorityBadge';
 import CreateComplaintWizard from './CreateComplaintWizard';
 import TicketDetailsPage from '../../pages/student/TicketDetailsPage';
-import NotificationBell from '../common/NotificationBell';
 import './StudentDashboard.css';
 
 /* ── Helper: initials from name ── */
@@ -162,7 +161,6 @@ function StudentDashboard() {
         </a>
 
         <div className="sd-topbar-right">
-          <NotificationBell />
           <div className="sd-user-pill">
             <div className="sd-user-avatar">{getInitials(user?.fullName)}</div>
             <div className="sd-user-info">

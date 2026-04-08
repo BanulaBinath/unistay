@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import NotificationBell from '../common/NotificationBell';
 import './FoodVendorDashboard.css';
 import ItemSidebar from '../foodvendor/itemsidebar'; 
 
@@ -14,9 +13,6 @@ function FoodVendorDashboard() {
 
       <div className="vendor-dashboard-content">
         <div className="vendor-dashboard-card">
-          <div className="card-notification-bell">
-            <NotificationBell />
-          </div>
           <h2 className="vendor-dashboard-title">
             Welcome, {user?.fullName}!
           </h2>
