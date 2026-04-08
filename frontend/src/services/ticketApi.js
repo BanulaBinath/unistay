@@ -9,9 +9,16 @@ const getAuthHeader = () => {
 };
 
 // Student Ticket APIs
-export const createTicket = async (ticketData) => {
+export const createTicket = async (ticketData, isFormData = false) => {
+  const headers = getAuthHeader();
+  
+  // If FormData, don't set Content-Type (browser will set it with boundary)
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+  
   const response = await axios.post(`${API_URL}/tickets`, ticketData, {
-    headers: getAuthHeader()
+    headers
   });
   return response.data;
 };

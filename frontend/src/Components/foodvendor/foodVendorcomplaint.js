@@ -96,8 +96,6 @@ function FoodVendorComplaint() {
             <option value="high">High</option>
             <option value="urgent">Urgent</option>
           </select>
-          
-          <button onClick={fetchTickets} className="vendor-btn">Refresh</button>
         </div>
 
         {error && <p className="vendor-error">{error}</p>}

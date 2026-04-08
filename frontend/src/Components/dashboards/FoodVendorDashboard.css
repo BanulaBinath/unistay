@@ -19,6 +19,14 @@
   border-radius: 16px;
   width: 420px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* NOTIFICATION BELL IN CARD CORNER */
+.card-notification-bell {
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 
 .vendor-dashboard-title {

@@ -126,6 +126,10 @@ const ticketSchema = new mongoose.Schema({
   rejectionReason: {
     type: String,
     default: null
+  },
+  complaintImage: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true

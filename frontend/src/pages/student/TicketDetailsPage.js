@@ -209,6 +209,28 @@ const TicketDetailsPage = ({ ticketId }) => {
             <p>{ticket.description}</p>
           </div>
 
+          {ticket.complaintImage && (
+            <div className="description-section">
+              <h3>Attached Image</h3>
+              <div style={{ marginTop: '12px' }}>
+                <img 
+                  src={`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${ticket.complaintImage}`}
+                  alt="Complaint evidence"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '400px',
+                    borderRadius: '8px',
+                    border: '1px solid #e5e7eb',
+                    objectFit: 'contain'
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {ticket.rejectionReason && (
             <div className="rejection-section">
               <h3>Rejection Reason</h3>
