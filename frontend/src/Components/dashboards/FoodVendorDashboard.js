@@ -12,7 +12,6 @@ function FoodVendorDashboard() {
       <ItemSidebar />
 
       <div className="vendor-dashboard-content">
-
         <div className="vendor-dashboard-card">
           <h2 className="vendor-dashboard-title">
             Welcome, {user?.fullName}!

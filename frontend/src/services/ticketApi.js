@@ -4,9 +4,16 @@ import { getAuthHeader } from './api';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Student Ticket APIs
-export const createTicket = async (ticketData) => {
+export const createTicket = async (ticketData, isFormData = false) => {
+  const headers = getAuthHeader();
+  
+  // If FormData, don't set Content-Type (browser will set it with boundary)
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+  
   const response = await axios.post(`${API_URL}/tickets`, ticketData, {
-    headers: getAuthHeader()
+    headers
   });
   return response.data;
 };
@@ -152,6 +159,40 @@ export const addAdminMessage = async (ticketId, message) => {
   const response = await axios.post(
     `${API_URL}/admin/tickets/${ticketId}/messages`,
     { message },
+    { headers: getAuthHeader() }
+  );
+  return response.data;
+};
+
+// Vendor Ticket APIs
+export const getVendorTickets = async (filters = {}) => {
+  const params = new URLSearchParams(filters).toString();
+  const response = await axios.get(`${API_URL}/vendor/tickets?${params}`, {
+    headers: getAuthHeader()
+  });
+  return response.data;
+};
+
+export const getVendorTicketById = async (ticketId) => {
+  const response = await axios.get(`${API_URL}/vendor/tickets/${ticketId}`, {
+    headers: getAuthHeader()
+  });
+  return response.data;
+};
+
+export const addVendorReply = async (ticketId, message) => {
+  const response = await axios.post(
+    `${API_URL}/vendor/tickets/${ticketId}/reply`,
+    { message },
+    { headers: getAuthHeader() }
+  );
+  return response.data;
+};
+
+export const resolveVendorTicket = async (ticketId, notes) => {
+  const response = await axios.patch(
+    `${API_URL}/vendor/tickets/${ticketId}/resolve`,
+    { notes },
     { headers: getAuthHeader() }
   );
   return response.data;

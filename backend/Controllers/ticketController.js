@@ -49,6 +49,9 @@ const createTicket = async (req, res) => {
     // Auto-assign priority
     const priority = assignPriority(complaintType);
 
+    // Handle optional image upload
+    const complaintImage = req.file ? `/uploads/${req.file.filename}` : null;
+
     // Create ticket
     const ticket = new Ticket({
       ticketNumber,
@@ -60,6 +63,7 @@ const createTicket = async (req, res) => {
       vendorId: vendorId || null,
       vendorReference: vendorReference || null,
       serviceItemReference: serviceItemReference || null,
+      complaintImage,
       priority,
       status: 'open'
     });

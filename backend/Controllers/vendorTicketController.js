@@ -1,6 +1,7 @@
 const Ticket = require('../models/Ticket');
 const TicketMessage = require('../models/TicketMessage');
 const TicketActionLog = require('../models/TicketActionLog');
+const User = require('../Model/User'); // Assuming User model path
 
 /**
  * Get vendor's tickets (Vendor)

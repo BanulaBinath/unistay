@@ -1,0 +1,88 @@
+.manage-container { font-family: 'Segoe UI', sans-serif; }
+.manage-title     { color: #1e3c72; font-size: 24px; margin-bottom: 24px; }
+.manage-empty     { color: #888; font-size: 15px; }
+
+.manage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.manage-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.manage-img {
+  width: 100%; height: 160px; object-fit: cover;
+  border-radius: 10px; margin-bottom: 4px;
+}
+
+.manage-no-img {
+  width: 100%; height: 160px; background: #f0f4ff;
+  border-radius: 10px; display: flex;
+  align-items: center; justify-content: center;
+  color: #aaa; font-size: 13px; margin-bottom: 4px;
+}
+
+.manage-room-title { color: #1e3c72; font-size: 17px; margin: 0; }
+.manage-price      { font-size: 14px; color: #333; margin: 0; }
+.manage-facilities { font-size: 13px; color: #666; margin: 0; }
+
+.manage-status          { font-weight: bold; font-size: 14px; margin: 0; }
+.manage-status.occupied { color: red; }
+.manage-status.vacant   { color: green; }
+
+.manage-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+.btn-edit, .btn-delete, .btn-toggle, .btn-save, .btn-cancel {
+  border: none; border-radius: 8px; padding: 8px 14px;
+  font-size: 13px; font-weight: bold; cursor: pointer;
+  font-family: 'Segoe UI', sans-serif; transition: opacity 0.2s;
+}
+
+.btn-edit   { background: #2a5298; color: white; }
+.btn-delete { background: #e53935; color: white; }
+.btn-toggle { background: #f57c00; color: white; }
+.btn-save   { background: #2e7d32; color: white; }
+.btn-cancel { background: #aaa;    color: white; }
+
+.btn-edit:hover, .btn-delete:hover, .btn-toggle:hover,
+.btn-save:hover, .btn-cancel:hover { opacity: 0.85; }
+.btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.edit-form { display: flex; flex-direction: column; gap: 10px; }
+.edit-error { color: red; font-size: 13px; margin: 0; }
+
+.edit-input {
+  padding: 9px 12px; border: 1.5px solid #dde3ed;
+  border-radius: 8px; font-size: 14px;
+  font-family: 'Segoe UI', sans-serif; outline: none;
+  background: #fafbfd; width: 100%; box-sizing: border-box;
+}
+
+.edit-input:focus { border-color: #2a5298; box-shadow: 0 0 0 3px rgba(42,82,152,0.1); }
+
+.edit-label { font-size: 13px; font-weight: 600; color: #333; }
+
+.edit-facilities-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 8px; padding: 10px; border: 1.5px solid #dde3ed;
+  border-radius: 8px; background: #fafbfd;
+}
+
+.edit-facility-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; cursor: pointer; color: #333;
+}
+
+.edit-facility-item input[type="checkbox"] {
+  accent-color: #2a5298; width: 15px; height: 15px;
+}
+
+.edit-actions { display: flex; gap: 8px; margin-top: 4px; }

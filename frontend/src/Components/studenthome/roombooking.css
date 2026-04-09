@@ -1,0 +1,758 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── WRAPPER ── */
+.rb-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: #f9fafb;
+}
+
+.rb-page {
+  flex: 1;
+}
+
+/* ── HERO ── */
+.rb-hero {
+  background: linear-gradient(135deg, #5b6cf2 0%, #4a5ae0 100%);
+  padding: 60px 24px;
+  text-align: center;
+  color: white;
+}
+
+.rb-hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.rb-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.rb-hero-accent {
+  color: #fbbf24;
+  font-style: italic;
+}
+
+.rb-hero p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0 0 28px 0;
+}
+
+/* ── SEARCH BAR ── */
+.rb-search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px;
+  padding: 10px 20px;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.rb-search-icon { font-size: 16px; }
+
+.rb-search-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  color: #374151;
+  background: transparent;
+}
+
+.rb-search-input::placeholder { color: #9ca3af; }
+
+/* ── CONTENT AREA ── */
+.rb-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.rb-results-bar {
+  margin-bottom: 24px;
+}
+
+.rb-results-count {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.rb-results-count b { color: #5b6cf2; }
+
+/* ── LOADING ── */
+.rb-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  color: #9ca3af;
+  gap: 16px;
+}
+
+.rb-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #5b6cf2;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── ERROR ── */
+.rb-error {
+  text-align: center;
+  padding: 60px 0;
+  color: #ef4444;
+}
+
+.rb-retry-btn {
+  margin-top: 12px;
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+/* ── EMPTY ── */
+.rb-empty {
+  text-align: center;
+  padding: 60px 0;
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+/* ── GRID ── */
+.rb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── CARD ── */
+.rb-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #f0f0f0;
+}
+
+.rb-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(91,108,242,0.15);
+}
+
+/* ── IMAGE ── */
+.rb-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.rb-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.rb-card:hover .rb-image-wrap img { transform: scale(1.04); }
+
+.rb-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}
+
+.rb-badge.available { background: #d1fae5; color: #065f46; }
+.rb-badge.occupied  { background: #fee2e2; color: #991b1b; }
+.rb-badge.booked    { background: #dbeafe; color: #1e40af; }
+
+/* ── BODY ── */
+.rb-body {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rb-room-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.rb-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #5b6cf2;
+  white-space: nowrap;
+}
+
+.rb-price span {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.rb-location {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.rb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rb-tag {
+  background: #eef2ff;
+  color: #5b6cf2;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ── ACTIONS ── */
+.rb-actions {
+  padding: 14px 18px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rb-book-btn,
+.rb-review-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+}
+
+.rb-book-btn {
+  background: #5b6cf2;
+  color: white;
+}
+
+.rb-book-btn:hover:not(.disabled) {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+.rb-book-btn.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.rb-review-btn {
+  background: white;
+  color: #5b6cf2;
+  border: 1.5px solid #5b6cf2;
+}
+
+.rb-review-btn:hover {
+  background: #eef2ff;
+}
+
+/* ── TOAST ── */
+.rb-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: fadeInToast 0.3s ease;
+}
+
+@keyframes fadeInToast {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── MODAL ── */
+.rb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+}
+
+.rb-modal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.rb-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 0;
+}
+
+.rb-modal-header h2 {
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.rb-modal-avg {
+  color: #f59e0b;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.rb-close-btn {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.rb-close-btn:hover { background: #e5e7eb; }
+
+.rb-modal-reviews {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 240px;
+  overflow-y: auto;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rb-modal-empty {
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.rb-review-item {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rb-review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rb-review-stars { font-size: 14px; }
+
+.rb-review-comment {
+  font-size: 13px;
+  color: #4b5563;
+  font-style: italic;
+  margin: 0;
+}
+
+.rb-review-reply {
+  background: #eef2ff;
+  border-left: 3px solid #5b6cf2;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #374151;
+}
+
+.rb-review-date {
+  font-size: 11px;
+  color: #d1d5db;
+  margin: 0;
+}
+
+/* ── REVIEW FORM ── */
+.rb-review-form {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rb-review-form h3 {
+  color: #111827;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.rb-input {
+  padding: 10px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  background: #f9fafb;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.rb-input:focus {
+  border-color: #5b6cf2;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.1);
+  background: white;
+}
+
+.rb-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.rb-star-picker {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rb-star-pick {
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+
+.rb-star-pick:hover { transform: scale(1.25); }
+
+.rb-star-label {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-left: 8px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.rb-submit-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s;
+}
+
+.rb-submit-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+.rb-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .rb-hero h1  { font-size: 1.6rem; }
+  .rb-content  { padding: 24px 16px; }
+  .rb-grid     { grid-template-columns: 1fr; }
+}
+
+/* ── LOGIN REQUIRED POPUP ── */
+.rb-login-popup {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.rb-login-popup-icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.rb-login-popup h2 {
+  color: #111827;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.rb-login-popup p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.rb-login-popup-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.rb-login-popup-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.rb-login-popup-btn.primary {
+  background: #5b6cf2;
+  color: white;
+}
+
+.rb-login-popup-btn.primary:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+.rb-login-popup-btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.rb-login-popup-btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+.rb-login-popup-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.rb-login-popup-close:hover { color: #6b7280; }
+
+/* ================= FIX BOOKING MODAL (NO JSX CHANGE) ================= */
+
+/* Better modal look */
+.rb-booking-modal {
+  max-width: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  animation: rbFade 0.25s ease;
+}
+
+@keyframes rbFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Improve header */
+.rb-modal-header {
+  padding: 20px 24px 0;
+}
+
+.rb-modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rb-modal-avg {
+  color: #5b6cf2;
+  font-weight: 600;
+}
+
+/* Fix form spacing */
+.rb-booking-form {
+  padding: 16px 24px 24px;
+  gap: 16px;
+}
+
+/* Fix form row (your date inputs) */
+.rb-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Improve inputs */
+.rb-input {
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.rb-input:hover {
+  border-color: #c7d2fe;
+}
+
+.rb-input:focus {
+  border-color: #5b6cf2;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.12);
+}
+
+/* Readonly field */
+.rb-input-readonly {
+  background: #eef2ff;
+  font-weight: 500;
+}
+
+/* Fix summary box */
+.rb-booking-summary {
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  border: 1px solid #e0e7ff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Make summary text nicer */
+.rb-summary-row span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.rb-summary-row b {
+  display: block;
+  font-size: 15px;
+  color: #111827;
+}
+
+/* Improve error box */
+.rb-booking-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #fecaca;
+  font-size: 13px;
+}
+
+/* Improve submit button */
+.rb-submit-btn {
+  background: linear-gradient(135deg, #5b6cf2, #4a5ae0);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.rb-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(91,108,242,0.35);
+}
+
+.rb-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Small polish */
+.rb-form-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Smooth scroll */
+.rb-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rb-modal::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
