@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 
@@ -61,6 +61,9 @@ import CleaningProfile      from './Components/cleaningstaff/CleaningProfile';
 import CleaningAssignedJobs from './Components/cleaningstaff/CleaningAssignedJobs';
 import CleaningRatings      from './Components/cleaningstaff/CleaningRatings';
 import CleaningComplaints   from './Components/cleaningstaff/CleaningComplaints';
+import LaundryVendorDashboard from './Components/dashboards/LaundryVendorDashboard';
+import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashboard';
+
 
 function App() {
   return (

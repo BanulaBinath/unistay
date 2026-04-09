@@ -3,7 +3,7 @@ import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import './Services.css';
 import './Services2.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getItems } from '../../services/itemApi';
 import RoomBooking from '../studenthome/roombooking'; // RoomBooking component
 
@@ -59,8 +59,8 @@ function Services() {
         <div className="services-tabs">
           <button className={activeService === 'food' ? 'active' : ''} onClick={() => setActiveService('food')}>Food Services</button>
           <button className={activeService === 'room' ? 'active' : ''} onClick={() => setActiveService('room')}>Room Booking</button>
-          <button className={activeService === 'laundry' ? 'active' : ''} onClick={() => setActiveService('laundry')}>Laundry Service</button>
-          <button className={activeService === 'cleaning' ? 'active' : ''} onClick={() => setActiveService('cleaning')}>Cleaning Service</button>
+          <Link to="/laundry"><button>Laundry Service</button></Link>
+          <Link to="/cleaning"><button>Cleaning Service</button></Link>
         </div>
       </div>
 

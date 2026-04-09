@@ -19,6 +19,14 @@
   margin: 15px 0 40px;
 }
 
+.services-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 15px 0 40px;
+}
+
 .services-content button {
   padding: 10px 20px;
   background: #4a6cf7;

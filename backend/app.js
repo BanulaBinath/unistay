@@ -17,7 +17,7 @@ const cleaningRoutes = require('./Route/cleaningRoutes');
 const roomRoutes = require("./routes/rooms");
 const reviewRoutes = require("./routes/reviewRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
-const notificationRoutes = require('./routes/notificationRoutes');
+
 
 const app = express();
 
@@ -44,7 +44,7 @@ app.use('/api/items', itemRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/laundry', laundryRoutes);
 app.use('/api/cleaning', cleaningRoutes);
-app.use('/api/notifications', notificationRoutes);
+
 app.use("/api/rooms", roomRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);
