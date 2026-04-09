@@ -41,20 +41,28 @@ function FoodOrder() {
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(map);
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        if (!isActive || !mapInstanceRef.current) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (!isActive || !mapInstanceRef.current) return;
 
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
 
-        mapInstanceRef.current.setView([lat, lng], 16);
+          mapInstanceRef.current.setView([lat, lng], 16);
 
-        L.marker([lat, lng]).addTo(mapInstanceRef.current)
-          .bindPopup("Your current location")
-          .openPopup();
+          L.marker([lat, lng]).addTo(mapInstanceRef.current)
+            .bindPopup("Your current location")
+            .openPopup();
 
-        setFormData(prev => ({ ...prev, liveLocation: `${lat}, ${lng}` }));
-      });
+          setFormData(prev => ({ ...prev, liveLocation: `${lat}, ${lng}` }));
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
     }
 
     return () => {
@@ -283,7 +291,36 @@ function FoodOrder() {
 
             <div className="form-group">
               <label>Live Location</label>
-              <input value={formData.liveLocation} readOnly />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <input value={formData.liveLocation} readOnly placeholder="Fetching location..." />
+                <button 
+                  type="button" 
+                  style={{ width: "auto", padding: "0 10px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+                  onClick={() => {
+                    if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                          const lat = pos.coords.latitude;
+                          const lng = pos.coords.longitude;
+                          setFormData(prev => ({ ...prev, liveLocation: `${lat}, ${lng}` }));
+                          if (mapInstanceRef.current) {
+                            mapInstanceRef.current.setView([lat, lng], 16);
+                            L.marker([lat, lng]).addTo(mapInstanceRef.current)
+                              .bindPopup("Your current location")
+                              .openPopup();
+                          }
+                        },
+                        (err) => alert("Could not fetch location. Please enable location permissions."),
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                      );
+                    } else {
+                      alert("Geolocation is not supported by your browser.");
+                    }
+                  }}
+                >
+                  Fetch
+                </button>
+              </div>
             </div>
 
            
