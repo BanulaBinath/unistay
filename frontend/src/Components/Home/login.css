@@ -158,7 +158,7 @@
   line-height: 1.5;
 }
 
-.error-message {
+.api-error-message {
   background-color: #fee2e2;
   color: #dc2626;
   padding: 10px 14px;
@@ -223,6 +223,18 @@
   border-color: #5b6cf2;
   background: white;
   box-shadow: 0 0 0 3px rgba(91, 108, 242, 0.08);
+}
+
+.form-group input.error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 10px;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
 .remember-me-row {
