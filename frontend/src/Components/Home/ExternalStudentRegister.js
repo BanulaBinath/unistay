@@ -17,13 +17,30 @@ function ExternalStudentRegister() {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
+  const validatePassword = (pwd) => {
+    if (!pwd) return 'Password is required';
+    if (pwd.length < 8) return 'At least 8 characters required';
+    if (!/[A-Z]/.test(pwd)) return 'At least one uppercase letter';
+    if (!/[a-z]/.test(pwd)) return 'At least one lowercase letter';
+    if (!/[0-9]/.test(pwd)) return 'At least one number required';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return 'At least one special character';
+    return '';
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    if (errors[name]) {
+
+    if (name === 'password') {
+      const pwdError = validatePassword(value);
+      setErrors(prev => ({
+        ...prev,
+        password: pwdError
+      }));
+    } else if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -51,10 +68,9 @@ function ExternalStudentRegister() {
       newErrors.email = 'SLIIT students should use the SLIIT registration form';
     }
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+    const pwdError = validatePassword(formData.password);
+    if (pwdError) {
+      newErrors.password = pwdError;
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -234,7 +250,7 @@ function ExternalStudentRegister() {
                 <div className="subscription-info">
                   <div className="subscription-header">
                     <span className="subscription-label">Annual Subscription</span>
-                    <span className="subscription-price">Rs.1000<span className="price-period">/YEAR</span></span>
+                    <span className="subscription-price">Rs.500<span className="price-period">/YEAR</span></span>
                   </div>
                   <p className="subscription-description">
                     Billed once a year. Full access to all properties and premium features.

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import Navbar from '../common/Navbar';
@@ -16,6 +16,33 @@ function SLIITStudentRegister() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
+  
+  // OTP Modal State
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [otpSuccess, setOtpSuccess] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+
+  // Resend timer effect
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
+
+  const validatePassword = (pwd) => {
+    if (!pwd) return 'Password is required';
+    if (pwd.length < 8) return 'At least 8 characters required';
+    if (!/[A-Z]/.test(pwd)) return 'At least one uppercase letter';
+    if (!/[a-z]/.test(pwd)) return 'At least one lowercase letter';
+    if (!/[0-9]/.test(pwd)) return 'At least one number required';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return 'At least one special character';
+    return '';
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,8 +50,14 @@ function SLIITStudentRegister() {
       ...prev,
       [name]: value
     }));
-    // Clear error for this field
-    if (errors[name]) {
+
+    if (name === 'password') {
+      const pwdError = validatePassword(value);
+      setErrors(prev => ({
+        ...prev,
+        password: pwdError
+      }));
+    } else if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -48,10 +81,9 @@ function SLIITStudentRegister() {
       newErrors.email = 'Please use your SLIIT student email (@my.sliit.lk)';
     }
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+    const pwdError = validatePassword(formData.password);
+    if (pwdError) {
+      newErrors.password = pwdError;
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -81,13 +113,9 @@ function SLIITStudentRegister() {
       });
 
       if (response.success) {
-        // Navigate to OTP verification page
-        navigate('/verify-otp', { 
-          state: { 
-            email: formData.email,
-            fullName: formData.fullName
-          } 
-        });
+        // Show OTP modal instead of navigating
+        setShowOtpModal(true);
+        setResendTimer(60);
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -105,12 +133,117 @@ function SLIITStudentRegister() {
     }
   };
 
+  // OTP Handlers
+  const handleOtpChange = (index, value) => {
+    if (value.length > 1) {
+      value = value[0];
+    }
+
+    if (!/^\d*$/.test(value)) {
+      return;
+    }
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    setOtpError('');
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) prevInput.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').slice(0, 6);
+    if (!/^\d+$/.test(pastedData)) {
+      return;
+    }
+
+    const newOtp = pastedData.split('');
+    while (newOtp.length < 6) {
+      newOtp.push('');
+    }
+    setOtp(newOtp);
+
+    const lastIndex = Math.min(pastedData.length, 5);
+    const lastInput = document.getElementById(`otp-${lastIndex}`);
+    if (lastInput) lastInput.focus();
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setOtpError('');
+
+    const otpString = otp.join('');
+    if (otpString.length !== 6) {
+      setOtpError('Please enter all 6 digits');
+      return;
+    }
+
+    setOtpLoading(true);
+
+    try {
+      const response = await authAPI.verifyOTP({
+        email: formData.email,
+        otp: otpString
+      });
+
+      if (response.success) {
+        setOtpSuccess(true);
+        setTimeout(() => {
+          navigate('/login', { 
+            state: { 
+              message: 'Account verified successfully! Please log in.' 
+            } 
+          });
+        }, 1500);
+      }
+    } catch (error) {
+      console.error('OTP verification error:', error);
+      setOtpError(error.response?.data?.message || 'Invalid or expired OTP. Please try again.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendTimer > 0) return;
+
+    setResending(true);
+    setOtpError('');
+
+    try {
+      const response = await authAPI.resendOTP(formData.email);
+      if (response.success) {
+        setResendTimer(60);
+        setOtp(['', '', '', '', '', '']);
+        const firstInput = document.getElementById('otp-0');
+        if (firstInput) firstInput.focus();
+      }
+    } catch (error) {
+      console.error('Resend OTP error:', error);
+      setOtpError(error.response?.data?.message || 'Failed to resend OTP. Please try again.');
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="sliit-register-container">
         <div className="sliit-register-wrapper">
-          {/* Left Side - Emerald Section */}
+          {/* Left Side - Purple Section */}
           <div className="sliit-register-left">
             <div className="sliit-badge">SLIIT STUDENT</div>
             
@@ -250,6 +383,75 @@ function SLIITStudentRegister() {
             </div>
           </div>
         </div>
+
+        {/* OTP Modal */}
+        {showOtpModal && (
+          <div className="otp-modal-overlay">
+            <div className="otp-modal">
+              <div className="otp-modal-header">
+                <div className="otp-modal-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <h3>Verify Your Email</h3>
+                <p>We've sent a 6-digit code to <strong>{formData.email}</strong></p>
+              </div>
+
+              <form onSubmit={handleVerifyOtp} className="otp-modal-form">
+                <div className="otp-inputs-container">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`otp-${index}`}
+                      type="text"
+                      maxLength="1"
+                      value={digit}
+                      onChange={(e) => handleOtpChange(index, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                      onPaste={handleOtpPaste}
+                      className={`otp-digit-input ${otpError ? 'error' : ''} ${otpSuccess ? 'success' : ''}`}
+                      disabled={otpLoading || otpSuccess}
+                      autoFocus={index === 0}
+                    />
+                  ))}
+                </div>
+
+                {otpError && (
+                  <div className="otp-error-message">
+                    {otpError}
+                  </div>
+                )}
+
+                {otpSuccess && (
+                  <div className="otp-success-message">
+                    ✓ Verification successful! Redirecting...
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  className="otp-verify-btn"
+                  disabled={otpLoading || otpSuccess}
+                >
+                  {otpLoading ? 'Verifying...' : otpSuccess ? 'Verified!' : 'Verify OTP'}
+                </button>
+
+                <div className="otp-resend-section">
+                  <span>Didn't receive the code?</span>
+                  <button
+                    type="button"
+                    className="otp-resend-btn"
+                    onClick={handleResendOtp}
+                    disabled={resending || resendTimer > 0}
+                  >
+                    {resending ? 'Sending...' : resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend OTP'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

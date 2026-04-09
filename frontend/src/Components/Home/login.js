@@ -27,20 +27,50 @@ function Login() {
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
-    setError('');
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+    setApiError('');
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = 'Please provide a valid email';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setApiError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -63,9 +93,17 @@ function Login() {
         }
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Login failed. Please try again.'
-      );
+      if (err.response?.data?.errors) {
+        const apiErrors = {};
+        err.response.data.errors.forEach(e => {
+          apiErrors[e.field] = e.message;
+        });
+        setErrors(apiErrors);
+      } else {
+        setApiError(
+          err.response?.data?.message || 'Login failed. Please try again.'
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -112,7 +150,7 @@ function Login() {
             <h2 className="login-title">Sign In</h2>
             <p className="login-subtitle">Enter your credentials to access your account</p>
             
-            {error && <div className="error-message">{error}</div>}
+            {apiError && <div className="api-error-message">{apiError}</div>}
 
             <form onSubmit={handleSubmit} className="login-form">
               <div className="form-group">
@@ -124,8 +162,9 @@ function Login() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="student@university.edu"
-                  required
+                  className={errors.email ? 'error' : ''}
                 />
+                {errors.email && <span className="error-text">{errors.email}</span>}
               </div>
 
               <div className="form-group">
@@ -140,8 +179,9 @@ function Login() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  required
+                  className={errors.password ? 'error' : ''}
                 />
+                {errors.password && <span className="error-text">{errors.password}</span>}
               </div>
 
               <div className="remember-me-row">
