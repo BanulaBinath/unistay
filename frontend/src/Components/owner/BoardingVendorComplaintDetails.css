@@ -1,191 +1,219 @@
-/* Boarding Vendor Complaint Details Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Boarding Vendor Complaint Details - Matching Admin Dashboard Style */
 .boarding-detail-container {
-  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  max-width: 900px;
 }
 
 .boarding-detail-back-btn {
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  color: #374151;
   border: none;
-  color: #5b6cf2;
-  cursor: pointer;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 20px;
-  font-size: 14px;
-  padding: 8px 0;
-  transition: color 0.2s;
+  cursor: pointer;
   font-family: 'Poppins', sans-serif;
+  margin-bottom: 20px;
+  transition: all 0.2s;
 }
 
 .boarding-detail-back-btn:hover {
-  color: #4a5ae0;
-  text-decoration: underline;
+  background: #e5e7eb;
+  transform: translateX(-2px);
 }
 
 .boarding-detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .boarding-detail-header h2 {
-  font-size: 22px;
-  color: #111827;
-  margin: 0;
+  font-size: 1.5rem;
   font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .boarding-detail-status-badge {
-  padding: 6px 14px;
+  display: inline-block;
+  padding: 6px 16px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: capitalize;
 }
 
-.status-open { background: #eff6ff; color: #3b82f6; }
-.status-in_progress { background: #fef3c7; color: #f59e0b; }
-.status-waiting_vendor { background: #fef2f2; color: #ef4444; }
-.status-waiting_student { background: #f5f3ff; color: #8b5cf6; }
-.status-escalated { background: #fef2f2; color: #b91c1c; }
-.status-resolved { background: #ecfdf5; color: #10b981; }
-.status-closed { background: #f3f4f6; color: #6b7280; }
-.status-reopened { background: #f5f3ff; color: #8b5cf6; }
+.status-open {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.status-in_progress {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-waiting_vendor {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status-waiting_student {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.status-escalated {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-resolved {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.status-closed {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.status-reopened {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.boarding-detail-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  padding: 12px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
 
 .boarding-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
 
 .boarding-detail-card {
   background: white;
-  border: 1px solid #f3f4f6;
-  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
 .boarding-detail-card h3 {
-  margin-top: 0;
-  margin-bottom: 14px;
-  color: #111827;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.3px;
 }
 
 .boarding-detail-card p {
+  font-size: 0.85rem;
+  color: #6b7280;
   margin: 8px 0;
-  color: #475569;
-  font-size: 14px;
   line-height: 1.6;
 }
 
-.boarding-detail-card p strong {
-  color: #111827;
+.boarding-detail-card strong {
+  color: #374151;
   font-weight: 600;
 }
 
-/* Messages Section */
 .boarding-detail-messages-section {
   background: white;
-  border: 1px solid #f3f4f6;
-  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   margin-top: 20px;
 }
 
 .boarding-detail-messages-section h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #111827;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.3px;
 }
 
 .boarding-detail-messages-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
   max-height: 400px;
   overflow-y: auto;
+  margin-bottom: 20px;
   padding-right: 8px;
 }
 
-.boarding-detail-messages-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.boarding-detail-messages-container::-webkit-scrollbar-track {
-  background: #f9fafb;
-  border-radius: 3px;
-}
-
-.boarding-detail-messages-container::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-.boarding-detail-messages-container::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.boarding-detail-no-messages {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  padding: 40px 0;
 }
 
 .boarding-detail-message {
-  padding: 12px 16px;
-  border-radius: 12px;
-  max-width: 75%;
-  font-size: 14px;
+  background: #fafbfc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
 }
 
 .boarding-detail-message.vendor-msg {
-  background: #5b6cf2;
-  color: white;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
+  background: #f0f4ff;
+  border-color: #c7d4ff;
 }
 
 .boarding-detail-message.other-msg {
-  background: #f9fafb;
-  color: #111827;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-  border: 1px solid #f3f4f6;
+  background: #fafbfc;
+  border-color: #e5e7eb;
 }
 
 .boarding-detail-message-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 12px;
-  opacity: 0.9;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.boarding-detail-message-header strong {
+  font-size: 0.85rem;
+  color: #1a1a1a;
   font-weight: 600;
 }
 
 .boarding-detail-message-date {
-  font-size: 11px;
-  margin-left: 12px;
-  font-weight: 400;
+  font-size: 0.75rem;
+  color: #9ca3af;
 }
 
 .boarding-detail-message-body {
-  font-size: 14px;
+  font-size: 0.85rem;
+  color: #374151;
   line-height: 1.6;
-  white-space: pre-wrap;
 }
 
-.boarding-detail-no-messages {
-  text-align: center;
-  padding: 30px;
-  color: #94a3b8;
-  font-size: 14px;
-}
-
-/* Reply Form */
 .boarding-detail-reply-form {
   display: flex;
   flex-direction: column;
@@ -193,38 +221,34 @@
 }
 
 .boarding-detail-reply-form textarea {
-  width: 100%;
   padding: 12px 14px;
-  border-radius: 10px;
-  border: 1.5px solid #e5e7eb;
-  resize: vertical;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
-  font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background: #f9fafb;
+  resize: vertical;
+  outline: none;
+  transition: all 0.2s;
 }
 
 .boarding-detail-reply-form textarea:focus {
-  outline: none;
   border-color: #5b6cf2;
-  box-shadow: 0 0 0 3px rgba(91, 108, 242, 0.1);
-  background: white;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.1);
 }
 
 .boarding-detail-form-actions {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .boarding-detail-btn {
-  padding: 10px 18px;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
   font-weight: 600;
+  cursor: pointer;
   font-family: 'Poppins', sans-serif;
   transition: all 0.2s;
 }
@@ -237,36 +261,33 @@
 .boarding-detail-btn-send:hover {
   background: #4a5ae0;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(91, 108, 242, 0.3);
+}
+
+.boarding-detail-btn-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .boarding-detail-btn-resolve {
-  background: #10b981;
+  background: #14b8a6;
   color: white;
 }
 
 .boarding-detail-btn-resolve:hover {
-  background: #059669;
+  background: #0d9488;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-.boarding-detail-btn:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
 .boarding-detail-resolved-notice {
-  text-align: center;
-  padding: 14px;
-  background: #f9fafb;
-  border-radius: 10px;
-  color: #64748b;
-  font-style: italic;
-  font-size: 14px;
-  border: 1px solid #f3f4f6;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #059669;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 16px;
 }
 
 /* Modal */
@@ -276,61 +297,60 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1000;
+  padding: 20px;
 }
 
 .boarding-detail-modal-content {
   background: white;
+  border-radius: 10px;
   padding: 28px;
-  border-radius: 16px;
+  max-width: 500px;
   width: 100%;
-  max-width: 450px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .boarding-detail-modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 18px;
-  color: #111827;
+  font-size: 1.25rem;
   font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.3px;
 }
 
 .boarding-detail-modal-content p {
-  margin-bottom: 16px;
-  color: #64748b;
-  font-size: 14px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0 0 16px 0;
   line-height: 1.6;
 }
 
 .boarding-detail-modal-content textarea {
   width: 100%;
   padding: 12px 14px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  border: 1.5px solid #e5e7eb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-family: 'Poppins', sans-serif;
   resize: vertical;
-  box-sizing: border-box;
-  font-size: 14px;
-  background: #f9fafb;
+  outline: none;
+  margin-bottom: 16px;
+  transition: all 0.2s;
 }
 
 .boarding-detail-modal-content textarea:focus {
-  outline: none;
   border-color: #5b6cf2;
-  box-shadow: 0 0 0 3px rgba(91, 108, 242, 0.1);
-  background: white;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.1);
 }
 
 .boarding-detail-modal-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 10px;
+  justify-content: flex-end;
 }
 
 .boarding-detail-btn-cancel {
@@ -343,34 +363,38 @@
 }
 
 .boarding-detail-btn-confirm {
-  background: #10b981;
+  background: #14b8a6;
   color: white;
 }
 
 .boarding-detail-btn-confirm:hover {
-  background: #059669;
+  background: #0d9488;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-/* Error Message */
-.boarding-detail-error {
-  color: #dc2626;
-  background: #fef2f2;
-  padding: 12px 16px;
-  border-radius: 10px;
-  margin: 12px 0;
-  border-left: 3px solid #dc2626;
-  font-size: 14px;
+.boarding-detail-btn-confirm:disabled,
+.boarding-detail-btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
   .boarding-detail-grid {
     grid-template-columns: 1fr;
   }
-  
-  .boarding-detail-message {
-    max-width: 90%;
+
+  .boarding-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .boarding-detail-form-actions {
+    flex-direction: column;
+  }
+
+  .boarding-detail-btn {
+    width: 100%;
   }
 }
