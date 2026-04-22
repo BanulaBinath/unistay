@@ -3,7 +3,7 @@ import './BoardingVendorComplaint.css';
 import { getVendorTickets } from '../../services/ticketApi';
 import { useAuth } from '../../context/AuthContext';
 
-function BoardingVendorComplaint({ onViewDetails }) {
+function BoardingVendorComplaint({ onViewDetails, user: propUser, profileOpen, setProfileOpen, profileRef, handleLogout, setActiveTab: setOwnerActiveTab, displayName, initials }) {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -65,8 +65,62 @@ function BoardingVendorComplaint({ onViewDetails }) {
   return (
     <div className="boarding-complaint-container">
       <div className="boarding-complaint-header">
-        <h2>Boarding Complaints</h2>
-        <p>Manage complaints related to your boarding services</p>
+        <div>
+          <h2 className="bvc-title">Boarding Complaints</h2>
+          <p className="bvc-subtitle">Manage and respond to student complaints</p>
+        </div>
+        {/* Profile Button */}
+        {displayName && (
+          <div className="bvc-profile-wrap" ref={profileRef}>
+            <button
+              className="bvc-profile-btn"
+              onClick={() => setProfileOpen((p) => !p)}
+            >
+              <div className="bvc-avatar">{initials}</div>
+              <div className="bvc-profile-info">
+                <span className="bvc-profile-name">{displayName}</span>
+                <span className="bvc-profile-role">Room Owner</span>
+              </div>
+              <span className="bvc-profile-chevron">{profileOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {/* Dropdown */}
+            {profileOpen && (
+              <div className="bvc-profile-dropdown">
+                <div className="bvc-dropdown-header">
+                  <div className="bvc-avatar bvc-avatar-lg">{initials}</div>
+                  <div>
+                    <p className="bvc-dropdown-name">{displayName}</p>
+                    <p className="bvc-dropdown-email">{propUser?.email || ""}</p>
+                  </div>
+                </div>
+                <div className="bvc-dropdown-divider" />
+                <button className="bvc-dropdown-item" onClick={() => { setProfileOpen(false); setOwnerActiveTab("dashboard"); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  </svg>
+                  Dashboard
+                </button>
+                <button className="bvc-dropdown-item" onClick={() => { setProfileOpen(false); setOwnerActiveTab("manage"); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  Manage Rooms
+                </button>
+                <div className="bvc-dropdown-divider" />
+                <button className="bvc-dropdown-item danger" onClick={handleLogout}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
       <div className="boarding-complaint-filters">
