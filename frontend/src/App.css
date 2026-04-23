@@ -1,0 +1,59 @@
+/* ============================================================
+   Unistay App - Global Styles
+   Unified UX improvements with smooth transitions
+   ============================================================ */
+
+/* Import global utilities */
+@import './styles/transitions.css';
+@import './styles/forms.css';
+@import './styles/buttons.css';
+
+/* Global smooth transitions for all interactive elements */
+* {
+  box-sizing: border-box;
+}
+
+a {
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Global focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #5b6cf2;
+  outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}

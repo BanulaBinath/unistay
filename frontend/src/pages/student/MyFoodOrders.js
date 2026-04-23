@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getStudentOrders } from '../../services/orderApi';
+import Alert from '../../Components/common/Alert';
+import EmptyState from '../../Components/common/EmptyState';
 import './MyFoodOrders.css';
 
 const MyFoodOrders = () => {
@@ -87,27 +89,12 @@ const MyFoodOrders = () => {
         <div className="mfo-body">
           {/* Success Message */}
           {successMessage && (
-            <div className="mfo-success-banner">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
-              {successMessage}
-            </div>
+            <Alert type="success" message={successMessage} onClose={() => setSuccessMessage('')} />
           )}
 
           {/* Error */}
           {error && (
-            <div className="mfo-error-banner">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-              {error}
-            </div>
+            <Alert type="error" message={error} onClose={() => setError('')} />
           )}
 
           {/* Loading */}
@@ -119,8 +106,8 @@ const MyFoodOrders = () => {
 
           /* Empty */
           ) : orders.length === 0 ? (
-            <div className="mfo-empty-state">
-              <div className="mfo-empty-icon">
+            <EmptyState
+              icon={
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
@@ -129,18 +116,12 @@ const MyFoodOrders = () => {
                   <line x1="10" y1="1" x2="10" y2="4"/>
                   <line x1="14" y1="1" x2="14" y2="4"/>
                 </svg>
-              </div>
-              <h3 className="mfo-empty-title">No food orders yet</h3>
-              <p className="mfo-empty-desc">
-                You have not placed any food orders yet. Once you place an order, it will appear here.
-              </p>
-              <button
-                className="mfo-empty-action-btn"
-                onClick={() => navigate('/services')}
-              >
-                Browse Food Menu
-              </button>
-            </div>
+              }
+              title="No food orders yet"
+              description="You have not placed any food orders yet. Once you place an order, it will appear here."
+              actionLabel="Browse Food Menu"
+              onAction={() => navigate('/services')}
+            />
 
           /* Orders list */
           ) : (

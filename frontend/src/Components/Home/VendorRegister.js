@@ -26,13 +26,30 @@ function VendorRegister() {
     { value: 'cleaning', label: 'Cleaning Services' }
   ];
 
+  const validatePassword = (pwd) => {
+    if (!pwd) return 'Password is required';
+    if (pwd.length < 8) return 'At least 8 characters required';
+    if (!/[A-Z]/.test(pwd)) return 'At least one uppercase letter';
+    if (!/[a-z]/.test(pwd)) return 'At least one lowercase letter';
+    if (!/[0-9]/.test(pwd)) return 'At least one number required';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return 'At least one special character';
+    return '';
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    if (errors[name]) {
+
+    if (name === 'password') {
+      const pwdError = validatePassword(value);
+      setErrors(prev => ({
+        ...prev,
+        password: pwdError
+      }));
+    } else if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -66,10 +83,9 @@ function VendorRegister() {
       newErrors.vendorType = 'Please select a vendor type';
     }
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+    const pwdError = validatePassword(formData.password);
+    if (pwdError) {
+      newErrors.password = pwdError;
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -310,7 +326,7 @@ function VendorRegister() {
                   className="submit-btn"
                   disabled={loading}
                 >
-                  {loading ? 'Processing...' : 'Register & Pay Annual Subscription'}
+                  {loading ? 'Processing...' : 'Register & Pay'}
                 </button>
               </div>
               </form>

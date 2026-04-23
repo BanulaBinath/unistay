@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './foodVendorcomplaint.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ItemSidebar from '../foodvendor/itemsidebar'; 
 import { getVendorTickets } from '../../services/ticketApi';
 import { useAuth } from '../../context/AuthContext';
@@ -9,8 +9,10 @@ function FoodVendorComplaint() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
@@ -19,6 +21,17 @@ function FoodVendorComplaint() {
   useEffect(() => {
     fetchTickets();
   }, [user, statusFilter, priorityFilter]);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const fetchTickets = async () => {
     try {
@@ -41,6 +54,14 @@ function FoodVendorComplaint() {
       setLoading(false);
     }
   };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const displayName = user?.fullName || user?.name || user?.email || "Vendor";
+  const initials = displayName.charAt(0).toUpperCase();
 
   const getStatusBadge = (status) => {
     const statusMap = {
@@ -66,8 +87,60 @@ function FoodVendorComplaint() {
       <ItemSidebar />
       <div className="vendor-main">
         <div className="vendor-header">
-          <h2>Unistay</h2>
-          <h3>Food Vendor Complaints</h3>
+          <div>
+            <h2 className="vendor-title">Complaints</h2>
+            <p className="vendor-subtitle">Manage and respond to student complaints</p>
+          </div>
+          {/* Profile Button */}
+          <div className="vendor-profile-wrap" ref={profileRef}>
+            <button
+              className="vendor-profile-btn"
+              onClick={() => setProfileOpen((p) => !p)}
+            >
+              <div className="vendor-avatar">{initials}</div>
+              <div className="vendor-profile-info">
+                <span className="vendor-profile-name">{displayName}</span>
+                <span className="vendor-profile-role">Food Vendor</span>
+              </div>
+              <span className="vendor-profile-chevron">{profileOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {/* Dropdown */}
+            {profileOpen && (
+              <div className="vendor-profile-dropdown">
+                <div className="vendor-dropdown-header">
+                  <div className="vendor-avatar vendor-avatar-lg">{initials}</div>
+                  <div>
+                    <p className="vendor-dropdown-name">{displayName}</p>
+                    <p className="vendor-dropdown-email">{user?.email || ""}</p>
+                  </div>
+                </div>
+                <div className="vendor-dropdown-divider" />
+                <button className="vendor-dropdown-item" onClick={() => { setProfileOpen(false); navigate('/vendor/food/dashboard'); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  </svg>
+                  Dashboard
+                </button>
+                <button className="vendor-dropdown-item" onClick={() => { setProfileOpen(false); navigate('/ItemManagement'); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  Manage Items
+                </button>
+                <div className="vendor-dropdown-divider" />
+                <button className="vendor-dropdown-item danger" onClick={handleLogout}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="vendor-filters">
@@ -100,45 +173,47 @@ function FoodVendorComplaint() {
 
         {error && <p className="vendor-error">{error}</p>}
 
-        <table className="vendor-table">
-          <thead>
-            <tr>
-              <th>Ticket #</th>
-              <th>Title</th>
-              <th>Student</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan="7" className="vendor-loading">Loading complaints...</td></tr>
-            ) : tickets.length === 0 ? (
-              <tr><td colSpan="7" className="vendor-no-items">No complaints assigned to you.</td></tr>
-            ) : (
-              tickets.map(ticket => (
-                <tr key={ticket._id}>
-                  <td>{ticket.ticketNumber}</td>
-                  <td>{ticket.title}</td>
-                  <td>{ticket.studentId?.fullName || 'Unknown'}</td>
-                  <td className={`priority-${ticket.priority}`}>{ticket.priority}</td>
-                  <td>{getStatusBadge(ticket.status)}</td>
-                  <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
-                  <td>
-                    <button 
-                      onClick={() => navigate(`/foodVendorcomplaint/${ticket._id}`)}
-                      className="vendor-btn vendor-btn-update"
-                    >
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        <div className="vendor-table-wrapper">
+          <table className="vendor-table">
+            <thead>
+              <tr>
+                <th>Ticket #</th>
+                <th>Title</th>
+                <th>Student</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan="7" className="vendor-loading">Loading complaints...</td></tr>
+              ) : tickets.length === 0 ? (
+                <tr><td colSpan="7" className="vendor-no-items">No complaints assigned to you.</td></tr>
+              ) : (
+                tickets.map(ticket => (
+                  <tr key={ticket._id}>
+                    <td className="vendor-ticket-number">{ticket.ticketNumber}</td>
+                    <td className="vendor-ticket-title">{ticket.title}</td>
+                    <td>{ticket.studentId?.fullName || 'Unknown'}</td>
+                    <td className={`priority-${ticket.priority}`}>{ticket.priority}</td>
+                    <td>{getStatusBadge(ticket.status)}</td>
+                    <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
+                    <td>
+                      <button 
+                        onClick={() => navigate(`/foodVendorcomplaint/${ticket._id}`)}
+                        className="vendor-btn vendor-btn-view"
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

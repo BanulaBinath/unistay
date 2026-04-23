@@ -72,6 +72,7 @@
 /* ── CONTENT AREA ── */
 .rb-content {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 40px 24px;
 }
@@ -140,33 +141,60 @@
 /* ── GRID ── */
 .rb-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 24px;
 }
 
 /* ── CARD ── */
 .rb-card {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #f0f0f0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.rb-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), rgba(168, 85, 247, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .rb-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(91,108,242,0.15);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(56, 189, 248, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.rb-card:hover::before {
+  opacity: 1;
 }
 
 /* ── IMAGE ── */
 .rb-image-wrap {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  margin: 6px 6px 0 6px;
+  width: calc(100% - 12px);
 }
 
 .rb-image-wrap img {
@@ -174,33 +202,38 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.rb-card:hover .rb-image-wrap img { transform: scale(1.04); }
+.rb-card:hover .rb-image-wrap img { transform: scale(1.1); }
 
 .rb-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.rb-badge.available { background: #d1fae5; color: #065f46; }
-.rb-badge.occupied  { background: #fee2e2; color: #991b1b; }
-.rb-badge.booked    { background: #dbeafe; color: #1e40af; }
+.rb-badge.available { background: rgba(209, 250, 229, 0.9); color: #059669; border: 1px solid rgba(5, 150, 105, 0.2); }
+.rb-badge.occupied  { background: rgba(254, 226, 226, 0.9); color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.2); }
+.rb-badge.booked    { background: rgba(219, 234, 254, 0.9); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.2); }
 
 /* ── BODY ── */
 .rb-body {
-  padding: 18px;
+  padding: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .rb-row {
@@ -212,51 +245,62 @@
 
 .rb-room-title {
   font-size: 16px;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: #0f172a;
   margin: 0;
+  line-height: 1.3;
 }
 
 .rb-price {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: #5b6cf2;
+  color: transparent;
+  background: linear-gradient(135deg, #38bdf8, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
   white-space: nowrap;
 }
 
 .rb-price span {
   font-size: 12px;
-  color: #9ca3af;
-  font-weight: 400;
+  color: #64748b;
+  font-weight: 500;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 .rb-location {
   font-size: 13px;
-  color: #6b7280;
+  color: #64748b;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .rb-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: 4px;
 }
 
 .rb-tag {
-  background: #eef2ff;
-  color: #5b6cf2;
-  padding: 3px 10px;
-  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #0284c7;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
+  border: 1px solid rgba(56, 189, 248, 0.2);
 }
 
 /* ── ACTIONS ── */
 .rb-actions {
-  padding: 14px 18px;
+  padding: 12px 16px 16px;
   display: flex;
-  gap: 10px;
-  border-top: 1px solid #f3f4f6;
+  gap: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .rb-book-btn,
@@ -264,39 +308,48 @@
   flex: 1;
   padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.2s;
+  font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .rb-book-btn {
-  background: #5b6cf2;
+  background: linear-gradient(135deg, #38bdf8, #a855f7);
   color: white;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
 }
 
 .rb-book-btn:hover:not(.disabled) {
-  background: #4a5ae0;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.35);
 }
 
 .rb-book-btn.disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
+  background: #f1f5f9;
+  color: #94a3b8;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .rb-review-btn {
-  background: white;
-  color: #5b6cf2;
-  border: 1.5px solid #5b6cf2;
+  background: rgba(255, 255, 255, 0.8);
+  color: #475569;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .rb-review-btn:hover {
-  background: #eef2ff;
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
 }
 
 /* ── TOAST ── */

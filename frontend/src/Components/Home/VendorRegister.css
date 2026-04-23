@@ -193,7 +193,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .form-group {
@@ -287,9 +287,10 @@
 .subscription-info {
   background: #dbeafe;
   border: 1px solid #bfdbfe;
-  padding: 16px 18px;
+  padding: 12px 18px;
   border-radius: 10px;
-  margin-bottom: 14px;
+  margin-top: -14px;
+  margin-bottom: 8px;
 }
 
 .subscription-header {
@@ -336,7 +337,7 @@
 }
 
 .form-footer-new {
-  margin-top: 14px;
+  margin-top: 4px;
   display: flex;
   flex-direction: row;
   align-items: center;

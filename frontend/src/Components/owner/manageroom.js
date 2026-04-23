@@ -63,7 +63,6 @@ export default function ManageRooms({ rooms, onUpdate }) {
 
   return (
     <div className="manage-container">
-      <h2 className="manage-title">🛏️ Manage Rooms</h2>
       {rooms.length === 0 && <p className="manage-empty">No rooms found.</p>}
 
       <div className="manage-grid">

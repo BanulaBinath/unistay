@@ -7,7 +7,7 @@ const STATUS_CONFIG = {
   rejected: { label: "Rejected", bg: "#fef2f2", color: "#b91c1c", dot: "#f87171" },
 };
 
-export default function BookingRequest() {
+export default function BookingRequest({ user, profileOpen, setProfileOpen, profileRef, handleLogout, setActiveTab: setOwnerActiveTab, displayName, initials }) {
   const [activeTab, setActiveTab] = useState("booking");
   const [filter, setFilter]       = useState("all");
   const [requests, setRequests]   = useState([]);
@@ -69,11 +69,13 @@ export default function BookingRequest() {
 
   const pendingCount  = requests.filter((r) => r.status === "pending").length;
   const acceptedCount = requests.filter((r) => r.status === "accepted").length;
+  const rejectedCount = requests.filter((r) => r.status === "rejected").length;
+  const totalCount    = requests.length;
 
   return (
     <div className="br-container">
 
-      {/* Header */}
+      {/* Header with title, stats, and profile */}
       <div className="br-header">
         <div>
           <h2 className="br-title">Requests Center</h2>
@@ -89,6 +91,58 @@ export default function BookingRequest() {
             <span className="br-stat-label">Accepted</span>
           </div>
         </div>
+        {/* Profile Button */}
+        {displayName && (
+          <div className="br-profile-wrap" ref={profileRef}>
+            <button
+              className="br-profile-btn"
+              onClick={() => setProfileOpen((p) => !p)}
+            >
+              <div className="br-avatar">{initials}</div>
+              <div className="br-profile-info">
+                <span className="br-profile-name">{displayName}</span>
+                <span className="br-profile-role">Room Owner</span>
+              </div>
+              <span className="br-profile-chevron">{profileOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {/* Dropdown */}
+            {profileOpen && (
+              <div className="br-profile-dropdown">
+                <div className="br-dropdown-header">
+                  <div className="br-avatar br-avatar-lg">{initials}</div>
+                  <div>
+                    <p className="br-dropdown-name">{displayName}</p>
+                    <p className="br-dropdown-email">{user?.email || ""}</p>
+                  </div>
+                </div>
+                <div className="br-dropdown-divider" />
+                <button className="br-dropdown-item" onClick={() => { setProfileOpen(false); setOwnerActiveTab("dashboard"); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  </svg>
+                  Dashboard
+                </button>
+                <button className="br-dropdown-item" onClick={() => { setProfileOpen(false); setOwnerActiveTab("manage"); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  Manage Rooms
+                </button>
+                <div className="br-dropdown-divider" />
+                <button className="br-dropdown-item danger" onClick={handleLogout}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style={{ width: '16px', height: '16px', strokeWidth: 2 }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

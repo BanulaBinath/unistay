@@ -17,8 +17,6 @@ const cleaningRoutes = require('./Route/cleaningRoutes');
 const roomRoutes = require("./routes/rooms");
 const reviewRoutes = require("./routes/reviewRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
-
-
 const app = express();
 
 // Middleware

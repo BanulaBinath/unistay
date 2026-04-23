@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllUsers, activateUser, deactivateUser } from '../../services/adminApi';
 import './UsersManagement.css';
 
-function UsersManagement() {
+function UsersManagement({ userType = 'users' }) {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,14 +23,24 @@ function UsersManagement() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
+    setFilters({
+      role: '',
+      isActive: '',
+      vendorType: '',
+      page: 1,
+      limit: 10
+    });
+  }, [userType]);
+
+  useEffect(() => {
     fetchUsers();
-  }, [filters]);
+  }, [filters, userType]);
 
   const fetchUsers = async () => {
     try {
       setLoading(true);
       setError('');
-      const response = await getAllUsers(filters);
+      const response = await getAllUsers({ ...filters, userType });
       if (response.success) {
         setUsers(response.data.users);
         setPagination(response.data.pagination);
@@ -173,8 +183,8 @@ function UsersManagement() {
       {/* 1. SaaS Page Header */}
       <header className="page-heading-row">
         <div>
-          <h1 className="page-title">Users Overview</h1>
-          <p className="page-description">Manage access, monitor roles, and oversee all platform users.</p>
+          <h1 className="page-title">{userType === 'users' ? 'Students Overview' : 'Vendors Overview'}</h1>
+          <p className="page-description">Manage access, monitor roles, and oversee all platform {userType === 'users' ? 'students' : 'vendors'}.</p>
         </div>
         <div className="view-mode-toggle">
           <button
@@ -208,95 +218,139 @@ function UsersManagement() {
       )}
 
       {/* 2. Summary Metric Cards */}
-      {!loading && users.length > 0 && (
+            {!loading && users.length > 0 && (
         <div className="metrics-grid">
-          <div className="metric-card complex-card">
-            <div className="card-inner-top">
-              <div className="metric-data">
-                <p className="metric-title">Total Users</p>
-                <h3 className="metric-value">{pagination?.total || users.length}</h3>
+          
+          {userType === 'users' && (
+            <>
+              <div className="metric-card complex-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Total Students</p>
+                    <h3 className="metric-value">{pagination?.total || users.length}</h3>
+                  </div>
+                  <div className="metric-icon primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">     
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="card-inner-bottom">
+                  <span className="trend-badge trend-up">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"/></svg>
+                    +8.2%
+                  </span>
+                  <span className="trend-text">from last month</span>
+                </div>
               </div>
-              <div className="metric-icon primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-            </div>
-            <div className="card-inner-bottom">
-              <span className="trend-badge trend-up">
-                <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"/></svg>
-                +8.2%
-              </span>
-              <span className="trend-text">from last month</span>
-            </div>
-          </div>
 
-          <div className="metric-card complex-card">
-            <div className="card-inner-top">
-              <div className="metric-data">
-                <p className="metric-title">Active Now</p>
-                <h3 className="metric-value">{users.filter(u => u.isActive).length}</h3>
+              <div className="metric-card complex-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">SLIIT Students</p>
+                    <h3 className="metric-value">{users.filter(u => u.role === 'student_sliit').length}</h3>
+                  </div>
+                  <div className="metric-icon success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">     
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="card-inner-bottom progress-bottom">
+                  <div className="progress-info">
+                    <span className="progress-label">Engagement</span>
+                    <span className="progress-percent">{users.length > 0 ? Math.round((users.filter(u => u.role === 'student_sliit' && u.isActive).length / (users.filter(u => u.role === 'student_sliit').length || 1)) * 100) : 0}%</span>     
+                  </div>
+                  <div className="progress-bar-bg">
+                    <div className="progress-bar-fill" style={{ width: `${(users.filter(u => u.role === 'student_sliit' && u.isActive).length / (users.filter(u => u.role === 'student_sliit').length || 1)) * 100}%` }}></div>
+                  </div>
+                </div>
               </div>
-              <div className="metric-icon success">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div className="card-inner-bottom progress-bottom">
-              <div className="progress-info">
-                <span className="progress-label">Engagement</span>
-                <span className="progress-percent">{users.length > 0 ? Math.round((users.filter(u => u.isActive).length / users.length) * 100) : 0}%</span>
-              </div>
-              <div className="progress-bar-bg">
-                <div className="progress-bar-fill" style={{ width: `${users.length > 0 ? Math.round((users.filter(u => u.isActive).length / users.length) * 100) : 0}%` }}></div>
-              </div>
-            </div>
-          </div>
 
-          <div className="metric-card complex-card">
-            <div className="card-inner-top">
-              <div className="metric-data">
-                <p className="metric-title">Total Students</p>
-                <h3 className="metric-value">{users.filter(u => u.role.includes('student')).length}</h3>
+              <div className="metric-card complex-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Non-SLIIT Students</p>
+                    <h3 className="metric-value">{users.filter(u => u.role === 'student_external').length}</h3>
+                  </div>
+                  <div className="metric-icon indigo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>   
+                  </div>
+                </div>
+                <div className="card-inner-bottom">
+                   <span className="trend-badge trend-up">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"/></svg>
+                    +124
+                  </span>
+                  <span className="trend-text">new enrollments</span>
+                </div>
               </div>
-              <div className="metric-icon indigo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-              </div>
-            </div>
-            <div className="card-inner-bottom">
-               <span className="trend-badge trend-up">
-                <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd"/></svg>
-                +124
-              </span>
-              <span className="trend-text">new enrollments</span>
-            </div>
-          </div>
+            </>
+          )}
 
-          <div className="metric-card complex-card">
-            <div className="card-inner-top">
-              <div className="metric-data">
-                <p className="metric-title">Total Vendors</p>
-                <h3 className="metric-value">{users.filter(u => u.role === 'vendor').length}</h3>
+                    {userType === 'vendors' && (
+            <>
+              <div className="metric-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Food</p>
+                    <h3 className="metric-value">{users.filter(u => u.vendorType === 'food').length}</h3>
+                  </div>
+                  <div className="metric-icon success" style={{ background: '#FEF08A', color: '#B45309' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              <div className="metric-icon warning">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+
+              <div className="metric-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Boarding</p>
+                    <h3 className="metric-value">{users.filter(u => u.vendorType === 'boarding').length}</h3>
+                  </div>
+                  <div className="metric-icon primary" style={{ background: '#E0E7FF', color: '#4338CA' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="card-inner-bottom">
-               <div className="avatars-group">
-                 <div className="mini-avatar">🍔</div>
-                 <div className="mini-avatar">🏠</div>
-                 <div className="mini-avatar">👕</div>
-                 <span className="mini-avatar-text">+ categories</span>
-               </div>
-            </div>
-          </div>
+
+              <div className="metric-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Laundry</p>
+                    <h3 className="metric-value">{users.filter(u => u.vendorType === 'laundry').length}</h3>
+                  </div>
+                  <div className="metric-icon warning" style={{ background: '#DBEAFE', color: '#3730A3' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21v-4m0 0h2m-2 0H5m4 0v-5.696m10 5.696v-4m0 0h2m-2 0h-2m4 0v-5.696M5 9.071c-.726.471-1.394 1.097-1.87 1.834m-1.127 3.518A7.989 7.989 0 012 12a7.989 7.989 0 013.003-6.425M21 9.071c.726.471 1.394 1.097 1.87 1.834m1.127 3.518A7.989 7.989 0 0022 12a7.989 7.989 0 00-3.003-6.425M7 6a5 5 0 0110 0v2H7V6z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div className="metric-card">
+                <div className="card-inner-top">
+                  <div className="metric-data">
+                    <p className="metric-title">Cleaning</p>
+                    <h3 className="metric-value">{users.filter(u => u.vendorType === 'cleaning').length}</h3>
+                  </div>
+                  <div className="metric-icon success" style={{ background: '#D1FAE5', color: '#065F46' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"> 
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
         </div>
       )}
-
+    
       {/* 3. Toolbar (Search & Filters) */}
       <div className="toolbar-card">
         <div className="search-wrapper">
@@ -316,24 +370,27 @@ function UsersManagement() {
         </div>
 
         <div className="filters-wrapper">
-          <select name="role" value={filters.role} onChange={handleFilterChange} className="modern-select">
-            <option value="">Role: All</option>
-            <option value="student_sliit">SLIIT Student</option>
-            <option value="student_external">External Student</option>
-            <option value="vendor">Vendor</option>
-          </select>
+          {userType !== 'vendors' && (
+            <select name="role" value={filters.role} onChange={handleFilterChange} className="modern-select">
+              <option value="">Student Type: All</option>
+              <option value="student_sliit">SLIIT Student</option>
+              <option value="student_external">Non-SLIIT Student</option>
+            </select>
+          )}
           <select name="isActive" value={filters.isActive} onChange={handleFilterChange} className="modern-select">
             <option value="">Status: All</option>
             <option value="true">Active Only</option>
             <option value="false">Inactive Only</option>
           </select>
-          <select name="vendorType" value={filters.vendorType} onChange={handleFilterChange} className="modern-select">
-            <option value="">Vendor Type: All</option>
-            <option value="food">Food</option>
-            <option value="boarding">Boarding</option>
-            <option value="laundry">Laundry</option>
-            <option value="cleaning">Cleaning</option>
-          </select>
+          {userType !== 'users' && (
+            <select name="vendorType" value={filters.vendorType} onChange={handleFilterChange} className="modern-select">
+              <option value="">Vendor Type: All</option>
+              <option value="food">Food</option>
+              <option value="boarding">Boarding</option>
+              <option value="laundry">Laundry</option>
+              <option value="cleaning">Cleaning</option>
+            </select>
+          )}
         </div>
       </div>
 
@@ -380,8 +437,8 @@ function UsersManagement() {
                     <th onClick={() => handleSort('fullName')}>
                       User {sortConfig.key === 'fullName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                     </th>
-                    <th>Role</th>
-                    <th>Vendor Type</th>
+                    {userType !== 'vendors' && <th>{userType === 'users' ? 'Student Type' : 'Role'}</th>}
+                    {userType !== 'users' && <th>Vendor Type</th>}
                     <th onClick={() => handleSort('isActive')}>
                       Status {sortConfig.key === 'isActive' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                     </th>
@@ -424,20 +481,24 @@ function UsersManagement() {
                             </div>
                           </div>
                         </td>
-                        <td>
-                          <span className={`modern-badge badge-${getRoleBadgeColor(user.role)}`}>
-                            {user.role.replace('_', ' ')}
-                          </span>
-                        </td>
-                        <td>
-                          {user.vendorType ? (
-                            <div className="vendor-type-tag">
-                              {getVendorIcon(user.vendorType)} <span className="pt-1">{user.vendorType}</span>
-                            </div>
-                          ) : (
-                            <span className="dash-placeholder">-</span>
-                          )}
-                        </td>
+                        {userType !== 'vendors' && (
+                          <td>
+                            <span className={`modern-badge badge-`}>
+                              {user.role === 'student_sliit' ? 'SLIIT Student' : user.role === 'student_external' ? 'Non-SLIIT Student' : user.role.replace('_', ' ')}
+                            </span>
+                          </td>
+                        )}
+                        {userType !== 'users' && (
+                          <td>
+                            {user.vendorType ? (
+                              <div className="vendor-type-tag">
+                                {getVendorIcon(user.vendorType)} <span className="pt-1">{user.vendorType}</span>
+                              </div>
+                            ) : (
+                              <span className="dash-placeholder">-</span>
+                            )}
+                          </td>
+                        )}
                         <td>
                           <span className={`status-dot-badge ${user.isActive ? 'active' : 'inactive'}`}>
                             <span className="dot"></span>
@@ -607,3 +668,14 @@ function UsersManagement() {
 }
 
 export default UsersManagement;
+
+
+
+
+
+
+
+
+
+
+

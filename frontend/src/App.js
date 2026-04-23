@@ -1,6 +1,7 @@
 import React from "react";
 import './App.css';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import PageTransition from './Components/common/PageTransition';
 
 // 🔹 Auth
 import { AuthProvider } from "./context/AuthContext";
@@ -66,10 +67,13 @@ import CleaningVendorDashboard from './Components/dashboards/CleaningVendorDashb
 
 
 function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <div className="App">
-        <Routes>
+        <PageTransition key={location.pathname}>
+          <Routes location={location}>
 
           {/* ── Public Routes ── */}
           <Route path="/" element={<NomalHome />} />
@@ -285,17 +289,26 @@ function App() {
             } 
           />
 
-          <Route 
-            path="/admin/payments" 
+          <Route
+            path="/admin/vendors"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard defaultTab="vendors" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/payments"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard defaultTab="payments" />
               </ProtectedRoute>
-            } 
+            }
           />
 
-          <Route 
-            path="/admin/subscriptions" 
+          <Route
+            path="/admin/subscriptions"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard defaultTab="subscriptions" />
@@ -321,7 +334,8 @@ function App() {
             } 
           />
 
-        </Routes>
+          </Routes>
+        </PageTransition>
       </div>
     </AuthProvider>
   );
