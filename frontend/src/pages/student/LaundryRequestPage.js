@@ -156,7 +156,7 @@ function LaundryRequestPage() {
             <h1>🧺 Laundry Service</h1>
             <p>Manage your laundry requests easily</p>
           </div>
-          <button className="lrp-back-btn" onClick={() => navigate('/laundry')}>
+          <button className="lrp-back-btn" onClick={() => navigate('/services', { state: { activeService: 'laundry' } })}>
             ← Back to Vendors
           </button>
         </div>
@@ -191,12 +191,12 @@ function LaundryRequestPage() {
                 ✅ Selected Vendor: <strong>
                   {selectedVendor.businessName || selectedVendor.fullName}
                 </strong>
-                <button onClick={() => navigate('/laundry')}>Change Vendor</button>
+                <button onClick={() => navigate('/services', { state: { activeService: 'laundry' } })}>Change Vendor</button>
               </div>
             ) : (
               <div className="lrp-vendor-banner lrp-vendor-none">
                 ⚠️ No vendor selected.
-                <button onClick={() => navigate('/laundry')}>Browse Vendors</button>
+                <button onClick={() => navigate('/services', { state: { activeService: 'laundry' } })}>Browse Vendors</button>
               </div>
             )}
 

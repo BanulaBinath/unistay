@@ -50,8 +50,6 @@ import AcceptItem from './Components/foodvendor/AcceptItem';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
 import FoodVendorComplaintDetails from './Components/foodvendor/FoodVendorComplaintDetails';
 import BuyOrderPage from './Components/studenthome/foodorder';
-import Londriservices from './Components/studenthome/londriservices';
-import Cleaningservices from './Components/studenthome/cleaningservices';
 import LaundryRequestPage from './pages/student/LaundryRequestPage';
 import CleaningRequestPage from './pages/student/CleaningRequestPage';  
 import LaundryProfile      from './Components/laundrystaff/LaundryProfile';
@@ -88,8 +86,8 @@ function App() {
           <Route path="/register/vendor" element={<VendorRegister />} />
           <Route path="/payment/process" element={<PaymentProcess />} />
           <Route path="/buyorder" element={<BuyOrderPage />} />
-          <Route path="/laundry" element={<Londriservices />} />
-          <Route path="/cleaning" element={<Cleaningservices />} />
+          <Route path="/laundry" element={<Services />} />
+          <Route path="/cleaning" element={<Services />} />
           <Route path="/student-laundry" element={<LaundryRequestPage />} />
           <Route path="/student-cleaning" element={<CleaningRequestPage />} />
           

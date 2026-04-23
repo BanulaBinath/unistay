@@ -156,7 +156,7 @@ function CleaningRequestPage() {
             <h1>🧹 Cleaning Service</h1>
             <p>Book professional room cleaning for your hostel</p>
           </div>
-          <button className="crp-back-btn" onClick={() => navigate('/cleaning')}>
+          <button className="crp-back-btn" onClick={() => navigate('/services', { state: { activeService: 'cleaning' } })}>
             ← Back to Vendors
           </button>
         </div>
@@ -193,12 +193,12 @@ function CleaningRequestPage() {
                 ✅ Selected Vendor: <strong>
                   {selectedVendor.businessName || selectedVendor.name}
                 </strong>
-                <button onClick={() => navigate('/cleaning')}>Change Vendor</button>
+                <button onClick={() => navigate('/services', { state: { activeService: 'cleaning' } })}>Change Vendor</button>
               </div>
             ) : (
               <div className="crp-vendor-banner crp-vendor-none">
                 ⚠️ No vendor selected.
-                <button onClick={() => navigate('/cleaning')}>Browse Vendors</button>
+                <button onClick={() => navigate('/services', { state: { activeService: 'cleaning' } })}>Browse Vendors</button>
               </div>
             )}
 

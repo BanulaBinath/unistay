@@ -105,7 +105,7 @@ function NomalHome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
-              <Link to="/laundry" className="service-content-link">
+              <Link to="/services" state={{ activeService: 'laundry' }} className="service-content-link">
                 <div className="service-content">
                   <h3 className="service-title">Laundry</h3>
                   <p className="service-description">
@@ -125,7 +125,7 @@ function NomalHome() {
                 </div>
                 <div className="service-icon-bg"></div>
               </div>
-              <Link to="/cleaning" className="service-content-link">
+              <Link to="/services" state={{ activeService: 'cleaning' }} className="service-content-link">
                 <div className="service-content">
                   <h3 className="service-title">Cleaning</h3>
                   <p className="service-description">
