@@ -1,7 +1,11 @@
 const Ticket = require('../models/Ticket');
 const TicketMessage = require('../models/TicketMessage');
 const TicketActionLog = require('../models/TicketActionLog');
-const User = require('../Model/User'); // Assuming User model path
+const User = require('../Model/User');
+const {
+  notifyMessageAdded,
+  notifyTicketResolved
+} = require('../services/notificationService');
 
 /**
  * Get vendor's tickets (Vendor)
@@ -161,6 +165,11 @@ const addVendorReply = async (req, res) => {
 
     await ticketMessage.populate('senderId', 'fullName email role');
 
+    // Send notifications
+    const io = req.app.get('io');
+    const vendor = await User.findById(req.user.userId);
+    await notifyMessageAdded(ticket, message.trim(), 'vendor', req.user.userId, vendor.fullName || vendor.businessName, io);
+
     res.status(201).json({
       success: true,
       message: 'Reply added successfully',
@@ -224,6 +233,11 @@ const resolveVendorTicket = async (req, res) => {
       newValue: 'resolved',
       notes: notes || 'Ticket resolved by vendor'
     });
+
+    // Send notifications
+    const io = req.app.get('io');
+    const vendor = await User.findById(req.user.userId);
+    await notifyTicketResolved(ticket, req.user.userId, vendor.fullName || vendor.businessName, io);
 
     res.status(200).json({
       success: true,

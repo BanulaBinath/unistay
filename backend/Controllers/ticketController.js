@@ -8,6 +8,13 @@ const {
   checkVendorWarningConditions,
   checkStudentMisuseConditions
 } = require('../utils/ticketUtils');
+const {
+  notifyTicketCreated,
+  notifyMessageAdded,
+  notifyTicketClosed,
+  notifyTicketReopened,
+  notifyTicketEscalated
+} = require('../services/notificationService');
 
 /**
  * Create new ticket (Student)
@@ -84,6 +91,10 @@ const createTicket = async (req, res) => {
     if (ticket.vendorId) {
       await ticket.populate('vendorId', 'fullName businessName email');
     }
+
+    // Send notifications
+    const io = req.app.get('io');
+    await notifyTicketCreated(ticket, io);
 
     res.status(201).json({
       success: true,
@@ -260,6 +271,11 @@ const addMessage = async (req, res) => {
 
     await ticketMessage.populate('senderId', 'fullName email role');
 
+    // Send notifications
+    const io = req.app.get('io');
+    const sender = await User.findById(req.user.userId);
+    await notifyMessageAdded(ticket, message.trim(), req.user.role, req.user.userId, sender.fullName, io);
+
     res.status(201).json({
       success: true,
       message: 'Message added successfully',
@@ -322,6 +338,11 @@ const closeTicket = async (req, res) => {
       newValue: 'closed',
       notes: 'Ticket closed by student'
     });
+
+    // Send notifications
+    const io = req.app.get('io');
+    const student = await User.findById(req.user.userId);
+    await notifyTicketClosed(ticket, req.user.userId, student.fullName, io);
 
     res.status(200).json({
       success: true,
@@ -387,6 +408,11 @@ const reopenTicket = async (req, res) => {
       newValue: 'reopened',
       notes: reason || 'Ticket reopened by student'
     });
+
+    // Send notifications
+    const io = req.app.get('io');
+    const student = await User.findById(req.user.userId);
+    await notifyTicketReopened(ticket, req.user.userId, student.fullName, io);
 
     res.status(200).json({
       success: true,
@@ -460,6 +486,11 @@ const escalateTicket = async (req, res) => {
       newValue: `escalated (Level ${ticket.escalationLevel})`,
       notes: reason || 'Ticket escalated by student'
     });
+
+    // Send notifications
+    const io = req.app.get('io');
+    const student = await User.findById(req.user.userId);
+    await notifyTicketEscalated(ticket, req.user.userId, student.fullName, io);
 
     res.status(200).json({
       success: true,

@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const authRoutes = require('./Route/authRoutes');
 const userRoutes = require('./Route/userRoutes');
@@ -15,8 +17,28 @@ const orderRoutes = require('./routes/orderRoutes');
 const roomRoutes = require("./routes/rooms");
 const reviewRoutes = require("./routes/reviewRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const notificationRoutes = require('./routes/notificationRoutes');
+
+const { initializeSocket, setSocketInstance } = require('./socket/socketHandler');
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+  }
+});
+
+// Initialize socket handlers
+initializeSocket(io);
+setSocketInstance(io);
+
+// Make io accessible to routes
+app.set('io', io);
 
 // Middleware
 app.use(cors({
@@ -42,6 +64,7 @@ app.use('/api/orders', orderRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -73,8 +96,9 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://banulabinath:banul
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB');
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🔌 Socket.IO ready for real-time notifications`);
     });
   })
   .catch((err) => {
@@ -82,4 +106,4 @@ mongoose.connect(MONGODB_URI)
     process.exit(1);
   });
 
-module.exports = app;
+module.exports = { app, server, io };
