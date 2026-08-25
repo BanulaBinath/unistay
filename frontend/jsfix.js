@@ -1,0 +1,1 @@
+const fs = require('fs'); let content = fs.readFileSync('src/Components/admin/UsersManagement.js', 'utf8'); content = content.replace(/\{\{\s*width:\s*\$\(\(users\.filter/g, '{{ width: ${(users.filter'); content = content.replace(/% \}\}/g, '% }}'); fs.writeFileSync('src/Components/admin/UsersManagement.js', content);

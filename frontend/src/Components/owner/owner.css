@@ -1,0 +1,744 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── WRAPPER ── */
+.owner-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #fafbfc;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── PROFILE BUTTON (in top header) ── */
+.owner-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 64px;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 400;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.owner-profile-wrap {
+  position: relative;
+  z-index: 1000;
+}
+
+.owner-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 50px;
+  padding: 8px 16px 8px 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.owner-profile-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.owner-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #5b6cf2 0%, #7c8df5 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.owner-avatar-lg {
+  width: 44px;
+  height: 44px;
+  font-size: 1.1rem;
+}
+
+.owner-profile-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+  gap: 2px;
+}
+
+.owner-profile-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.owner-profile-role {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.owner-profile-chevron {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-left: 2px;
+}
+
+/* ── PROFILE DROPDOWN ── */
+.owner-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  width: 240px;
+  padding: 8px;
+  z-index: 10000;
+  animation: dropdownFade 0.15s ease;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.owner-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px 12px;
+}
+
+.owner-dropdown-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.owner-dropdown-email {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.owner-dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 4px 0;
+}
+
+.owner-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #374151;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.owner-dropdown-item:hover { background: #f9fafb; }
+.owner-dropdown-item.danger { color: #dc2626; }
+.owner-dropdown-item.danger:hover { background: #fef2f2; }
+
+/* ── BODY ── */
+/* Removed - no longer needed */
+
+/* ── SIDEBAR ── Matching Admin Dashboard Exactly */
+.owner-sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.owner-sidebar.closed {
+  width: 80px;
+}
+
+.owner-sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.owner-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.owner-sidebar-logo-icon {
+  width: 32px;
+  height: 32px;
+  color: #5b6cf2;
+  flex-shrink: 0;
+}
+
+.owner-sidebar-logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.owner-sidebar.closed .owner-sidebar-logo-text {
+  display: none;
+}
+
+.owner-sidebar-toggle {
+  width: 32px;
+  height: 32px;
+  background: #f0f4ff;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.owner-sidebar-toggle:hover {
+  background: #e0e7ff;
+}
+
+.owner-sidebar-toggle svg {
+  width: 18px;
+  height: 18px;
+  color: #5b6cf2;
+  stroke-width: 2;
+}
+
+.owner-sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.owner-sidebar-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 1px;
+  margin: 0 0 8px 16px;
+  text-transform: uppercase;
+}
+
+.owner-sidebar.closed .owner-sidebar-label {
+  display: none;
+}
+
+.owner-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.owner-nav-item:hover {
+  background: #f9fafb;
+  color: #1a1a1a;
+}
+
+.owner-nav-item.active {
+  background: #f0f4ff;
+  color: #5b6cf2;
+  font-weight: 600;
+}
+
+.owner-nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke-width: 2;
+}
+
+.owner-nav-label {
+  white-space: nowrap;
+}
+
+.owner-sidebar.closed .owner-nav-label {
+  display: none;
+}
+
+.owner-sidebar.closed .owner-nav-item {
+  justify-content: center;
+  padding: 10px;
+}
+
+.owner-sidebar-footer {
+  padding: 16px 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.owner-sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.owner-sidebar-logout:hover {
+  background: #fef2f2;
+}
+
+.owner-sidebar.closed .owner-sidebar-logout {
+  justify-content: center;
+  padding: 12px;
+}
+
+.owner-sidebar.closed .owner-sidebar-logout span {
+  display: none;
+}
+
+/* ── CONTENT ── */
+.owner-content {
+  flex: 1;
+  padding: 24px 28px;
+  overflow-y: auto;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+/* ── PAGE HEADER ── Removed - now using top header */
+
+.owner-add-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.owner-add-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+/* ── EMPTY ── */
+.owner-empty {
+  text-align: center;
+  padding: 80px 0;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.owner-empty p { margin: 0; font-size: 0.95rem; }
+
+/* ── ROOMS GRID ── Matching Admin Dashboard Cards */
+.owner-rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ── ROOM CARD ── Matching Admin Dashboard Style */
+.owner-room-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.owner-room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: #d1d5db;
+}
+
+.owner-room-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.owner-room-no-img {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a5b4fc;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.owner-room-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.owner-room-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.owner-room-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #5b6cf2;
+  margin: 0;
+}
+
+.owner-room-price span {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.owner-room-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.owner-room-status.occupied { 
+  background: #fef2f2; 
+  color: #dc2626; 
+}
+
+.owner-room-status.vacant { 
+  background: #eaf8ee; 
+  color: #1f6b34; 
+}
+
+.owner-room-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.owner-room-tag {
+  background: #f0f4ff;
+  color: #5b6cf2;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ── FORM CARD ── Matching Admin Dashboard */
+.form-card {
+  background: white;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e5e7eb;
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-card input[type="text"],
+.form-card input[type="number"] {
+  padding: 11px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  transition: all 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+}
+
+.form-card input[type="text"]:focus,
+.form-card input[type="number"]:focus {
+  border-color: #5b6cf2;
+  box-shadow: 0 0 0 3px rgba(91,108,242,0.1);
+}
+
+.form-card input[type="file"] {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-family: 'Poppins', sans-serif;
+  padding: 8px 0;
+}
+
+.facilities-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fafbfc;
+}
+
+.facility-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #374151;
+  font-family: 'Poppins', sans-serif;
+}
+
+.facility-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #5b6cf2;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.primary-btn {
+  background: #5b6cf2;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.primary-btn:hover {
+  background: #4a5ae0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(91,108,242,0.3);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .owner-sidebar {
+    width: 80px;
+  }
+
+  .owner-sidebar .owner-sidebar-logo-text,
+  .owner-sidebar .owner-sidebar-label,
+  .owner-sidebar .owner-nav-label,
+  .owner-sidebar .owner-sidebar-logout span {
+    display: none;
+  }
+
+  .owner-sidebar .owner-nav-item,
+  .owner-sidebar .owner-sidebar-logout {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .owner-content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .owner-wrapper {
+    flex-direction: column;
+  }
+
+  .owner-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .owner-sidebar.closed {
+    width: 100%;
+  }
+
+  .owner-sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 12px;
+  }
+
+  .owner-nav-item {
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    min-width: 80px;
+  }
+
+  .owner-nav-label {
+    font-size: 0.75rem;
+    display: block !important;
+  }
+
+  .owner-sidebar-footer {
+    display: none;
+  }
+
+  .owner-content {
+    padding: 20px 16px;
+  }
+
+  .owner-profile-info {
+    display: none;
+  }
+
+  .owner-top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .owner-rooms-grid {
+    grid-template-columns: 1fr;
+  }
+}
