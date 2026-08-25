@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import NotificationPanel from '../common/Notifications/NotificationPanel';
 import './Dashboard.css';
 
 function BoardingVendorDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeMenu, setActiveMenu] = useState('dashboard');
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleMenuClick = (menuId) => {
+    setActiveMenu(menuId);
   };
 
   const menuItems = [
@@ -54,6 +60,15 @@ function BoardingVendorDashboard() {
       )
     },
     { 
+      id: 'notifications', 
+      label: 'Notifications', 
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+      )
+    },
+    { 
       id: 'profile', 
       label: 'Profile', 
       icon: (
@@ -86,7 +101,8 @@ function BoardingVendorDashboard() {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`sidebar-nav-item ${item.id === 'dashboard' ? 'active' : ''}`}
+              className={`sidebar-nav-item ${activeMenu === item.id ? 'active' : ''}`}
+              onClick={() => handleMenuClick(item.id)}
             >
               <span className="nav-icon">{item.icon}</span>
               {sidebarOpen && <span className="nav-label">{item.label}</span>}
@@ -106,24 +122,27 @@ function BoardingVendorDashboard() {
 
       {/* Main Content */}
       <main className="boarding-main-content">
-        {/* Top Header */}
-        <header className="boarding-top-header">
-          <div className="header-left">
-            <h1 className="page-title">Dashboard</h1>
-            <p className="page-subtitle">Welcome back, {user?.fullName}</p>
-          </div>
-          <div className="header-right">
-            <div className="boarding-user-badge">
-              <div className="user-avatar">
-                {user?.fullName?.charAt(0).toUpperCase()}
+        {/* Dashboard View */}
+        {activeMenu === 'dashboard' && (
+          <>
+            {/* Top Header */}
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Dashboard</h1>
+                <p className="page-subtitle">Welcome back, {user?.fullName}</p>
               </div>
-              <div className="user-info">
-                <span className="user-name">{user?.fullName}</span>
-                <span className="user-role">Boarding Vendor</span>
+              <div className="header-right">
+                <div className="boarding-user-badge">
+                  <div className="user-avatar">
+                    {user?.fullName?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="user-info">
+                    <span className="user-name">{user?.fullName}</span>
+                    <span className="user-role">Boarding Vendor</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </header>
+            </header>
 
         {/* Stats Cards */}
         <div className="stats-grid-modern">
@@ -362,6 +381,85 @@ function BoardingVendorDashboard() {
             </div>
           </div>
         </div>
+        </>
+        )}
+
+        {/* Notifications Tab */}
+        {activeMenu === 'notifications' && (
+          <div className="boarding-notifications-container">
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Notifications</h1>
+                <p className="page-subtitle">Stay updated with booking and ticket activities</p>
+              </div>
+            </header>
+            <NotificationPanel userRole="vendor" />
+          </div>
+        )}
+
+        {/* Rooms Tab - Coming Soon */}
+        {activeMenu === 'rooms' && (
+          <div className="boarding-coming-soon">
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Room Management</h1>
+                <p className="page-subtitle">Manage your rooms and availability</p>
+              </div>
+            </header>
+            <div className="coming-soon-message">
+              <h2>Coming Soon</h2>
+              <p>Room management features will be available soon.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Bookings Tab - Coming Soon */}
+        {activeMenu === 'bookings' && (
+          <div className="boarding-coming-soon">
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Bookings</h1>
+                <p className="page-subtitle">View and manage room bookings</p>
+              </div>
+            </header>
+            <div className="coming-soon-message">
+              <h2>Coming Soon</h2>
+              <p>Booking management features will be available soon.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Analytics Tab - Coming Soon */}
+        {activeMenu === 'analytics' && (
+          <div className="boarding-coming-soon">
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Analytics</h1>
+                <p className="page-subtitle">View occupancy and revenue metrics</p>
+              </div>
+            </header>
+            <div className="coming-soon-message">
+              <h2>Coming Soon</h2>
+              <p>Analytics features will be available soon.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Profile Tab - Coming Soon */}
+        {activeMenu === 'profile' && (
+          <div className="boarding-coming-soon">
+            <header className="boarding-top-header">
+              <div className="header-left">
+                <h1 className="page-title">Profile</h1>
+                <p className="page-subtitle">Manage your vendor profile</p>
+              </div>
+            </header>
+            <div className="coming-soon-message">
+              <h2>Coming Soon</h2>
+              <p>Profile management features will be available soon.</p>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

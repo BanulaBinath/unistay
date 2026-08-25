@@ -5,6 +5,7 @@ import PageTransition from './Components/common/PageTransition';
 
 // 🔹 Auth
 import { AuthProvider } from "./context/AuthContext";
+import { SocketProvider } from "./context/SocketContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
 // 🔹 Public
@@ -47,6 +48,7 @@ import FoodVendor from './Components/foodvendor/foodvendor';
 import AddItem from './Components/foodvendor/addItem';
 import UpdateItem from './Components/foodvendor/updateitem';
 import AcceptItem from './Components/foodvendor/AcceptItem';
+import FoodVendorNotifications from './Components/foodvendor/FoodVendorNotifications';
 import Complaint from './Components/foodvendor/foodVendorcomplaint';
 import FoodVendorComplaintDetails from './Components/foodvendor/FoodVendorComplaintDetails';
 import BuyOrderPage from './Components/studenthome/foodorder';
@@ -56,9 +58,10 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="App">
-        <PageTransition key={location.pathname}>
-          <Routes location={location}>
+      <SocketProvider>
+        <div className="App">
+          <PageTransition key={location.pathname}>
+            <Routes location={location}>
 
           {/* ── Public Routes ── */}
           <Route path="/" element={<NomalHome />} />
@@ -157,6 +160,12 @@ function App() {
             </ProtectedRoute>
           } />
 
+          <Route path="/vendor/food/notifications" element={
+            <ProtectedRoute allowedRoles={['vendor']} allowedVendorTypes={['food']}>
+              <FoodVendorNotifications />
+            </ProtectedRoute>
+          } />
+
               <Route 
                 path="/foodVendorcomplaint/:id" 
               element={
@@ -233,6 +242,7 @@ function App() {
           </Routes>
         </PageTransition>
       </div>
+      </SocketProvider>
     </AuthProvider>
   );
 }

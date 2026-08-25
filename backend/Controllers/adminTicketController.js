@@ -6,6 +6,15 @@ const {
   checkVendorWarningConditions,
   checkStudentMisuseConditions
 } = require('../utils/ticketUtils');
+const {
+  notifyStatusChanged,
+  notifyTicketAssigned,
+  notifyTicketResolved,
+  notifyTicketClosed,
+  notifyWarningIssued,
+  notifyTicketRejected,
+  notifyMessageAdded
+} = require('../services/notificationService');
 
 /**
  * Get all tickets with filters (Admin)
@@ -240,6 +249,11 @@ const updateTicketStatus = async (req, res) => {
       notes: notes || `Status changed by admin`
     });
 
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyStatusChanged(ticket, previousStatus, status, req.user.userId, admin.fullName, io);
+
     res.status(200).json({
       success: true,
       message: 'Ticket status updated successfully',
@@ -358,6 +372,11 @@ const assignTicket = async (req, res) => {
 
     await ticket.populate('assignedAdminId', 'fullName email');
 
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyTicketAssigned(ticket, adminId, req.user.userId, admin.fullName, io);
+
     res.status(200).json({
       success: true,
       message: 'Ticket assigned successfully',
@@ -414,6 +433,11 @@ const resolveTicket = async (req, res) => {
       notes: notes || 'Ticket resolved by admin'
     });
 
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyTicketResolved(ticket, req.user.userId, admin.fullName, io);
+
     res.status(200).json({
       success: true,
       message: 'Ticket resolved successfully',
@@ -469,6 +493,11 @@ const closeTicketAdmin = async (req, res) => {
       newValue: 'closed',
       notes: notes || 'Ticket closed by admin'
     });
+
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyTicketClosed(ticket, req.user.userId, admin.fullName, io);
 
     res.status(200).json({
       success: true,
@@ -545,6 +574,11 @@ const issueVendorWarning = async (req, res) => {
     // Check vendor warning conditions
     const warningInfo = await checkVendorWarningConditions(ticket.vendorId._id);
 
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyWarningIssued(ticket, req.user.userId, admin.fullName, reason, io);
+
     res.status(200).json({
       success: true,
       message: 'Warning issued to vendor successfully',
@@ -614,6 +648,11 @@ const rejectTicket = async (req, res) => {
     // Check student misuse conditions
     const misuseInfo = await checkStudentMisuseConditions(ticket.studentId);
 
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyTicketRejected(ticket, req.user.userId, admin.fullName, reason, io);
+
     res.status(200).json({
       success: true,
       message: 'Ticket rejected successfully',
@@ -676,6 +715,11 @@ const addAdminMessage = async (req, res) => {
     });
 
     await ticketMessage.populate('senderId', 'fullName email role');
+
+    // Send notifications
+    const io = req.app.get('io');
+    const admin = await User.findById(req.user.userId);
+    await notifyMessageAdded(ticket, message.trim(), 'admin', req.user.userId, admin.fullName, io);
 
     res.status(201).json({
       success: true,
